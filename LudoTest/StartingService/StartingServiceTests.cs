@@ -9,11 +9,11 @@ namespace LudoTest.StartingServiceTests
     public class StartingServiceTests
     {
         private readonly Mock<IDiceService> _diceServiceMock;
-        private readonly StartingService startingService;
+        private readonly StartingService _startingService;
         public StartingServiceTests()
         {
             _diceServiceMock = new Mock<IDiceService>();
-            startingService = new StartingService(_diceServiceMock.Object);
+            _startingService = new StartingService(_diceServiceMock.Object);
         }
         
         [Theory]
@@ -21,7 +21,7 @@ namespace LudoTest.StartingServiceTests
         public void StartingService_ShouldReRoll_ReturnsExpectedResult(List<Roll> rolls, bool expected)
         {
             // Act
-            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
+            var shouldTheyReroll = _startingService.ShouldReRoll(rolls);
 
             // Assert
             shouldTheyReroll.Should().Be(expected);
@@ -71,7 +71,7 @@ namespace LudoTest.StartingServiceTests
         public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<LobbyPlayer> expected)
         {
             //Act
-            var actual = startingService.GetReRollers(rolls);
+            var actual = _startingService.GetReRollers(rolls);
 
             //Assert
             actual.Should().BeEquivalentTo(expected);
@@ -101,7 +101,7 @@ namespace LudoTest.StartingServiceTests
             expectedLobby.StartingRolls.Add(expectedRoll);
 
             //Act
-            var result = startingService.StartingRoll(lobby);
+            var result = _startingService.StartingRoll(lobby);
 
             //Assert
             result.Should().BeEquivalentTo(expectedLobby);
