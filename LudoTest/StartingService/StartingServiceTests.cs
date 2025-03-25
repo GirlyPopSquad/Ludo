@@ -2,102 +2,74 @@
 using LudoAPI.Models;
 using LudoAPI.Services;
 using Moq;
-using System.Collections.Concurrent;
 
 namespace LudoTest.StartingServiceTests
 {
     public class StartingServiceTests
     {
-        private readonly Mock<IPlayerService> _playerServiceMock;
         private readonly Mock<IDiceService> _diceServiceMock;
         private readonly StartingService startingService;
         public StartingServiceTests()
         {
-            _playerServiceMock = new Mock<IPlayerService>();
+            new Mock<IPlayerService>();
             _diceServiceMock = new Mock<IDiceService>();
             startingService = new StartingService(_diceServiceMock.Object);
         }
-
-
-
-
-
-        [Fact]
-        public void StartingService_ShouldReRoll_ReturnsTrueIfMoreHighestRollers()
+        
+        [Theory]
+        [MemberData(nameof(GetRollsDataAllPlayersRolledOnce))]
+        public void StartingService_ShouldReRoll_ReturnsExpectedResult(List<Roll> rolls, bool expected)
         {
-            //Arrange
-            var rolls = new List<Roll>()
-            {
-                new Roll(new LobbyPlayer(1), 1),
-                new Roll(new LobbyPlayer(2), 2),
-                new Roll(new LobbyPlayer(3), 4),
-                new Roll(new LobbyPlayer(4), 4),
-            };
-
-            //Act
+            // Act
             var shouldTheyReroll = startingService.ShouldReRoll(rolls);
 
-            //Assert
-            shouldTheyReroll.Should().BeTrue();
+            // Assert
+            shouldTheyReroll.Should().Be(expected);
         }
 
-        [Fact]
-        public void StartingService_ShouldReRoll_ReturnsFalseIfOnlyOneHighestRoller()
+        public static IEnumerable<object[]> GetRollsDataAllPlayersRolledOnce()
         {
-            //Arrange
-            var rolls = new List<Roll>()
-            {
-                new Roll(new LobbyPlayer(1), 1),
-                new Roll(new LobbyPlayer(2), 2),
-                new Roll(new LobbyPlayer(3), 3),
-                new Roll(new LobbyPlayer(4), 4),
-            };
+            yield return
+            [
+                new List<Roll>
+                {
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 2),
+                    new Roll(new LobbyPlayer(3), 4),
+                    new Roll(new LobbyPlayer(4), 4),
+                },
+                true
+            ];
 
-            //Act
-            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
+            yield return
+            [
+                new List<Roll>
+                {
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 2),
+                    new Roll(new LobbyPlayer(3), 3),
+                    new Roll(new LobbyPlayer(4), 4),
+                },
+                false
+            ];
 
-            //Assert
-            shouldTheyReroll.Should().BeFalse();
+            yield return
+            [
+                new List<Roll>()
+                {
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 2),
+                    new Roll(new LobbyPlayer(3), 2),
+                    new Roll(new LobbyPlayer(4), 4),
+                },
+                false
+            ];
         }
 
-        [Fact]
-        public void StartingService_ShouldReRoll_ReturnsFalseIfTwoLowerDoubles()
+        [Theory]
+        [MemberData(nameof(GetRerollersData))]
+        public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<LobbyPlayer> expected)
         {
-            //Arrange
-            var rolls = new List<Roll>()
-            {
-                new Roll(new LobbyPlayer(1), 1),
-                new Roll(new LobbyPlayer(2), 2),
-                new Roll(new LobbyPlayer(3), 2),
-                new Roll(new LobbyPlayer(4), 4),
-            };
-
-            //Act
-            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
-
-            //Assert
-            shouldTheyReroll.Should().BeFalse();
-        }
-
-        [Fact]
-        public void StartingService_GetRerollers_ShouldReturnTheRerollers()
-        {
-            //Arrange
-            var rolls = new List<Roll>()
-            {
-                new Roll(new LobbyPlayer(1), 1),
-                new Roll(new LobbyPlayer(2), 4),
-                new Roll(new LobbyPlayer(3), 4),
-                new Roll(new LobbyPlayer(4), 4),
-            };
-
-            var expected = new List<LobbyPlayer>
-            {
-                rolls[1].Player,
-                rolls[2].Player,
-                rolls[3].Player
-            };
-
             //Act
             var actual = startingService.GetReRollers(rolls);
 
@@ -105,8 +77,45 @@ namespace LudoTest.StartingServiceTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
+        public static IEnumerable<object[]> GetRerollersData()
+        {
+            yield return
+            [
+                new List<Roll>
+                {
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 2),
+                    new Roll(new LobbyPlayer(3), 6),
+                    new Roll(new LobbyPlayer(4), 6),
+                },
+                new List<LobbyPlayer>
+                {
+                    new LobbyPlayer(3),
+                    new LobbyPlayer(4)
+                }
+            ];
 
+            yield return
+            [
+                new List<Roll>
+                {
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 4),
+                    new Roll(new LobbyPlayer(3), 4),
+                    new Roll(new LobbyPlayer(4), 4),
+                },
+                new List<LobbyPlayer>()
+                {
+                    new LobbyPlayer(2),
+                    new LobbyPlayer(3),
+                    new LobbyPlayer(4)
+                }
+            ];
+            
+        }
+        
+
+        [Fact]
         public void StartingRollTest_StartingRoll_ShouldReturnOneStartingRoll()
         {
             //Arrange
