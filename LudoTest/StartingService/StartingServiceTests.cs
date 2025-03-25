@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections;
+using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Services;
 using Moq;
@@ -66,7 +67,7 @@ namespace LudoTest.StartingServiceTests
         }
 
         [Theory]
-        [MemberData(nameof(GetRerollersData))]
+        [ClassData(typeof(ReRollersData))]
         public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<LobbyPlayer> expected)
         {
             //Act
@@ -76,26 +77,58 @@ namespace LudoTest.StartingServiceTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        public static IEnumerable<object[]> GetRerollersData()
+        [Fact]
+        public void StartingRollTest_StartingRoll_ShouldReturnOneStartingRoll()
         {
-            yield return
-            [
+            //Arrange
+            _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
+
+            Lobby lobby = new Lobby([
+                new LobbyPlayer(1),
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            ],1) ;
+
+            Lobby expectedLobby = new Lobby([
+                new LobbyPlayer(1),
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            ], 1);
+
+            var expectedRoll = new Roll(new LobbyPlayer(1), 1);
+            expectedLobby.StartingRolls.Add(expectedRoll);
+
+            //Act
+            var result = startingService.StartingRoll(lobby);
+
+            //Assert
+            result.Should().BeEquivalentTo(expectedLobby);
+        }
+    }
+    
+    public class ReRollersData : IEnumerable<object[]>
+    {
+        private readonly List<object[]> _data =
+        [
+            new object[]
+            {
                 new List<Roll>
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 2),
-                    new Roll(new LobbyPlayer(3), 6),
-                    new Roll(new LobbyPlayer(4), 6),
+                new Roll(new LobbyPlayer(1), 1),
+                new Roll(new LobbyPlayer(2), 2),
+                new Roll(new LobbyPlayer(3), 6),
+                new Roll(new LobbyPlayer(4), 6),
                 },
                 new List<LobbyPlayer>
                 {
                     new LobbyPlayer(3),
                     new LobbyPlayer(4)
                 }
-            ];
-
-            yield return
-            [
+            },
+            new object[]
+            {
                 new List<Roll>
                 {
                     new Roll(new LobbyPlayer(1), 1),
@@ -109,41 +142,11 @@ namespace LudoTest.StartingServiceTests
                     new LobbyPlayer(3),
                     new LobbyPlayer(4)
                 }
-            ];
-            
-        }
-        
+            }
+        ];
 
-        [Fact]
-        public void StartingRollTest_StartingRoll_ShouldReturnOneStartingRoll()
-        {
-            //Arrange
-            _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
+        public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
 
-            Lobby lobby = new Lobby(new List<LobbyPlayer>()
-            {
-                new LobbyPlayer(1),
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
-            },1) ;
-
-            Lobby expectedLobby = new Lobby(new List<LobbyPlayer>()
-            {
-                new LobbyPlayer(1),
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
-            }, 1);
-
-            var expectedRoll = new Roll(new LobbyPlayer(1), 1);
-            expectedLobby.StartingRolls.Add(expectedRoll);
-
-            //Act
-            var result = startingService.StartingRoll(lobby);
-
-            //Assert
-            result.Should().BeEquivalentTo(expectedLobby);
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
