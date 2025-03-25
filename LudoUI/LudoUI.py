@@ -76,6 +76,7 @@ def starting_roll_frame(is_running, player_id, dice_value, button_text, button_a
 
     def on_button_click():
         updated_dice_value = on_starting_roll()
+        #TODO FIX: this should not be done this way
         starting_roll_frame(is_running, player_id, updated_dice_value, button_text, button_action)
 
     new_button = Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
