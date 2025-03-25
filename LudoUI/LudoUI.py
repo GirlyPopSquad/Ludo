@@ -1,16 +1,19 @@
 import sys
+
 import pygame
 import pygame.freetype
 
-from Constants import WHITE, BLACK, RED, YELLOW, GREEN, BLUE
-from LobbyClient import createLobby
+from Constants import WHITE, BLACK, RED, GREEN, BLUE
+from clients.LobbyClient import create_lobby
+from PlayerColor import get_piece_colorcode
+from clients.StartingRollClient import next_starting_roll
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 
 # Initialize Pygame
 pygame.init()
 
-lobby = createLobby()
+lobby = create_lobby()
 
 # Set up display
 WIDTH, HEIGHT = 600, 400
@@ -29,13 +32,13 @@ class Button:
         self.hover_color = hover_color
         self.action = action
 
-    def draw(self, screen):
+    def draw(self, surface):
         mouse_pos = pygame.mouse.get_pos()
         color = self.hover_color if self.rect.collidepoint(mouse_pos) else self.color
-        pygame.draw.rect(screen, color, self.rect)
+        pygame.draw.rect(surface, color, self.rect)
         text_surf = font.render(self.text, True, WHITE)
         text_rect = text_surf.get_rect(center=self.rect.center)
-        screen.blit(text_surf, text_rect)
+        surface.blit(text_surf, text_rect)
 
     def check_click(self):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -48,25 +51,47 @@ class Button:
 def start_game():
     starting_roll()
 
+def on_starting_roll():
+    global lobby
+    updated_lobby = next_starting_roll(lobby)
+    lobby = updated_lobby
+    return updated_lobby.starting_rolls[-1].value
 
 def starting_roll():
+    current_player_rolling = len(lobby.starting_rolls) + 1
+    running = True
+    starting_roll_frame(running, current_player_rolling,"?", "Roll", on_starting_roll)
+
+def starting_roll_frame(is_running, player_id, dice_value, button_text, button_action):
     new_screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Ludo - Starting Roll")
     new_screen.fill(WHITE)
 
-    running = True
-    while running:
+    text = font.render("Starting Roll", True, BLACK)
+    new_screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
+    draw_ludo_piece(new_screen, WIDTH // 5, 180, player_id, font)
+    draw_dice(new_screen, WIDTH // 5, 180, dice_value, font)
+
+    player_color = get_piece_colorcode(player_id)
+
+    def on_button_click():
+        updated_dice_value = on_starting_roll()
+        starting_roll_frame(is_running, player_id, updated_dice_value, button_text, button_action)
+
+    new_button = Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
+                        BUTTON_WIDTH,
+                        BUTTON_HEIGHT, player_color, GREEN, on_button_click)
+
+    while is_running:
+
+        new_button.draw(new_screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                is_running = False
                 quit_game()
-
-        # Add content to the new frame here
-        new_screen.fill(WHITE)
-        text = font.render("Starting Roll", True, BLACK)
-        new_screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
-        draw_ludo_piece(screen, WIDTH // 5, 180, RED, 1, font)
-        draw_dice(screen, WIDTH // 5, 180, "?", font)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                new_button.check_click()
 
         pygame.display.update()
 
@@ -98,10 +123,10 @@ def start_menu():
 
         piece_positions = [WIDTH // 5, WIDTH // 5 * 2, WIDTH // 5 * 3, WIDTH // 5 * 4]
 
-        draw_ludo_piece(screen, piece_positions[0], 180, RED, 1, font)
-        draw_ludo_piece(screen, piece_positions[1], 180, BLUE, 2, font)
-        draw_ludo_piece(screen, piece_positions[2], 180, GREEN, 3, font)
-        draw_ludo_piece(screen, piece_positions[3], 180, YELLOW, 4, font)
+        draw_ludo_piece(screen, piece_positions[0], 180, 1, font)
+        draw_ludo_piece(screen, piece_positions[1], 180, 2, font)
+        draw_ludo_piece(screen, piece_positions[2], 180, 3, font)
+        draw_ludo_piece(screen, piece_positions[3], 180, 4, font)
 
         # Draw buttons
         play_button.draw(screen)
