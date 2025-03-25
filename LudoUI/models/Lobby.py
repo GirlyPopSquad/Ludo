@@ -1,5 +1,6 @@
-from LobbyPlayer import LobbyPlayer
-from Roll import Roll
+from models.LobbyPlayer import LobbyPlayer
+from models.Roll import Roll
+
 
 class Lobby:
     def __init__(self, lobby_id, players: [LobbyPlayer], starting_rolls: [Roll]):
