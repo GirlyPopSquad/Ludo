@@ -11,7 +11,6 @@ namespace LudoTest.StartingServiceTests
         private readonly StartingService startingService;
         public StartingServiceTests()
         {
-            new Mock<IPlayerService>();
             _diceServiceMock = new Mock<IDiceService>();
             startingService = new StartingService(_diceServiceMock.Object);
         }
