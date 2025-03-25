@@ -13,6 +13,8 @@ from draw.ludo_piece import draw_ludo_piece
 # Initialize Pygame
 pygame.init()
 
+game_state = "StartMenu"
+
 lobby = create_lobby()
 
 # Set up display
@@ -49,7 +51,8 @@ class Button:
 
 # Functions for button actions
 def start_game():
-    starting_roll()
+    global game_state
+    game_state = "Lobby"
 
 def on_starting_roll():
     global lobby
@@ -58,14 +61,13 @@ def on_starting_roll():
     return updated_lobby.starting_rolls[-1].value
 
 def starting_roll():
-    running = True
-    starting_roll_frame(running, 1,"?", "Roll", 0)
-
-def starting_roll_frame(is_running, player_id, dice_value, button_text, state):
-    new_screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Ludo - Starting Roll")
-    new_screen.fill(WHITE)
 
+    starting_roll_frame(screen, 1, "?", "Roll", 0)
+
+
+def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
+    new_screen.fill(WHITE)
     text = font.render("Starting Roll", True, BLACK)
     new_screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
     draw_ludo_piece(new_screen, WIDTH // 5, 180, player_id, font)
@@ -75,12 +77,21 @@ def starting_roll_frame(is_running, player_id, dice_value, button_text, state):
 
     def on_click_next():
         updated_player_id = player_id + 1
-        starting_roll_frame(is_running, updated_player_id, "?", "Roll", 0)
+        if updated_player_id > len(lobby.players):
+            starting_roll_frame(new_screen, player_id, dice_value, "Done", 3)
+
+        else:
+            starting_roll_frame(new_screen, updated_player_id, "?", "Roll", 0)
 
     def on_click_roll():
         updated_dice_value = on_starting_roll()
         updated_button_text = "Next"
-        starting_roll_frame(is_running, player_id, updated_dice_value, updated_button_text, 1)
+        starting_roll_frame(new_screen, player_id, updated_dice_value, updated_button_text, 1)
+
+    def on_done():
+        print("ON DONE")
+        global game_state
+        game_state = "NOT IMPLEMENTED"
 
     button_action = None
 
@@ -88,12 +99,16 @@ def starting_roll_frame(is_running, player_id, dice_value, button_text, state):
         button_action = on_click_roll
     elif state == 1:
         button_action = on_click_next
+    elif state == 3:
+        button_action = on_done
 
     new_button = Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
                         BUTTON_WIDTH,
                         BUTTON_HEIGHT, player_color, GREEN, button_action)
 
-    while is_running:
+    global game_state
+
+    while game_state == "Lobby":
 
         new_button.draw(new_screen)
 
@@ -151,6 +166,16 @@ def start_menu():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 play_button.check_click()
                 quit_button.check_click()
+
+        if game_state == "Lobby":
+            starting_roll()
+
+        if game_state == "NOT IMPLEMENTED":
+            screen.fill(WHITE)
+            not_implemented_text = font.render("Not implemented yet", True, BLACK)
+            screen.blit(not_implemented_text, (
+            WIDTH // 2 - not_implemented_text.get_width() // 2, HEIGHT // 2 - not_implemented_text.get_height() // 2))
+
 
         pygame.display.update()
 
