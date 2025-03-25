@@ -58,11 +58,10 @@ def on_starting_roll():
     return updated_lobby.starting_rolls[-1].value
 
 def starting_roll():
-    current_player_rolling = len(lobby.starting_rolls) + 1
     running = True
-    starting_roll_frame(running, current_player_rolling,"?", "Roll", on_starting_roll)
+    starting_roll_frame(running, 1,"?", "Roll", 0)
 
-def starting_roll_frame(is_running, player_id, dice_value, button_text, button_action):
+def starting_roll_frame(is_running, player_id, dice_value, button_text, state):
     new_screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Ludo - Starting Roll")
     new_screen.fill(WHITE)
@@ -74,14 +73,25 @@ def starting_roll_frame(is_running, player_id, dice_value, button_text, button_a
 
     player_color = get_piece_colorcode(player_id)
 
-    def on_button_click():
+    def on_click_next():
+        updated_player_id = player_id + 1
+        starting_roll_frame(is_running, updated_player_id, "?", "Roll", 0)
+
+    def on_click_roll():
         updated_dice_value = on_starting_roll()
-        #TODO FIX: this should not be done this way
-        starting_roll_frame(is_running, player_id, updated_dice_value, button_text, button_action)
+        updated_button_text = "Next"
+        starting_roll_frame(is_running, player_id, updated_dice_value, updated_button_text, 1)
+
+    button_action = None
+
+    if state == 0:
+        button_action = on_click_roll
+    elif state == 1:
+        button_action = on_click_next
 
     new_button = Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
                         BUTTON_WIDTH,
-                        BUTTON_HEIGHT, player_color, GREEN, on_button_click)
+                        BUTTON_HEIGHT, player_color, GREEN, button_action)
 
     while is_running:
 
