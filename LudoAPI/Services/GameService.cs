@@ -4,17 +4,12 @@ namespace LudoAPI.Services
 {
     public class GameService : IGameService
     {
-
-        public Game StartNewGame(List<Player> players)
+        public Game Start(Lobby lobby)
         {
-            //Create and assign pieces to players
-            //Create Board
-            //Place player pieces in starting spots
-            //Return Game
             throw new NotImplementedException();
         }
 
-        public Player HaveTurn(Game game, Player player)
+        public LobbyPlayer HaveTurn(Game game, LobbyPlayer player)
         {
             throw new NotImplementedException();
         }

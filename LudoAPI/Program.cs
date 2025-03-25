@@ -1,4 +1,5 @@
 
+using LudoAPI.Repositories;
 using LudoAPI.Services;
 
 namespace LudoAPI
@@ -17,7 +18,7 @@ namespace LudoAPI
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IDiceService, DiceService>();
-            builder.Services.AddSingleton<IQueueService, QueueService>();
+            builder.Services.AddSingleton<LobbyRepository>();
 
             var app = builder.Build();
 

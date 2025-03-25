@@ -4,6 +4,6 @@
     {
         int RollDice();
 
-        bool IsItA6();
+        bool IsItA6(int i);
     }
 }

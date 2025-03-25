@@ -9,7 +9,7 @@ public class PlayerTest
     public void player_hasCorrectColor()
     {
         //Arrange
-        var player = new Player(1);
+        var player = new LobbyPlayer(1);
             
         //Act
         var playerColor = (Color) player.Id;

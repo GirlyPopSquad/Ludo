@@ -2,14 +2,14 @@
 {
     public class Roll
     {
-        private Player player;
+        public LobbyPlayer Player { get; }
 
-        private int value;
+        public int Value { get; }
 
-        public Roll(Player _player, int _value)
+        public Roll(LobbyPlayer _player, int _value)
         {
-            this.player = _player;
-            this.value = _value;
+            this.Player = _player;
+            this.Value = _value;
         }
     }
 }

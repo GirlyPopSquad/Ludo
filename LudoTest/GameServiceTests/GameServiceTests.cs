@@ -24,25 +24,27 @@ namespace LudoTest.GameServiceTests
         [Fact]
         public void StartNewGame()
         {
-            //Arrange 
             GameService service = new GameService();
-            var bluePlayer = new Player(1);
-            var redPlayer = new Player(2);
-            var yellowPlayer = new Player(3);
-            var greenPlayer = new Player(4);
-            var players = new List<Player> { bluePlayer, redPlayer, yellowPlayer, greenPlayer };
-            
+            //Arrange 
+            var bluePlayer = new LobbyPlayer(1);
+            var redPlayer = new LobbyPlayer(2);
+            var yellowPlayer = new LobbyPlayer(3);
+            var greenPlayer = new LobbyPlayer(4);
+            var players = new List<LobbyPlayer> { bluePlayer, redPlayer, yellowPlayer, greenPlayer };
+
+            var lobby = new Lobby(players, 1);
+
             //Act
-            var newGame = service.StartNewGame(players);
-            
+            var newGame = service.Start(lobby);
+
             //Assert
-            
+
             //A starting player hasn't yet been decided
-            newGame.currentPlayer.Should().BeNull();
-            
+            newGame.currentPlayerId.Should().BeNull();
+
             newGame.players.Count.Should().Be(4);
             newGame.players.Should().BeEquivalentTo(players);
-            
+
         }
     }
 }

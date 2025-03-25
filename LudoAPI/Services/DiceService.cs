@@ -2,14 +2,24 @@
 {
     public class DiceService : IDiceService
     {
+
+        private readonly Random _random = new();
         public int RollDice()
         {
-            throw new NotImplementedException();
+
+            return _random.Next(1, 7);
         }
 
-        public bool IsItA6()
+        public bool IsItA6(int i)
         {
-            throw new NotImplementedException();
+            if (i == 6)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

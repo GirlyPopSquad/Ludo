@@ -4,11 +4,9 @@ namespace LudoAPI.Services
 {
     public interface IStartingService
     {
-        bool ShouldReRoll();
-
-        void AddAndReplaceStartingRolls();
-
-        List<StartingRoll> StartingRoll();
-
+        Lobby HandleRerolls(Lobby lobby);
+        List<LobbyPlayer> GetReRollers(List<Roll> startingRolls);
+        bool ShouldReRoll(List<Roll> startingRolls);
+        Lobby StartingRoll(Lobby lobby);
     }
 }

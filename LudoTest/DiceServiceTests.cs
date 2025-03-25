@@ -1,3 +1,4 @@
+using FluentAssertions;
 using LudoAPI.Services;
 
 namespace LudoTest
@@ -5,7 +6,7 @@ namespace LudoTest
     public class DiceServiceTests
     {
         [Fact]
-        public void RollDiceTest()
+        public void DiceService_RollDice_ShouldReturnNumberBetween1And6()
         {
             //Arrange
             DiceService service = new DiceService();
@@ -15,21 +16,38 @@ namespace LudoTest
             var result = service.RollDice();
 
             //Assert
-            Assert.Contains(result, acceptableNumbers);
+            result.Should().BeOneOf(acceptableNumbers);
         }
 
 
         [Fact]
-        public void IsItA6Tests()
+        public void DiceService_IsItA6_TrueIf6()
+        {
+            //Arrage
+            DiceService service = new DiceService();
+            
+
+            //Act
+            bool result = service.IsItA6(6);
+            //service.RollDice();
+
+            //Assert
+            result.Should().Be(true);
+        }
+
+        [Fact]
+        public void DiceService_IsItA6_ReturnsFalseIfNot6()
         {
             //Arrage
             DiceService service = new DiceService();
 
+
             //Act
-            bool result = service.IsItA6();
+            bool result = service.IsItA6(5);
+            //service.RollDice();
 
             //Assert
-            Assert.Equal(true, result);
+            result.Should().Be(false);
         }
 
     }

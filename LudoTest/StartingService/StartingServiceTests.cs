@@ -26,82 +26,116 @@ namespace LudoTest.StartingServiceTests
         public void StartingService_ShouldReRoll_ReturnsTrueIfMoreHighestRollers()
         {
             //Arrange
-            
-            /*TODO will be changed
-            ConcurrentDictionary<Player, int> highestRollers = new();
-            highestRollers.TryAdd(new Player(Color.Blue), 4);
-            highestRollers.TryAdd(new Player(Color.Green), 4);
-            */
+            var rolls = new List<Roll>()
+            {
+                new Roll(new LobbyPlayer(1), 1),
+                new Roll(new LobbyPlayer(2), 2),
+                new Roll(new LobbyPlayer(3), 4),
+                new Roll(new LobbyPlayer(4), 4),
+            };
 
             //Act
-            var shouldTheyReroll = startingService.ShouldReRoll();
+            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
 
             //Assert
             shouldTheyReroll.Should().BeTrue();
         }
 
         [Fact]
-        public void StartingService_AddAndReplaceStartingRolls_ReplacesTheDictionaryWithNewDictionary()
+        public void StartingService_ShouldReRoll_ReturnsFalseIfOnlyOneHighestRoller()
         {
-            /* TODO will be changed
             //Arrange
-            _playerServiceMock.Setup(service => service.Players)
-                           .Returns(new List<Player>
-                           {
-                               new(Color.Red),
-                               new(Color.Red),
-                               new(Color.Red),
-                               new(Color.Red)
-                           });
-
-            ConcurrentDictionary<Player, int> highestRollers = new();
-            highestRollers.TryAdd(new Player(Color.Blue), 4);
-            highestRollers.TryAdd(new Player(Color.Green), 4);
-
-            var rolls = startingService.RollAndReturnAllPlayerRolls();
+            var rolls = new List<Roll>()
+            {
+                new Roll(new LobbyPlayer(1), 1),
+                new Roll(new LobbyPlayer(2), 2),
+                new Roll(new LobbyPlayer(3), 3),
+                new Roll(new LobbyPlayer(4), 4),
+            };
 
             //Act
-            startingService.AddAndReplaceStartingRolls(rolls);
+            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
 
             //Assert
-            startingService.StartingRolls.Should().HaveCount(4);
-            startingService.AddAndReplaceStartingRolls(highestRollers);
-            startingService.StartingRolls.Should().HaveCount(2);
-            */
+            shouldTheyReroll.Should().BeFalse();
+        }
+
+        [Fact]
+        public void StartingService_ShouldReRoll_ReturnsFalseIfTwoLowerDoubles()
+        {
+            //Arrange
+            var rolls = new List<Roll>()
+            {
+                new Roll(new LobbyPlayer(1), 1),
+                new Roll(new LobbyPlayer(2), 2),
+                new Roll(new LobbyPlayer(3), 2),
+                new Roll(new LobbyPlayer(4), 4),
+            };
+
+            //Act
+            var shouldTheyReroll = startingService.ShouldReRoll(rolls);
+
+            //Assert
+            shouldTheyReroll.Should().BeFalse();
+        }
+
+        [Fact]
+        public void StartingService_GetRerollers_ShouldReturnTheRerollers()
+        {
+            //Arrange
+            var rolls = new List<Roll>()
+            {
+                new Roll(new LobbyPlayer(1), 1),
+                new Roll(new LobbyPlayer(2), 4),
+                new Roll(new LobbyPlayer(3), 4),
+                new Roll(new LobbyPlayer(4), 4),
+            };
+
+            var expected = new List<LobbyPlayer>
+            {
+                rolls[1].Player,
+                rolls[2].Player,
+                rolls[3].Player
+            };
+
+            //Act
+            var actual = startingService.GetReRollers(rolls);
+
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
 
-        public void StartingRollTest()
+        public void StartingRollTest_StartingRoll_ShouldReturnOneStartingRoll()
         {
             //Arrange
             _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
 
-            List<StartingRoll> rolls = new List<StartingRoll>();
-
-            Lobby lobby = new Lobby(new List<Player>()
+            Lobby lobby = new Lobby(new List<LobbyPlayer>()
             {
-                new Player(1),
-                new Player(2),
-                new Player(3),
-                new Player(4)
-            }) ;
+                new LobbyPlayer(1),
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            },1) ;
 
-            StartingRoll startingRoll = new StartingRoll(lobby);
-
-            var expectedRoll = new Roll(new Player(1), 1);
-            var expectedStartingRolls = new StartingRoll(lobby)
+            Lobby expectedLobby = new Lobby(new List<LobbyPlayer>()
             {
-                Rolls = new List<Roll>(){
-                    expectedRoll
-                }
-            };
+                new LobbyPlayer(1),
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            }, 1);
+
+            var expectedRoll = new Roll(new LobbyPlayer(1), 1);
+            expectedLobby.StartingRolls.Add(expectedRoll);
 
             //Act
-            var result = startingService.StartingRoll(rolls);
+            var result = startingService.StartingRoll(lobby);
 
             //Assert
-            Assert.Equal(result, new List<StartingRoll>() { expectedStartingRolls });
+            result.Should().BeEquivalentTo(expectedLobby);
         }
     }
 }

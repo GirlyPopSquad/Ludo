@@ -1,13 +1,11 @@
 ﻿namespace LudoAPI.Models
 {
-    public class Player
+    public class LobbyPlayer
     {
         // number from 1-4
         public int Id { get; }
 
-        public List<Piece>? Pieces { get; set; }
-
-        public Player(int id)
+        public LobbyPlayer(int id)
         {
             Id = id;
         }
