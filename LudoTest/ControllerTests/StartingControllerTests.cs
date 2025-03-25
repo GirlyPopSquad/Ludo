@@ -2,13 +2,7 @@
 using LudoAPI.Controllers;
 using LudoAPI.Models;
 using LudoAPI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LudoTest.ControllerTests
 {
@@ -26,11 +20,29 @@ namespace LudoTest.ControllerTests
         [Fact]
         public void GetStartingRoll_ShouldReturnStartingRoll()
         {
-            //Arrange
+            // Arrange
+            var initialPlayers = new List<LobbyPlayer>
+            {
+                new LobbyPlayer(1),
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            };
+            
+            var initialLobby = new Lobby(initialPlayers, 1);
+            
+            var startingRoll = new Roll(new LobbyPlayer(1), 6);
+            var expectedLobby = new Lobby(initialPlayers, 1);
+            expectedLobby.StartingRolls.Add(startingRoll);
+            
+            
+            _startingServiceMock.Setup(service => service.StartingRoll(initialLobby)).Returns(expectedLobby);
 
-            //Act
-
-            //Assert
+            // Act
+            var result = _controller.GetStartingRoll(initialLobby);
+            // Assert
+            result.Should().NotBeNull();
+            result.Value.Should().Be(expectedLobby);
 
         }
     }

@@ -1,6 +1,5 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers
@@ -15,19 +14,19 @@ namespace LudoAPI.Controllers
             _startingService = startingService;
         }
 
-        [HttpGet]
-        public ActionResult<Lobby> GetStartingRoll(Lobby lobby)
+        [HttpPost("StartingRoll")]
+        public ActionResult<Lobby> GetStartingRoll([FromBody] Lobby lobby)
         {
-            throw new NotImplementedException();
+            return _startingService.StartingRoll(lobby);
         }
 
-        [HttpGet]
+        [HttpGet("GetRerollers")]
         public ActionResult<List<LobbyPlayer>> GetReRollers(List<Roll> startingRolls)
         {
             throw new NotImplementedException();
         }
 
-        [HttpGet]
+        [HttpGet("GetShouldReroll")]
         public ActionResult<bool> GetShouldReRoll(List<Roll> startingRolls)
         {
             throw new NotImplementedException();

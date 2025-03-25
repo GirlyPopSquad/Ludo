@@ -3,11 +3,14 @@ import pygame
 import pygame.freetype
 
 from Constants import WHITE, BLACK, RED, YELLOW, GREEN, BLUE
+from LobbyClient import createLobby
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 
 # Initialize Pygame
 pygame.init()
+
+lobby = createLobby()
 
 # Set up display
 WIDTH, HEIGHT = 600, 400
@@ -15,6 +18,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
+
 
 # Button class
 class Button:
@@ -39,9 +43,11 @@ class Button:
                 if self.action:
                     self.action()
 
+
 # Functions for button actions
 def start_game():
     starting_roll()
+
 
 def starting_roll():
     new_screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -64,16 +70,20 @@ def starting_roll():
 
         pygame.display.update()
 
+
 def quit_game():
     pygame.quit()
     sys.exit()
+
 
 BUTTON_WIDTH, BUTTON_HEIGHT = 200, 60
 PADDING = 20  # Space between buttons
 
 # Create buttons
-play_button = Button("Play", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, BLUE, GREEN, start_game)
-quit_button = Button("Quit", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING, BUTTON_WIDTH, BUTTON_HEIGHT, RED, (255, 100, 100), quit_game)
+play_button = Button("Play", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 2 - BUTTON_HEIGHT,
+                     BUTTON_WIDTH, BUTTON_HEIGHT, BLUE, GREEN, start_game)
+quit_button = Button("Quit", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING, BUTTON_WIDTH,
+                     BUTTON_HEIGHT, RED, (255, 100, 100), quit_game)
 
 
 def start_menu():
@@ -107,6 +117,7 @@ def start_menu():
                 quit_button.check_click()
 
         pygame.display.update()
+
 
 # Run the start menu
 start_menu()
