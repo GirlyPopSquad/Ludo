@@ -6,7 +6,7 @@ import pygame.freetype
 from Constants import WHITE, BLACK, RED, GREEN, BLUE
 from clients.LobbyClient import create_lobby
 from PlayerColor import get_piece_colorcode
-from clients.StartingRollClient import next_starting_roll
+from clients.StartingRollClient import next_starting_roll, get_rerollers, get_should_reroll
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 
@@ -58,7 +58,7 @@ def on_starting_roll():
     global lobby
     updated_lobby = next_starting_roll(lobby)
     lobby = updated_lobby
-    return updated_lobby.starting_rolls[-1].value
+    return updated_lobby.rolls[-1].value
 
 def starting_roll():
     pygame.display.set_caption("Ludo - Starting Roll")
@@ -90,8 +90,14 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
 
     def on_done():
         print("ON DONE")
-        global game_state
-        game_state = "NOT IMPLEMENTED"
+        startingRolls = lobby.rolls
+        should_we_reroll = get_should_reroll(startingRolls)
+        if(should_we_reroll):
+            rerollers = get_rerollers(startingRolls)
+
+
+       # global game_state
+        #game_state = "NOT IMPLEMENTED"
 
     button_action = None
 

@@ -35,7 +35,7 @@ namespace LudoAPI.Services
         {
             int playerCount = lobby.Players.Count();
 
-            int rollCount = lobby.StartingRolls.Count();
+            int rollCount = lobby.Rolls.Count();
 
             if (rollCount >= playerCount)
             {
@@ -46,7 +46,7 @@ namespace LudoAPI.Services
             var value = _diceService.RollDice();
 
             var newRoll = new Roll(player, value);
-            lobby.StartingRolls.Add(newRoll);
+            lobby.Rolls.Add(newRoll);
 
             return lobby;
         }

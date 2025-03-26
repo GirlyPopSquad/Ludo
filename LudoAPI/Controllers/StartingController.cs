@@ -21,7 +21,7 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("GetRerollers")]
-        public ActionResult<List<LobbyPlayer>> GetReRollers(List<Roll> startingRolls)
+        public ActionResult<List<LobbyPlayer>> GetReRollers([FromBody] List<Roll> startingRolls)
         {
             var rerollers = _startingService.GetReRollers(startingRolls);
             if (rerollers.Count == 0 || rerollers == null)
@@ -33,7 +33,7 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("GetShouldReroll")]
-        public ActionResult<bool> GetShouldReRoll(List<Roll> startingRolls)
+        public ActionResult<bool> GetShouldReRoll([FromBody] List<Roll> startingRolls)
         {
             try
             {

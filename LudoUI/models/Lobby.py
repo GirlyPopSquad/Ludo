@@ -1,22 +1,21 @@
 from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll
 
-
 class Lobby:
-    def __init__(self, lobby_id, players: [LobbyPlayer], starting_rolls: [Roll]):
-        self.lobby_id = lobby_id
-        self.players: [LobbyPlayer] = players
-        self.starting_rolls: [Roll] = starting_rolls
+    def __init__(self, id, players, rolls):
+        self.id = id
+        self.players = players
+        self.rolls = rolls
 
     @classmethod
     def from_json(cls, json_data):
-        players = [LobbyPlayer(**player) for player in json_data['players']]
-        starting_rolls = [Roll.from_json(roll) for roll in json_data['startingRolls']]
-        return cls(lobby_id=json_data['id'], players=players, starting_rolls=starting_rolls)
+        players = [LobbyPlayer.from_json(player) for player in json_data['players']]
+        rolls = [Roll.from_json(roll) for roll in json_data['rolls']]
+        return cls(id=json_data['id'], players=players, rolls=rolls)
 
     def to_dict(self):
         return {
-            'lobby_id': self.lobby_id,
+            'id': self.id,
             'players': [player.to_dict() for player in self.players],
-            'starting_rolls': [roll.to_dict() for roll in self.starting_rolls]
+            'rolls': [roll.to_dict() for roll in self.rolls]
         }

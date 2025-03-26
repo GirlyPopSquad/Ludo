@@ -2,18 +2,20 @@ from models.LobbyPlayer import LobbyPlayer
 
 
 class Roll:
-    def __init__(self, lobby_player: LobbyPlayer, value: int):
-        self.lobby_player: LobbyPlayer = lobby_player
-        self.value: int = value
+    def __init__(self, player, value):
+        self.player = player  # Should be an instance of LobbyPlayer
+        self.value = value
 
     @classmethod
-    def from_json(cls, roll):
-        lobby_player = LobbyPlayer(**roll['player'])
-        value = roll['value']
-        return cls(lobby_player, value)
+    def from_json(cls, json_data):
+        # Deserialize the JSON data to a Roll object
+        player = LobbyPlayer.from_json(json_data['player'])
+        value = json_data['value']
+        return cls(player, value)
 
     def to_dict(self):
+        # Convert the Roll object to a dictionary
         return {
-            'lobby_player': self.lobby_player.to_dict(),
+            'player': self.player.to_dict(),  # Convert the player to a dictionary
             'value': self.value
         }

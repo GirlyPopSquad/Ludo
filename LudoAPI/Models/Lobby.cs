@@ -3,11 +3,13 @@
 public class Lobby
 {
     
-    public int Id { get; }
+    public int Id { get; set; }
     
-    public List<LobbyPlayer> Players { get; } 
+    public List<LobbyPlayer> Players { get; set; } 
 
-    public List<Roll> StartingRolls { get; set; } = new List<Roll>();
+    public List<Roll> Rolls { get; set; } = new List<Roll>();
+
+    public Lobby() { }
     
     public Lobby(List<LobbyPlayer> players, int id)
     {
