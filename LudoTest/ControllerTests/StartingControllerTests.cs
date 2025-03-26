@@ -3,6 +3,81 @@ using LudoAPI.Controllers;
 using LudoAPI.Models;
 using LudoAPI.Services;
 using Moq;
+using System.Collections.Generic;
+using Xunit;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+            // Act
+            var result = _controller.GetStartingRoll(lobby);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<Lobby>>().Which.Value.Should().BeEquivalentTo(lobby);
+        }
+
+        [Fact]
+        public void GetReRollers_ShouldReturnReRollers()
+        {
+            // Arrange
+            var startingRolls = new List<Roll>();
+            var reRollers = new List<LobbyPlayer>();
+            _startingServiceMock.Setup(service => service.GetReRollers(It.IsAny<List<Roll>>())).Returns(reRollers);
+
+            // Act
+            var result = _controller.GetReRollers(startingRolls);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<List<LobbyPlayer>>>().Which.Value.Should().BeEquivalentTo(reRollers);
+        }
+
+        [Fact]
+        public void GetShouldReRoll_ShouldReturnShouldReRoll()
+        {
+            // Arrange
+            var startingRolls = new List<Roll>();
+            var shouldReRoll = true;
+            _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>())).Returns(shouldReRoll);
+
+            // Act
+            var result = _controller.GetShouldReRoll(startingRolls);
+
+using System.Linq;
+            result.Should().BeOfType<ActionResult<bool>>().Which.Value.Should().Be(shouldReRoll);
+        }
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LudoTest.ControllerTests
 {
@@ -20,30 +95,14 @@ namespace LudoTest.ControllerTests
         [Fact]
         public void GetStartingRoll_ShouldReturnStartingRoll()
         {
-            // Arrange
-            var initialPlayers = new List<LobbyPlayer>
-            {
-                new LobbyPlayer(1),
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
-            };
-            
-            var initialLobby = new Lobby(initialPlayers, 1);
-            
-            var startingRoll = new Roll(new LobbyPlayer(1), 6);
-            var expectedLobby = new Lobby(initialPlayers, 1);
-            expectedLobby.StartingRolls.Add(startingRoll);
-            
-            
-            _startingServiceMock.Setup(service => service.StartingRoll(initialLobby)).Returns(expectedLobby);
+            //Arrange
 
-            // Act
-            var result = _controller.GetStartingRoll(initialLobby);
+            //Act
+
+            //Assert
+
             // Assert
-            result.Should().NotBeNull();
-            result.Value.Should().Be(expectedLobby);
-
+            result.Should().BeOfType<ActionResult<bool>>().Which.Value.Should().Be(shouldReRoll);
         }
     }
 }

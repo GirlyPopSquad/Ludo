@@ -20,34 +20,19 @@ namespace LudoTest
         }
 
 
-        [Fact]
-        public void DiceService_IsItA6_TrueIf6()
+        [Theory]
+        [InlineData(6, true)]
+        [InlineData(5, false)]
+        public void DiceService_IsItA6_ShouldReturnExpectedResult(int input, bool expected)
         {
-            //Arrage
-            DiceService service = new DiceService();
-            
-
-            //Act
-            bool result = service.IsItA6(6);
-            //service.RollDice();
-
-            //Assert
-            result.Should().Be(true);
-        }
-
-        [Fact]
-        public void DiceService_IsItA6_ReturnsFalseIfNot6()
-        {
-            //Arrage
+            // Arrange
             DiceService service = new DiceService();
 
+            // Act
+            bool result = service.IsItA6(input);
 
-            //Act
-            bool result = service.IsItA6(5);
-            //service.RollDice();
-
-            //Assert
-            result.Should().Be(false);
+            // Assert
+            result.Should().Be(expected);
         }
 
     }
