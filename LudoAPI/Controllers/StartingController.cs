@@ -32,7 +32,7 @@ namespace LudoAPI.Controllers
             return Ok(rerollers);
         }
 
-        [HttpGet("GetShouldReroll")]
+        [HttpPost("GetShouldReroll")]
         public ActionResult<bool> GetShouldReRoll(List<Roll> startingRolls)
         {
             try
@@ -44,7 +44,6 @@ namespace LudoAPI.Controllers
             {
                 return BadRequest("Could not determine if reroll is needed");
             }
-            
         }
     }
 }
