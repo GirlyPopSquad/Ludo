@@ -20,16 +20,31 @@ namespace LudoAPI.Controllers
             return _startingService.StartingRoll(lobby);
         }
 
-        [HttpGet("GetRerollers")]
+        [HttpPost("GetRerollers")]
         public ActionResult<List<LobbyPlayer>> GetReRollers(List<Roll> startingRolls)
         {
-            throw new NotImplementedException();
+            var rerollers = _startingService.GetReRollers(startingRolls);
+            if (rerollers.Count == 0 || rerollers == null)
+            {
+                return BadRequest("Could not find rerollers");
+            }
+
+            return Ok(rerollers);
         }
 
         [HttpGet("GetShouldReroll")]
         public ActionResult<bool> GetShouldReRoll(List<Roll> startingRolls)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var shouldReroll = _startingService.ShouldReRoll(startingRolls);
+                return Ok(shouldReroll);
+            }
+            catch
+            {
+                return BadRequest("Could not determine if reroll is needed");
+            }
+            
         }
     }
 }
