@@ -1,20 +1,18 @@
-import sys
-
 import pygame
 import pygame.freetype
 
 from Constants import WHITE, BLACK, WIDTH, HEIGHT, DEEP_PINK
+from GameState import set_game_state, get_game_state, quit_game
 from PlayerColor import get_piece_colorcode
+from StartMenu import start_menu
 from clients.LobbyClient import create_lobby
 from clients.StartingRollClient import next_starting_roll, get_rerollers, get_should_reroll
-from draw.button import init_standard_button, init_play_button, init_quit_button
+from draw.button import init_standard_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 
 # Initialize Pygame
 pygame.init()
-
-game_state = "StartMenu"
 
 lobby = create_lobby()
 
@@ -23,11 +21,6 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
-
-# Functions for button actions
-def start_game():
-    global game_state
-    game_state = "Lobby"
 
 def on_starting_roll():
     global lobby
@@ -66,8 +59,7 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
     def on_done():
         print("ON DONE")
 
-        global game_state
-        game_state = "NOT IMPLEMENTED"
+        set_game_state("NOT IMPLEMENTED")
 
         #TODO: See rolls and check for rerolls
         startingRolls = lobby.rolls
@@ -87,9 +79,7 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
 
     new_button = init_standard_button(button_text, player_color, DEEP_PINK, button_action)
 
-    global game_state
-
-    while game_state == "Lobby":
+    while get_game_state() == "Lobby":
 
         new_button.draw(new_screen, font)
 
@@ -102,44 +92,10 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
         pygame.display.update()
 
 
-def quit_game():
-    pygame.quit()
-    sys.exit()
-
-def start_menu():
-    screen.fill(WHITE)
-
-    # Display title
-    title_text = font.render("Ludo Game", True, BLACK)
-    screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 50))
-
-    piece_positions = [WIDTH // 5, WIDTH // 5 * 2, WIDTH // 5 * 3, WIDTH // 5 * 4]
-
-    draw_ludo_piece(screen, piece_positions[0], 180, 1, font)
-    draw_ludo_piece(screen, piece_positions[1], 180, 2, font)
-    draw_ludo_piece(screen, piece_positions[2], 180, 3, font)
-    draw_ludo_piece(screen, piece_positions[3], 180, 4, font)
-
-    # Draw buttons
-    play_button = init_play_button(start_game)
-    play_button.draw(screen, font)
-
-    quit_button = init_quit_button(quit_game)
-    quit_button.draw(screen, font)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            quit_game()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            play_button.check_click()
-            quit_button.check_click()
-
-
 def ludo():
     game_on = True
 
-    global game_state
-    game_state = "StartMenu"
+    set_game_state("StartMenu")
 
     while game_on:
         # Event handling
@@ -148,13 +104,13 @@ def ludo():
                 game_on = False
                 quit_game()
 
-        if game_state == "StartMenu":
-            start_menu()
+        if get_game_state() == "StartMenu":
+            start_menu(screen, font)
 
-        if game_state == "Lobby":
+        if get_game_state() == "Lobby":
             starting_roll()
 
-        if game_state == "NOT IMPLEMENTED":
+        if get_game_state() == "NOT IMPLEMENTED":
             screen.fill(WHITE)
             not_implemented_text = font.render("Not implemented yet", True, BLACK)
             screen.blit(not_implemented_text, (
