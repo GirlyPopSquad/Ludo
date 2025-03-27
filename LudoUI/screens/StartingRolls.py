@@ -1,8 +1,8 @@
 import pygame
 
 from Constants import WHITE, WIDTH, BLACK, HEIGHT, DEEP_PINK
-from GameStateManager import set_game_state, GameState, get_game_state, quit_game
-from LobbyStateManager import get_lobby, set_lobby
+from stateManagers.GameStateManager import set_game_state, GameState, get_game_state, quit_game
+from stateManagers.LobbyStateManager import get_lobby, set_lobby
 from PlayerColor import get_piece_colorcode
 from clients.StartingRollClient import next_starting_roll, get_should_reroll, get_rerollers
 from draw.button import init_standard_button

@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from LobbyStateManager import get_lobby
+from stateManagers.LobbyStateManager import get_lobby
 from models.Lobby import Lobby
 from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll

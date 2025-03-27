@@ -2,10 +2,10 @@ import pygame
 import pygame.freetype
 
 from Constants import WHITE, BLACK, WIDTH, HEIGHT
-from GameStateManager import set_game_state, get_game_state, quit_game, GameState
-from LobbyStateManager import set_lobby
-from StartMenu import start_menu
-from StartingRoll import starting_roll
+from stateManagers.GameStateManager import set_game_state, get_game_state, quit_game, GameState
+from stateManagers.LobbyStateManager import set_lobby
+from screens.StartMenu import start_menu
+from screens.StartingRolls import starting_roll
 from clients.LobbyClient import create_lobby
 
 # Initialize Pygame
