@@ -16,7 +16,7 @@ def starting_roll(screen, font):
     starting_roll_frame(screen, font, 1, "?", "Roll", 0)
 
 
-def starting_roll_frame(new_screen,font, player_id, dice_value, button_text, state):
+def starting_roll_frame(new_screen, font, player_id, dice_value, button_text, state):
     new_screen.fill(WHITE)
     text = font.render("Starting Roll", True, BLACK)
     new_screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
@@ -72,6 +72,7 @@ def starting_roll_frame(new_screen,font, player_id, dice_value, button_text, sta
                 new_button.check_click()
 
         pygame.display.update()
+
 
 def on_starting_roll():
     updated_lobby = next_starting_roll()

@@ -1,6 +1,7 @@
 from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll
 
+
 class Lobby:
     def __init__(self, id, players, rolls):
         self.id = id

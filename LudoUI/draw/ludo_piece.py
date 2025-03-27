@@ -1,17 +1,15 @@
 import pygame
 
-from PlayerColor import get_piece_colorcode
 from Constants import BLACK
+from PlayerColor import get_piece_colorcode
 
 
 def draw_ludo_piece(surface, x, y, player_id, font):
-
     body_height = 50
     body_width = 50
     head_radius = 15
     head_offset = 10
     color = get_piece_colorcode(player_id)
-
 
     # 🔲 Draw black outline for the body (slightly bigger)
     pygame.draw.polygon(surface, BLACK, [(x - body_width // 2 - 2, y),

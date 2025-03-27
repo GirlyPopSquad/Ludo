@@ -2,6 +2,7 @@ import pygame
 
 from Constants import WHITE, WIDTH, HEIGHT, BLUE, GREEN, RED
 
+
 class Button:
     def __init__(self, text, x, y, width, height, color, hover_color, action=None):
         self.text = text
@@ -29,15 +30,18 @@ class Button:
 BUTTON_WIDTH, BUTTON_HEIGHT = 200, 60
 PADDING = 20
 
+
 def init_play_button(action):
     return Button("Play", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 2 - BUTTON_HEIGHT,
-                     BUTTON_WIDTH, BUTTON_HEIGHT, BLUE, GREEN, action)
+                  BUTTON_WIDTH, BUTTON_HEIGHT, BLUE, GREEN, action)
+
 
 def init_quit_button(action):
     return Button("Quit", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING, BUTTON_WIDTH,
-                     BUTTON_HEIGHT, RED, (255, 100, 100), action)
+                  BUTTON_HEIGHT, RED, (255, 100, 100), action)
+
 
 def init_standard_button(button_text, color, hover_color, action):
     return Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
-                        BUTTON_WIDTH,
-                        BUTTON_HEIGHT, color, hover_color, action)
+                  BUTTON_WIDTH,
+                  BUTTON_HEIGHT, color, hover_color, action)

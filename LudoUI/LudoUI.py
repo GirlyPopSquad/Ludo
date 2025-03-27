@@ -19,6 +19,7 @@ pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
 
+
 def ludo():
     game_on = True
 
