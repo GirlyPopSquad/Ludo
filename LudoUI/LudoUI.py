@@ -106,39 +106,50 @@ def quit_game():
     pygame.quit()
     sys.exit()
 
-
 def start_menu():
-    gameOn = True
+    screen.fill(WHITE)
 
-    while gameOn:
-        screen.fill(WHITE)
+    # Display title
+    title_text = font.render("Ludo Game", True, BLACK)
+    screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 50))
 
-        # Display title
-        title_text = font.render("Ludo Game", True, BLACK)
-        screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 50))
+    piece_positions = [WIDTH // 5, WIDTH // 5 * 2, WIDTH // 5 * 3, WIDTH // 5 * 4]
 
-        piece_positions = [WIDTH // 5, WIDTH // 5 * 2, WIDTH // 5 * 3, WIDTH // 5 * 4]
+    draw_ludo_piece(screen, piece_positions[0], 180, 1, font)
+    draw_ludo_piece(screen, piece_positions[1], 180, 2, font)
+    draw_ludo_piece(screen, piece_positions[2], 180, 3, font)
+    draw_ludo_piece(screen, piece_positions[3], 180, 4, font)
 
-        draw_ludo_piece(screen, piece_positions[0], 180, 1, font)
-        draw_ludo_piece(screen, piece_positions[1], 180, 2, font)
-        draw_ludo_piece(screen, piece_positions[2], 180, 3, font)
-        draw_ludo_piece(screen, piece_positions[3], 180, 4, font)
+    # Draw buttons
+    play_button = init_play_button(start_game)
+    play_button.draw(screen, font)
 
-        # Draw buttons
-        play_button = init_play_button(start_game)
-        play_button.draw(screen, font)
+    quit_button = init_quit_button(quit_game)
+    quit_button.draw(screen, font)
 
-        quit_button = init_quit_button(quit_game)
-        quit_button.draw(screen, font)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            quit_game()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            play_button.check_click()
+            quit_button.check_click()
 
+
+def ludo():
+    game_on = True
+
+    global game_state
+    game_state = "StartMenu"
+
+    while game_on:
         # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gameOn = False
+                game_on = False
                 quit_game()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                play_button.check_click()
-                quit_button.check_click()
+
+        if game_state == "StartMenu":
+            start_menu()
 
         if game_state == "Lobby":
             starting_roll()
@@ -149,9 +160,8 @@ def start_menu():
             screen.blit(not_implemented_text, (
             WIDTH // 2 - not_implemented_text.get_width() // 2, HEIGHT // 2 - not_implemented_text.get_height() // 2))
 
-
         pygame.display.update()
 
 
 # Run the start menu
-start_menu()
+ludo()
