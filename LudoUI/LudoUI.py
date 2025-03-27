@@ -3,10 +3,11 @@ import sys
 import pygame
 import pygame.freetype
 
-from Constants import WHITE, BLACK, RED, GREEN, BLUE
-from clients.LobbyClient import create_lobby
+from Constants import WHITE, BLACK, WIDTH, HEIGHT, DEEP_PINK
 from PlayerColor import get_piece_colorcode
+from clients.LobbyClient import create_lobby
 from clients.StartingRollClient import next_starting_roll, get_rerollers, get_should_reroll
+from draw.button import init_standard_button, init_play_button, init_quit_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 
@@ -18,36 +19,10 @@ game_state = "StartMenu"
 lobby = create_lobby()
 
 # Set up display
-WIDTH, HEIGHT = 600, 400
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
-
-
-# Button class
-class Button:
-    def __init__(self, text, x, y, width, height, color, hover_color, action=None):
-        self.text = text
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = color
-        self.hover_color = hover_color
-        self.action = action
-
-    def draw(self, surface):
-        mouse_pos = pygame.mouse.get_pos()
-        color = self.hover_color if self.rect.collidepoint(mouse_pos) else self.color
-        pygame.draw.rect(surface, color, self.rect)
-        text_surf = font.render(self.text, True, WHITE)
-        text_rect = text_surf.get_rect(center=self.rect.center)
-        surface.blit(text_surf, text_rect)
-
-    def check_click(self):
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            if pygame.mouse.get_pressed()[0]:  # Left mouse click
-                if self.action:
-                    self.action()
-
 
 # Functions for button actions
 def start_game():
@@ -90,14 +65,16 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
 
     def on_done():
         print("ON DONE")
+
+        global game_state
+        game_state = "NOT IMPLEMENTED"
+
+        #TODO: See rolls and check for rerolls
         startingRolls = lobby.rolls
         should_we_reroll = get_should_reroll(startingRolls)
         if(should_we_reroll):
             rerollers = get_rerollers(startingRolls)
 
-
-       # global game_state
-        #game_state = "NOT IMPLEMENTED"
 
     button_action = None
 
@@ -108,19 +85,16 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
     elif state == 3:
         button_action = on_done
 
-    new_button = Button(button_text, WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 3,
-                        BUTTON_WIDTH,
-                        BUTTON_HEIGHT, player_color, GREEN, button_action)
+    new_button = init_standard_button(button_text, player_color, DEEP_PINK, button_action)
 
     global game_state
 
     while game_state == "Lobby":
 
-        new_button.draw(new_screen)
+        new_button.draw(new_screen, font)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                is_running = False
                 quit_game()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 new_button.check_click()
@@ -131,16 +105,6 @@ def starting_roll_frame(new_screen, player_id, dice_value, button_text, state):
 def quit_game():
     pygame.quit()
     sys.exit()
-
-
-BUTTON_WIDTH, BUTTON_HEIGHT = 200, 60
-PADDING = 20  # Space between buttons
-
-# Create buttons
-play_button = Button("Play", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING * 2 - BUTTON_HEIGHT,
-                     BUTTON_WIDTH, BUTTON_HEIGHT, BLUE, GREEN, start_game)
-quit_button = Button("Quit", WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT - BUTTON_HEIGHT - PADDING, BUTTON_WIDTH,
-                     BUTTON_HEIGHT, RED, (255, 100, 100), quit_game)
 
 
 def start_menu():
@@ -161,8 +125,11 @@ def start_menu():
         draw_ludo_piece(screen, piece_positions[3], 180, 4, font)
 
         # Draw buttons
-        play_button.draw(screen)
-        quit_button.draw(screen)
+        play_button = init_play_button(start_game)
+        play_button.draw(screen, font)
+
+        quit_button = init_quit_button(quit_game)
+        quit_button.draw(screen, font)
 
         # Event handling
         for event in pygame.event.get():
