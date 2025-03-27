@@ -1,12 +1,16 @@
 import json
+
 import requests
+
+from LobbyStateManager import get_lobby
 from models.Lobby import Lobby
-from models.Roll import Roll
 from models.LobbyPlayer import LobbyPlayer
+from models.Roll import Roll
 
 url = 'http://localhost:5276/api/Starting'
 
-def next_starting_roll(lobby):
+def next_starting_roll():
+    lobby = get_lobby()
     headers = {'Content-Type': 'application/json'}
     lobby_dict = lobby.to_dict()
     response = requests.post(url + '/startingroll', json=lobby_dict, headers=headers)
