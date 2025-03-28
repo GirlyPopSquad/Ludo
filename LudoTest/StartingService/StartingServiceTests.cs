@@ -98,7 +98,7 @@ namespace LudoTest.StartingServiceTests
             ], 1);
 
             var expectedRoll = new Roll(new LobbyPlayer(1), 1);
-            expectedLobby.StartingRolls.Add(expectedRoll);
+            expectedLobby.Rolls.Add(expectedRoll);
 
             //Act
             var result = _startingService.StartingRoll(lobby);

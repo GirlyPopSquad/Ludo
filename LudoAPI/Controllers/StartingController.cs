@@ -1,6 +1,5 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers
@@ -15,22 +14,36 @@ namespace LudoAPI.Controllers
             _startingService = startingService;
         }
 
-        [HttpGet]
-        public ActionResult<Lobby> GetStartingRoll(Lobby lobby)
+        [HttpPost("StartingRoll")]
+        public ActionResult<Lobby> GetStartingRoll([FromBody] Lobby lobby)
         {
-            throw new NotImplementedException();
+            return _startingService.StartingRoll(lobby);
         }
 
-        [HttpGet]
-        public ActionResult<List<LobbyPlayer>> GetReRollers(List<Roll> startingRolls)
+        [HttpPost("GetRerollers")]
+        public ActionResult<List<LobbyPlayer>> GetReRollers([FromBody] List<Roll> startingRolls)
         {
-            throw new NotImplementedException();
+            var rerollers = _startingService.GetReRollers(startingRolls);
+            if (rerollers.Count == 0 || rerollers == null)
+            {
+                return BadRequest("Could not find rerollers");
+            }
+
+            return Ok(rerollers);
         }
 
-        [HttpGet]
-        public ActionResult<bool> GetShouldReRoll(List<Roll> startingRolls)
+        [HttpPost("GetShouldReroll")]
+        public ActionResult<bool> GetShouldReRoll([FromBody] List<Roll> startingRolls)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var shouldReroll = _startingService.ShouldReRoll(startingRolls);
+                return Ok(shouldReroll);
+            }
+            catch
+            {
+                return BadRequest("Could not determine if reroll is needed");
+            }
         }
     }
 }

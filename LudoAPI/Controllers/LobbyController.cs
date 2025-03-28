@@ -1,6 +1,5 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers
@@ -15,7 +14,7 @@ namespace LudoAPI.Controllers
             _lobbyService = lobbyService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult<Lobby> CreateLobby()
         {
             var lobby = _lobbyService.CreateLobby();
