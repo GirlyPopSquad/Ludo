@@ -3,12 +3,12 @@ import pygame
 from Constants import WHITE, BLACK
 
 
-def draw_dice(screen, x, y, dice_value, font):
+def draw_dice(screen, size, x, y, dice_value, font):
     body_height = 50
     body_width = 50
 
     # Draw dice next to the Ludo piece
-    dice_size = 80
+    dice_size = size
     dice_x = x + body_width // 2 + 10
     dice_y = y - body_height // 2
 
@@ -22,7 +22,7 @@ def draw_dice(screen, x, y, dice_value, font):
         screen.blit(question_mark, question_mark_rect)
     else:
         # Draw dots on the dice based on the dice_value
-        dot_radius = 6
+        dot_radius = dice_size // 13
         dot_positions = {
             1: [(dice_x + dice_size // 2, dice_y + dice_size // 2)],
             2: [(dice_x + dice_size // 4, dice_y + dice_size // 4),

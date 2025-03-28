@@ -19,3 +19,6 @@ class Roll:
             'player': self.player.to_dict(),  # Convert the player to a dictionary
             'value': self.value
         }
+
+    def __repr__(self):
+        return f"Roll(player={self.player}, value={self.value})"
