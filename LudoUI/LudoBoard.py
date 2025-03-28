@@ -113,30 +113,30 @@ class BoardGame:
         self.add_grid_overlay()
         
         # Red Pieces
-        self.place_object_on_grid(2, 2, "red")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(3, 2, "red")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(2, 3, "red")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(3, 3, "red")  # Placing a red circle at grid (5, 3)
+        self.place_object_on_grid(2, 2, "red")  # Placing a red circle 
+        self.place_object_on_grid(3, 2, "red")  # Placing a red circle 
+        self.place_object_on_grid(2, 3, "red")  # Placing a red circle 
+        self.place_object_on_grid(3, 3, "red")  # Placing a red circle 
         
         
         # Green pieces 
-        self.place_object_on_grid(11, 2, "green") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(12, 2, "green") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(11, 3, "green") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(12, 3, "green") # Placing a blue circle at grid (7, 7)
+        self.place_object_on_grid(11, 2, "green") # Placing a green circle 
+        self.place_object_on_grid(12, 2, "green") # Placing a green circle 
+        self.place_object_on_grid(11, 3, "green") # Placing a green circle 
+        self.place_object_on_grid(12, 3, "green") # Placing a green circle 
 
         
         #Blue pieces
-        self.place_object_on_grid(2, 11, "skyblue")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(3, 11, "skyblue")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(2, 12, "skyblue")  # Placing a red circle at grid (5, 3)
-        self.place_object_on_grid(3, 12, "skyblue")  # Placing a red circle at grid (5, 3)
+        self.place_object_on_grid(2, 11, "skyblue")  # Placing a skyblue circle
+        self.place_object_on_grid(3, 11, "skyblue")  # Placing a skyblue circle
+        self.place_object_on_grid(2, 12, "skyblue")  # Placing a skyblue circle
+        self.place_object_on_grid(3, 12, "skyblue")  # Placing a skyblue circle
         
         #Yellow Pieces
-        self.place_object_on_grid(11, 11, "yellow") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(12, 11, "yellow") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(11, 12, "yellow") # Placing a blue circle at grid (7, 7)
-        self.place_object_on_grid(12, 12, "yellow") # Placing a blue circle at grid (7, 7)
+        self.place_object_on_grid(11, 11, "yellow") # Placing a yellow circle
+        self.place_object_on_grid(12, 11, "yellow") # Placing a yellow circle
+        self.place_object_on_grid(11, 12, "yellow") # Placing a yellow circle
+        self.place_object_on_grid(12, 12, "yellow") # Placing a yellow circle
         
         
         self.color_grid_square(1, 6, "red")
