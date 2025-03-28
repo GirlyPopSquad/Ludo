@@ -47,6 +47,5 @@ def ludo():
 
         pygame.display.update()
 
-
 # Run the start menu
 ludo()

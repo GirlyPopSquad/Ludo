@@ -19,3 +19,10 @@ class Roll:
             'player': self.player.to_dict(),  # Convert the player to a dictionary
             'value': self.value
         }
+    
+    @classmethod
+    def generate_test_rolls(cls):
+        """Generates a test list of Roll objects."""
+        players = [LobbyPlayer(id=i) for i in range(1, 4)]  # Create sample players
+        rolls = [cls(player, value) for player, value in zip(players, [6, 2, 6])]
+        return rolls
