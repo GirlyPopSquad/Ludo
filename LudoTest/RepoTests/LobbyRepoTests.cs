@@ -54,7 +54,7 @@ namespace LudoTest.RepoTests
             var updatedLobby = new Lobby(initialLobby.Id, updatedPlayers);
         
             // Act
-            repository.UpdateLobby(initialLobby.Id, updatedLobby);
+            repository.UpdateLobby(updatedLobby);
             var result = repository.Get(initialLobby.Id);
         
             // Assert

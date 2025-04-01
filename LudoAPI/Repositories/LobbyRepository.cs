@@ -28,9 +28,9 @@ namespace LudoAPI.Repositories
             return Lobbies.First(lobby => lobby.Id == id);
         }
 
-        public void UpdateLobby(int id, Lobby lobby)
+        public void UpdateLobby(Lobby lobby)
         {
-            var existingLobby = Lobbies.FirstOrDefault(l => l.Id == id);
+            var existingLobby = Lobbies.FirstOrDefault(l => l.Id == lobby.Id);
             if (existingLobby != null)
             {
                 existingLobby.Players = lobby.Players;

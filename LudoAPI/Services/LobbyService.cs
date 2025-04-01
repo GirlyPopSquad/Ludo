@@ -5,7 +5,6 @@ namespace LudoAPI.Services;
 
 public class LobbyService : ILobbyService
 {
-
     private readonly ILobbyRepository _lobbyRepo;
 
     public LobbyService(ILobbyRepository lobbyRepo)
@@ -31,5 +30,10 @@ public class LobbyService : ILobbyService
     public Lobby GetLobbyById(int id)
     {
         return _lobbyRepo.Get(id);
+    }
+
+    public void UpdateLobby(Lobby lobby)
+    {
+        throw new NotImplementedException();
     }
 }

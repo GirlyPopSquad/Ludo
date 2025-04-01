@@ -58,4 +58,26 @@ public class LobbyServiceTest
         //Assert
         actualLobby.Should().BeEquivalentTo(expectedLobby);
     }
+
+    [Fact]
+    public void UpdateLobby()
+    {
+        //Arrange
+        var testLobby = new Lobby(1, new List<LobbyPlayer>
+        {
+            new LobbyPlayer(1),
+            new LobbyPlayer(2),
+            new LobbyPlayer(3),
+            new LobbyPlayer(4)
+        });
+        
+        _repository.Setup(repo => repo.UpdateLobby(testLobby));
+        
+        var lobbyService = new LobbyService(_repository.Object);
+        //Act
+        lobbyService.UpdateLobby(testLobby);
+        
+        //Assert
+        _repository.Verify(repo => repo.UpdateLobby(testLobby), Times.Once);
+    }
 }

@@ -128,7 +128,9 @@ namespace LudoTest.StartingServiceTests
             _lobbyServiceMock.Setup(ls => ls.GetLobbyById(lobbyId)).Returns(testLobby);
             
             //Act
-             //todo: not done
+             
+            
+            
             var result = _startingService.HandleReroll(lobbyId, testRoll);
 
             //Assert
