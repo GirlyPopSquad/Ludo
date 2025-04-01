@@ -17,12 +17,12 @@ def starting_roll(screen, font):
     starting_roll_frame(screen, font, 1, "?", "Roll", 0)
 
 
-def starting_roll_frame(new_screen, font, player_id, dice_value, button_text, state):
-    new_screen.fill(WHITE)
+def starting_roll_frame(screen, font, player_id, dice_value, button_text, state):
+    screen.fill(WHITE)
     text = font.render("Starting Roll", True, BLACK)
-    new_screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
-    draw_ludo_piece(new_screen, WIDTH // 5, 180, player_id, font)
-    draw_dice(new_screen, 80, WIDTH // 5, 180, dice_value, font)
+    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 5 - text.get_height() // 2))
+    draw_ludo_piece(screen, WIDTH // 5, 180, player_id, font)
+    draw_dice(screen, 80, WIDTH // 5, 180, dice_value, font)
 
     player_color = get_piece_colorcode(player_id)
 
@@ -30,18 +30,18 @@ def starting_roll_frame(new_screen, font, player_id, dice_value, button_text, st
         updated_player_id = player_id + 1
         lobby = get_lobby()
         if updated_player_id > len(lobby.players):
-            starting_roll_frame(new_screen, font, player_id, dice_value, "Done", 3)
+            starting_roll_frame(screen, font, player_id, dice_value, "Done", 3)
 
         else:
-            starting_roll_frame(new_screen, font, updated_player_id, "?", "Roll", 0)
+            starting_roll_frame(screen, font, updated_player_id, "?", "Roll", 0)
 
     def on_click_roll():
         updated_dice_value = on_starting_roll()
         updated_button_text = "Next"
-        starting_roll_frame(new_screen, font, player_id, updated_dice_value, updated_button_text, 1)
+        starting_roll_frame(screen, font, player_id, updated_dice_value, updated_button_text, 1)
 
     def on_done():
-        starting_rolls_overview(new_screen, font)
+        starting_rolls_overview(screen, font)
 
     button_action = None
 
@@ -53,7 +53,7 @@ def starting_roll_frame(new_screen, font, player_id, dice_value, button_text, st
         button_action = on_done
 
     new_button = init_standard_button(button_text, player_color, DEEP_PINK, button_action)
-    new_button.draw(new_screen, font)
+    new_button.draw(screen, font)
 
     while get_game_state() == GameState.LOBBY:
 

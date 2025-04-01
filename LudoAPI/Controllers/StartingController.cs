@@ -45,5 +45,11 @@ namespace LudoAPI.Controllers
                 return BadRequest("Could not determine if reroll is needed");
             }
         }
+
+        [HttpPost("HandleReroll/{lobbyId}")]
+        public ActionResult<Lobby> HandleReroll(int lobbyId, [FromBody] LobbyPlayer player)
+        {
+            return _startingService.HandleReroll(lobbyId, player);
+        }
     }
 }

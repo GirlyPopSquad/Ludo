@@ -19,12 +19,12 @@ namespace LudoAPI.Services
             throw new NotImplementedException();
         }
 
-        public Lobby HandleReroll(int lobbyId, Roll roll)
+        public Lobby HandleReroll(int lobbyId, LobbyPlayer player)
         {
             var lobby = _lobbyService.GetLobbyById(lobbyId);
             var newRollValue = _diceService.RollDice();
 
-            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == roll.Player.Id);
+            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == player.Id);
 
             if (oldRoll == null)
             {
@@ -66,6 +66,9 @@ namespace LudoAPI.Services
 
             var newRoll = new Roll(player, value);
             lobby.Rolls.Add(newRoll);
+            
+            //todo: add this to test
+            _lobbyService.UpdateLobby(lobby);
 
             return lobby;
         }

@@ -19,7 +19,7 @@ namespace LudoAPI
 
             builder.Services.AddScoped<IDiceService, DiceService>();
             
-            builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
+            builder.Services.AddSingleton<ILobbyRepository, LobbyRepository>();
             builder.Services.AddScoped<ILobbyService, LobbyService>();
             
             builder.Services.AddScoped<IStartingService, StartingService>();

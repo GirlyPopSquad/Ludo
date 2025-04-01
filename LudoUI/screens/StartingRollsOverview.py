@@ -8,6 +8,7 @@ from draw.ludo_piece import draw_ludo_piece
 from models.Lobby import Lobby
 from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll
+from screens.StartingRerolls import starting_rerolls
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
 from stateManagers.LobbyStateManager import get_lobby, set_lobby
 
@@ -22,6 +23,14 @@ def starting_rolls_overview(screen, font):
 
         draw_ludo_piece(screen, piece_position, 180, get_lobby().players[i - 1].id, font)
         draw_dice(screen, 40, dice_position, 180, get_lobby().rolls[i - 1].value, font)
+
+    def setup_reroll_button():
+        return init_standard_button("Do Reroll", HOT_PINK, DEEP_PINK, on_reroll)
+
+
+    # TODO: implement
+    def on_reroll():
+        starting_rerolls(screen, font)
 
     has_to_reroll = get_should_reroll(get_lobby().rolls)
 
@@ -42,57 +51,10 @@ def starting_rolls_overview(screen, font):
 
         pygame.display.update()
 
-
-def setup_reroll_button():
-    return init_standard_button("Do Reroll", HOT_PINK, DEEP_PINK, on_reroll)
-
-
-# TODO: implement
-def on_reroll():
-    print("ON REROLL")
-    set_game_state(GameState.NOT_IMPLEMENTED)
-
-
 def setup_start_game_button():
-    return init_standard_button("Start Game", HOT_PINK, DEEP_PINK, on_reroll)
+    return init_standard_button("Start Game", HOT_PINK, DEEP_PINK, on_start_game)
 
 # TODO: implement
 def on_start_game():
     print("ON START")
     set_game_state(GameState.NOT_IMPLEMENTED)
-
-def test():
-    pygame.init()
-
-    # Set up display
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-    font = pygame.font.Font(None, 50)
-
-    roll_values = [2, 4, 6, 6]
-
-    starting_players: [LobbyPlayer] = []
-    starting_rolls: [Roll] = []
-    for j in range(1, 5):
-        player = LobbyPlayer(j)
-        roll = Roll(player, roll_values[j - 1])
-
-        starting_players.append(player)
-        starting_rolls.append(roll)
-
-    test_lobby = Lobby(1, starting_players, starting_rolls)
-
-    set_lobby(test_lobby)
-
-    starting_rolls_overview(screen, font)
-
-    game_on = True
-
-    while game_on:
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_on = False
-                quit_game()
-
-        pygame.display.update()

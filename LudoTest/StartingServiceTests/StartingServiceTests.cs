@@ -156,7 +156,7 @@ namespace LudoTest.StartingServiceTests
             _diceServiceMock.Setup(ds => ds.RollDice()).Returns(rerollValue);
             
             //Act
-            var result = _startingService.HandleReroll(lobbyId, initialRoll);
+            var result = _startingService.HandleReroll(lobbyId, testplayer);
 
             //Assert
             _lobbyServiceMock.Verify(ls => ls.GetLobbyById(lobbyId), Times.Once);
