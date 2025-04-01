@@ -42,5 +42,23 @@ namespace LudoTest.RepoTests
             // Assert
             result.Should().BeEquivalentTo(lobby);
         }
+
+        [Fact]
+        public void Update_ShouldUpdateLobby()
+        {
+            // Arrange
+            var repository = new LobbyRepository();
+            var initialPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
+            var updatedPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2), new LobbyPlayer(3) };
+            var initialLobby = repository.AddNewLobby(initialPlayers);
+            var updatedLobby = new Lobby(initialLobby.Id, updatedPlayers);
+        
+            // Act
+            repository.UpdateLobby(initialLobby.Id, updatedLobby);
+            var result = repository.Get(initialLobby.Id);
+        
+            // Assert
+            result.Should().BeEquivalentTo(updatedLobby);
+        }
     }
 }

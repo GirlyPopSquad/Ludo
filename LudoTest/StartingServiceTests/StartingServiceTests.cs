@@ -10,12 +10,15 @@ namespace LudoTest.StartingServiceTests
     {
         private readonly Mock<IDiceService> _diceServiceMock;
         private readonly StartingService _startingService;
+        private readonly Mock<ILobbyService> _lobbyServiceMock;
+
         public StartingServiceTests()
         {
             _diceServiceMock = new Mock<IDiceService>();
-            _startingService = new StartingService(_diceServiceMock.Object);
+            _lobbyServiceMock = new Mock<ILobbyService>();
+            _startingService = new StartingService(_diceServiceMock.Object, _lobbyServiceMock.Object);
         }
-        
+
         [Theory]
         [MemberData(nameof(GetRollsDataAllPlayersRolledOnce))]
         public void StartingService_ShouldReRoll_ReturnsExpectedResult(List<Roll> rolls, bool expected)
@@ -88,7 +91,7 @@ namespace LudoTest.StartingServiceTests
                 new LobbyPlayer(2),
                 new LobbyPlayer(3),
                 new LobbyPlayer(4)
-            ]) ;
+            ]);
 
             Lobby expectedLobby = new Lobby(1, [
                 new LobbyPlayer(1),
@@ -111,16 +114,28 @@ namespace LudoTest.StartingServiceTests
         public void StartingService_HandleReroll()
         {
             //Arrange
+            const int lobbyId = 1;
             var testplayer = new LobbyPlayer(1);
-            var testroll = new Roll(testplayer, 6);
-
+            var testRoll = new Roll(testplayer, 6);
+            var testLobby = new Lobby(lobbyId, new List<LobbyPlayer>()
+            {
+                testplayer,
+                new LobbyPlayer(2),
+                new LobbyPlayer(3),
+                new LobbyPlayer(4)
+            });
+            
+            _lobbyServiceMock.Setup(ls => ls.GetLobbyById(lobbyId)).Returns(testLobby);
+            
             //Act
-            
-            
+             //todo: not done
+            var result = _startingService.HandleReroll(lobbyId, testRoll);
+
             //Assert
+            _lobbyServiceMock.Verify(ls => ls.GetLobbyById(lobbyId), Times.Once);
         }
     }
-    
+
     public class ReRollersData : IEnumerable<object[]>
     {
         private readonly List<object[]> _data =
@@ -129,10 +144,10 @@ namespace LudoTest.StartingServiceTests
             {
                 new List<Roll>
                 {
-                new Roll(new LobbyPlayer(1), 1),
-                new Roll(new LobbyPlayer(2), 2),
-                new Roll(new LobbyPlayer(3), 6),
-                new Roll(new LobbyPlayer(4), 6),
+                    new Roll(new LobbyPlayer(1), 1),
+                    new Roll(new LobbyPlayer(2), 2),
+                    new Roll(new LobbyPlayer(3), 6),
+                    new Roll(new LobbyPlayer(4), 6),
                 },
                 new List<LobbyPlayer>
                 {

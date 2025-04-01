@@ -19,12 +19,18 @@ namespace LudoAPI.Repositories
             {
                 return 1;
             }
-            return Lobbies[Lobbies.Count - 1].Id+1;
+
+            return Lobbies[Lobbies.Count - 1].Id + 1;
         }
 
         public Lobby Get(int id)
         {
             return Lobbies.First(lobby => lobby.Id == id);
+        }
+
+        public void UpdateLobby(int id, Lobby lobby)
+        {
+            throw new NotImplementedException();
         }
     }
 }

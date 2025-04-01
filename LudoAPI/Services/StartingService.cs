@@ -6,10 +6,12 @@ namespace LudoAPI.Services
     {
         private readonly IPlayerService _playerService;
         private readonly IDiceService _diceService;
+        private readonly ILobbyService _lobbyService;
 
-        public StartingService(IDiceService diceService)
+        public StartingService(IDiceService diceService, ILobbyService lobbyService)
         {
             _diceService = diceService;
+            _lobbyService = lobbyService;
         }
 
         public Lobby HandleRerolls(Lobby lobby)
@@ -17,7 +19,7 @@ namespace LudoAPI.Services
             throw new NotImplementedException();
         }
 
-        public Lobby HandleReroll(Roll roll)
+        public Lobby HandleReroll(int lobbyId, Roll roll)
         {
             throw new NotImplementedException();
         }
