@@ -34,6 +34,6 @@ public class LobbyService : ILobbyService
 
     public void UpdateLobby(Lobby lobby)
     {
-        throw new NotImplementedException();
+        _lobbyRepo.UpdateLobby(lobby);
     }
 }
