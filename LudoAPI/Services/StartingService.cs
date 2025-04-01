@@ -1,5 +1,4 @@
 ﻿using LudoAPI.Models;
-using System.Collections.Concurrent;
 
 namespace LudoAPI.Services
 {
@@ -14,6 +13,11 @@ namespace LudoAPI.Services
         }
 
         public Lobby HandleRerolls(Lobby lobby)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Lobby HandleReroll(Roll roll)
         {
             throw new NotImplementedException();
         }

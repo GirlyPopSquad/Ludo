@@ -6,11 +6,10 @@
 
         public int Value { get; set; }
 
-        public Roll() { }
-        public Roll(LobbyPlayer _player, int _value)
+        public Roll(LobbyPlayer player, int value)
         {
-            this.Player = _player;
-            this.Value = _value;
+            this.Player = player;
+            this.Value = value;
         }
     }
 }

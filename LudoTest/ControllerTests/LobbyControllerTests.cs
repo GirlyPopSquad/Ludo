@@ -22,7 +22,7 @@ namespace LudoTest.ControllerTests
         public void CreateLobby_ShouldReturnNewLobby()
         {
             //Arrange
-            var expectedLobby = new Lobby(new List<LobbyPlayer>(), 1);
+            var expectedLobby = new Lobby(1, new List<LobbyPlayer>());
             _lobbyServiceMock.Setup(service => service.CreateLobby())
                 .Returns(expectedLobby);
 

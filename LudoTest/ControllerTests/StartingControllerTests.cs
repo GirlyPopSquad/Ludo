@@ -24,7 +24,7 @@ namespace LudoTest.ControllerTests
         public void GetStartingRoll_ShouldReturnStartingRoll()
         {
             // Arrange
-            var lobby = new Lobby(new List<LobbyPlayer>(), 1);
+            var lobby = new Lobby(1, new List<LobbyPlayer>());
             _startingServiceMock.Setup(s => s.StartingRoll(It.IsAny<Lobby>())).Returns(lobby);
 
             // Act

@@ -33,12 +33,12 @@ namespace LudoTest.GameServiceTests
         [
             new object[]
             {
-                new Lobby([
+                new Lobby(1, [
                     new LobbyPlayer(1),
                     new LobbyPlayer(2),
                     new LobbyPlayer(3),
                     new LobbyPlayer(4)
-                ], 1)
+                ])
             }
         ];
 

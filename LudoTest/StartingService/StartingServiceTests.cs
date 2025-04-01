@@ -83,19 +83,19 @@ namespace LudoTest.StartingServiceTests
             //Arrange
             _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
 
-            Lobby lobby = new Lobby([
+            Lobby lobby = new Lobby(1, [
                 new LobbyPlayer(1),
                 new LobbyPlayer(2),
                 new LobbyPlayer(3),
                 new LobbyPlayer(4)
-            ],1) ;
+            ]) ;
 
-            Lobby expectedLobby = new Lobby([
+            Lobby expectedLobby = new Lobby(1, [
                 new LobbyPlayer(1),
                 new LobbyPlayer(2),
                 new LobbyPlayer(3),
                 new LobbyPlayer(4)
-            ], 1);
+            ]);
 
             var expectedRoll = new Roll(new LobbyPlayer(1), 1);
             expectedLobby.Rolls.Add(expectedRoll);
@@ -105,6 +105,19 @@ namespace LudoTest.StartingServiceTests
 
             //Assert
             result.Should().BeEquivalentTo(expectedLobby);
+        }
+
+        [Fact]
+        public void StartingService_HandleReroll()
+        {
+            //Arrange
+            var testplayer = new LobbyPlayer(1);
+            var testroll = new Roll(testplayer, 6);
+
+            //Act
+            
+            
+            //Assert
         }
     }
     
