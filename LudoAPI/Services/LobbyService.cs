@@ -30,6 +30,6 @@ public class LobbyService : ILobbyService
 
     public Lobby GetLobbyById(int id)
     {
-        throw new NotImplementedException();
+        return _lobbyRepo.Get(id);
     }
 }
