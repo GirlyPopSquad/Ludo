@@ -21,7 +21,20 @@ namespace LudoAPI.Services
 
         public Lobby HandleReroll(int lobbyId, Roll roll)
         {
-            throw new NotImplementedException();
+            var lobby = _lobbyService.GetLobbyById(lobbyId);
+            var newRollValue = _diceService.RollDice();
+
+            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == roll.Player.Id);
+
+            if (oldRoll == null)
+            {
+                throw new Exception("This player hasn't rolled yet, and therefore cant reroll");
+            }
+            
+            oldRoll.Value = newRollValue;
+            
+            _lobbyService.UpdateLobby(lobby);
+            return lobby;
         }
 
         public List<LobbyPlayer> GetReRollers(List<Roll> startingRolls)
