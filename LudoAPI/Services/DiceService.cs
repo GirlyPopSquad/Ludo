@@ -7,7 +7,7 @@
         public int RollDice()
         {
 
-            return _random.Next(1, 7);
+            return 6;
         }
 
         public bool IsItA6(int i)

@@ -1,14 +1,13 @@
 import pygame
-from Constants import WHITE, WIDTH, HEIGHT, BLACK, DEEP_PINK, HOT_PINK
-from clients.StartingRollClient import next_starting_roll, get_rerollers, handle_reroll
+
+from Constants import WHITE, WIDTH, DEEP_PINK, HOT_PINK
+from clients.StartingRollClient import get_rerollers, handle_reroll
 from draw.button import init_standard_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
-from models.Lobby import Lobby
-from models.LobbyPlayer import LobbyPlayer
-from models.Roll import Roll
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
-from stateManagers.LobbyStateManager import get_lobby, set_lobby
+from stateManagers.LobbyStateManager import get_lobby
+
 
 def starting_rerolls(screen, font):
     pygame.display.set_caption("Ludo - Starting Rerolls")
@@ -19,14 +18,10 @@ def starting_rerolls(screen, font):
     reroll_frame(screen, font, reroll_players[0])
 
 
-
-
-
 def reroll_frame(screen, font, player):
     screen.fill(WHITE)
 
     def on_reroll():
-        print("ON REROLL")
         reroll_value = handle_reroll(player)
         reroll_frame_value(screen, font, player, reroll_value)
 
@@ -52,6 +47,7 @@ def reroll_frame_value(screen, font, player, value):
 
     def on_next():
         print("ON NEXT")
+        set_game_state(GameState.NOT_IMPLEMENTED)
 
     draw_ludo_piece(screen, WIDTH // 5, 180, player.id, font)
     draw_dice(screen, 80, WIDTH // 5, 180, value, font)
