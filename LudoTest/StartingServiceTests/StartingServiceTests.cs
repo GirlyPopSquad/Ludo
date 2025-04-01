@@ -116,25 +116,53 @@ namespace LudoTest.StartingServiceTests
             //Arrange
             const int lobbyId = 1;
             var testplayer = new LobbyPlayer(1);
-            var testRoll = new Roll(testplayer, 6);
-            var testLobby = new Lobby(lobbyId, new List<LobbyPlayer>()
+            var initialRoll = new Roll(testplayer, 6);
+
+            var lobbyPlayers = new List<LobbyPlayer>
             {
                 testplayer,
                 new LobbyPlayer(2),
                 new LobbyPlayer(3),
                 new LobbyPlayer(4)
-            });
+            };
             
-            _lobbyServiceMock.Setup(ls => ls.GetLobbyById(lobbyId)).Returns(testLobby);
+            var initialLobby = new Lobby(lobbyId, lobbyPlayers);
+
+            var initialRolls = new List<Roll>
+            {
+                initialRoll,
+                new Roll(lobbyPlayers[1], 3),
+                new Roll(lobbyPlayers[2], 6),
+                new Roll(lobbyPlayers[3], 5),
+            };
+            
+            initialLobby.Rolls = initialRolls;
+
+            const int rerollValue = 4;
+            var dicereroll = new Roll(testplayer, rerollValue);
+
+            var updatedRolls = new List<Roll>
+            {
+                dicereroll,
+                new Roll(lobbyPlayers[1], 3),
+                new Roll(lobbyPlayers[2], 6),
+                new Roll(lobbyPlayers[3], 5),
+            };
+            
+            var updatedLobby = initialLobby;
+            updatedLobby.Rolls = updatedRolls;
+            
+            _lobbyServiceMock.Setup(ls => ls.GetLobbyById(lobbyId)).Returns(initialLobby);
+            _diceServiceMock.Setup(ds => ds.RollDice()).Returns(rerollValue);
             
             //Act
-             
-            
-            
-            var result = _startingService.HandleReroll(lobbyId, testRoll);
+            var result = _startingService.HandleReroll(lobbyId, initialRoll);
 
             //Assert
             _lobbyServiceMock.Verify(ls => ls.GetLobbyById(lobbyId), Times.Once);
+            _lobbyServiceMock.Verify(ls => ls.UpdateLobby(It.IsAny<Lobby>()), Times.Once);
+            
+            result.Should().BeEquivalentTo(updatedLobby);
         }
     }
 
