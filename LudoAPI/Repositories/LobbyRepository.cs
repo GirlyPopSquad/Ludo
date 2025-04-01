@@ -30,7 +30,16 @@ namespace LudoAPI.Repositories
 
         public void UpdateLobby(int id, Lobby lobby)
         {
-            throw new NotImplementedException();
+            var existingLobby = Lobbies.FirstOrDefault(l => l.Id == id);
+            if (existingLobby != null)
+            {
+                existingLobby.Players = lobby.Players;
+                existingLobby.Rolls = lobby.Rolls;
+            }
+            else
+            {
+                throw new Exception("Lobby not found");
+            }
         }
     }
 }
