@@ -14,16 +14,21 @@ def starting_rerolls(screen, font):
     screen.fill(WHITE)
 
     reroll_players = get_rerollers(get_lobby().rolls)
+        
+    
+    reroll_frame(screen, font, 0, reroll_players)
+    
+    set_game_state(GameState.NOT_IMPLEMENTED)
 
-    reroll_frame(screen, font, reroll_players[0])
 
-
-def reroll_frame(screen, font, player):
+def reroll_frame(screen, font, index, reroll_players):
     screen.fill(WHITE)
+    
+    player = reroll_players[index]
 
     def on_reroll():
         reroll_value = handle_reroll(player)
-        reroll_frame_value(screen, font, player, reroll_value)
+        reroll_frame_value(screen, font, index, reroll_players, reroll_value)
 
     draw_ludo_piece(screen, WIDTH // 5, 180, player.id, font)
     draw_dice(screen, 80, WIDTH // 5, 180, "?", font)
@@ -42,12 +47,20 @@ def reroll_frame(screen, font, player):
         pygame.display.update()
 
 
-def reroll_frame_value(screen, font, player, value):
-    screen.fill(WHITE)
-
+def reroll_frame_value(screen, font, index, reroll_players, value):
+    screen.fill(WHITE)        
+    
+    player = reroll_players[index]
+        
     def on_next():
         print("ON NEXT")
-        set_game_state(GameState.NOT_IMPLEMENTED)
+        
+        new_index = index+1
+        
+        if new_index == len(reroll_players):
+            set_game_state(GameState.NOT_IMPLEMENTED)
+        else:
+            reroll_frame(screen, font, new_index, reroll_players)
 
     draw_ludo_piece(screen, WIDTH // 5, 180, player.id, font)
     draw_dice(screen, 80, WIDTH // 5, 180, value, font)
@@ -64,3 +77,4 @@ def reroll_frame_value(screen, font, player, value):
                 reroll_button.check_click()
 
         pygame.display.update()
+                
