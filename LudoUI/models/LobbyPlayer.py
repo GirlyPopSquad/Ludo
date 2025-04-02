@@ -12,3 +12,6 @@ class LobbyPlayer:
         return {
             'id': self.id
         }
+
+    def __repr__(self):
+        return f"LobbyPlayer(id='{self.id}')"
