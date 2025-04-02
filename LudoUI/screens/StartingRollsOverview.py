@@ -10,7 +10,7 @@ from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll
 from screens.StartingRerolls import starting_rerolls
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
-from stateManagers.LobbyStateManager import get_lobby, set_lobby
+from stateManagers.LobbyStateManager import LobbyState, get_lobby, get_lobby_state, set_lobby, set_lobby_state
 
 
 def starting_rolls_overview(screen, font):
@@ -24,13 +24,11 @@ def starting_rolls_overview(screen, font):
         draw_ludo_piece(screen, piece_position, 180, get_lobby().players[i - 1].id, font)
         draw_dice(screen, 40, dice_position, 180, get_lobby().rolls[i - 1].value, font)
 
+    def on_reroll():
+        set_lobby_state(LobbyState.STARTING_REROLL)
+
     def setup_reroll_button():
         return init_standard_button("Do Reroll", HOT_PINK, DEEP_PINK, on_reroll)
-
-
-    # TODO: implement
-    def on_reroll():
-        starting_rerolls(screen, font)
 
     has_to_reroll = get_should_reroll(get_lobby().rolls)
 
@@ -41,7 +39,7 @@ def starting_rolls_overview(screen, font):
 
     button.draw(screen, font)
 
-    while get_game_state() == GameState.LOBBY:
+    while get_lobby_state() == LobbyState.ROLLS_OVERVIEW and get_game_state() == GameState.LOBBY:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

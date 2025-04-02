@@ -8,7 +8,7 @@ from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 from screens.StartingRollsOverview import starting_rolls_overview
 from stateManagers.GameStateManager import GameState, get_game_state, quit_game
-from stateManagers.LobbyStateManager import get_lobby, set_lobby
+from stateManagers.LobbyStateManager import LobbyState, get_lobby, get_lobby_state, set_lobby, set_lobby_state
 
 
 def starting_roll(screen, font):
@@ -41,7 +41,7 @@ def starting_roll_frame(screen, font, player_id, dice_value, button_text, state)
         starting_roll_frame(screen, font, player_id, updated_dice_value, updated_button_text, 1)
 
     def on_done():
-        starting_rolls_overview(screen, font)
+        set_lobby_state(LobbyState.ROLLS_OVERVIEW)
 
     button_action = None
 
@@ -55,7 +55,7 @@ def starting_roll_frame(screen, font, player_id, dice_value, button_text, state)
     new_button = init_standard_button(button_text, player_color, DEEP_PINK, button_action)
     new_button.draw(screen, font)
 
-    while get_game_state() == GameState.LOBBY:
+    while get_lobby_state() == LobbyState.STARTING_ROLL and get_game_state() == GameState.LOBBY:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

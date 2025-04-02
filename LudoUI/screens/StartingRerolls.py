@@ -6,7 +6,7 @@ from draw.button import init_standard_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
-from stateManagers.LobbyStateManager import get_lobby
+from stateManagers.LobbyStateManager import LobbyState, get_lobby, get_lobby_state, set_lobby_state
 
 
 def starting_rerolls(screen, font):
@@ -18,7 +18,7 @@ def starting_rerolls(screen, font):
     
     reroll_frame(screen, font, 0, reroll_players)
     
-    set_game_state(GameState.NOT_IMPLEMENTED)
+    set_lobby_state(LobbyState.ROLLS_OVERVIEW)
 
 
 def reroll_frame(screen, font, index, reroll_players):
@@ -36,7 +36,7 @@ def reroll_frame(screen, font, index, reroll_players):
     reroll_button = init_standard_button("Reroll", HOT_PINK, DEEP_PINK, on_reroll)
     reroll_button.draw(screen, font)
 
-    while get_game_state() == GameState.LOBBY:
+    while get_lobby_state() == LobbyState.STARTING_REROLL and get_game_state() == GameState.LOBBY:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -52,15 +52,11 @@ def reroll_frame_value(screen, font, index, reroll_players, value):
     
     player = reroll_players[index]
         
-    def on_next():
-        print("ON NEXT")
-        
-        new_index = index+1
-        
-        if new_index == len(reroll_players):
-            set_game_state(GameState.NOT_IMPLEMENTED)
+    def on_next():                
+        if index == len(reroll_players)-1:
+            set_lobby_state(LobbyState.ROLLS_OVERVIEW)
         else:
-            reroll_frame(screen, font, new_index, reroll_players)
+            reroll_frame(screen, font, index+1, reroll_players)
 
     draw_ludo_piece(screen, WIDTH // 5, 180, player.id, font)
     draw_dice(screen, 80, WIDTH // 5, 180, value, font)
@@ -68,7 +64,7 @@ def reroll_frame_value(screen, font, index, reroll_players, value):
     reroll_button = init_standard_button("Next", HOT_PINK, DEEP_PINK, on_next)
     reroll_button.draw(screen, font)
 
-    while get_game_state() == GameState.LOBBY:
+    while get_lobby_state() == LobbyState.STARTING_REROLL and get_game_state() == GameState.LOBBY:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
