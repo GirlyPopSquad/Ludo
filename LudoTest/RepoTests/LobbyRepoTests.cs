@@ -13,7 +13,7 @@ namespace LudoTest.RepoTests
             // Arrange
             var repository = new LobbyRepository();
             var players = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
-            var expectedLobby = new Lobby(players, 1);
+            var expectedLobby = new Lobby(1, players);
 
             // Act
             var actualLobby = repository.AddNewLobby(players);
@@ -30,7 +30,7 @@ namespace LudoTest.RepoTests
             // Arrange
             var repository = new LobbyRepository();
             var players = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
-            var lobby = new Lobby(players, 2);
+            var lobby = new Lobby(2, players);
 
             repository.AddNewLobby(players);
             repository.AddNewLobby(players);
@@ -43,24 +43,22 @@ namespace LudoTest.RepoTests
             result.Should().BeEquivalentTo(lobby);
         }
 
-        //[Fact]
-        //public void GetNextId_ShouldReturnNextId()
-        //{
-        //    // Arrange
-        //    var repository = new LobbyRepository();
-        //    var players1 = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
-        //    var lobby1 = new Lobby(players1, 1);
-        //    repository.AddNewLobby(players1);
-
-        //    var players2 = new List<LobbyPlayer> { new LobbyPlayer(3), new LobbyPlayer(4) };
-        //    var lobby2 = new Lobby(players2, 2);
-        //    repository.AddNewLobby(players2);
-
-        //    // Act
-        //    var nextId = repository.GetNextId();
-
-        //    // Assert
-        //    nextId.Should().Be(3);
-        //}
+        [Fact]
+        public void Update_ShouldUpdateLobby()
+        {
+            // Arrange
+            var repository = new LobbyRepository();
+            var initialPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
+            var updatedPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2), new LobbyPlayer(3) };
+            var initialLobby = repository.AddNewLobby(initialPlayers);
+            var updatedLobby = new Lobby(initialLobby.Id, updatedPlayers);
+        
+            // Act
+            repository.UpdateLobby(updatedLobby);
+            var result = repository.Get(initialLobby.Id);
+        
+            // Assert
+            result.Should().BeEquivalentTo(updatedLobby);
+        }
     }
 }

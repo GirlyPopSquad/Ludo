@@ -9,7 +9,7 @@ public class Lobby
 
     public List<Roll> Rolls { get; set; } = new List<Roll>();
     
-    public Lobby(List<LobbyPlayer> players, int id)
+    public Lobby(int id, List<LobbyPlayer> players)
     {
         Players = players;
         Id = id;

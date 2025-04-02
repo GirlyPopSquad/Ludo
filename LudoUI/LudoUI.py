@@ -2,8 +2,10 @@ import pygame
 import pygame.freetype
 
 from Constants import WHITE, BLACK, WIDTH, HEIGHT
+from screens.StartingRerolls import starting_rerolls
+from screens.StartingRollsOverview import starting_rolls_overview
 from stateManagers.GameStateManager import set_game_state, get_game_state, quit_game, GameState
-from stateManagers.LobbyStateManager import set_lobby
+from stateManagers.LobbyStateManager import LobbyState, get_lobby_state, set_lobby
 from screens.StartMenu import start_menu
 from screens.StartingRolls import starting_roll
 from clients.LobbyClient import create_lobby
@@ -36,7 +38,12 @@ def ludo():
             start_menu(screen, font)
 
         if get_game_state() == GameState.LOBBY:
-            starting_roll(screen, font)
+            if get_lobby_state() == LobbyState.STARTING_ROLL:
+                starting_roll(screen, font)
+            if get_lobby_state() == LobbyState.ROLLS_OVERVIEW:
+                starting_rolls_overview(screen, font)
+            if get_lobby_state() == LobbyState.STARTING_REROLL:
+                starting_rerolls(screen, font)
 
         if get_game_state() == GameState.NOT_IMPLEMENTED:
             screen.fill(WHITE)

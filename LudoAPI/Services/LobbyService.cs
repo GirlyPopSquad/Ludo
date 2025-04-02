@@ -5,13 +5,13 @@ namespace LudoAPI.Services;
 
 public class LobbyService : ILobbyService
 {
+    private readonly ILobbyRepository _lobbyRepo;
 
-    private readonly LobbyRepository _lobbyRepo;
-
-    public LobbyService(LobbyRepository lobbyRepo)
+    public LobbyService(ILobbyRepository lobbyRepo)
     {
         _lobbyRepo = lobbyRepo;
     }
+
     public Lobby CreateLobby()
     {
         var lobbyPlayers = new List<LobbyPlayer>()
@@ -25,5 +25,15 @@ public class LobbyService : ILobbyService
         Lobby lobby = _lobbyRepo.AddNewLobby(lobbyPlayers);
 
         return lobby;
+    }
+
+    public Lobby GetLobbyById(int id)
+    {
+        return _lobbyRepo.Get(id);
+    }
+
+    public void UpdateLobby(Lobby lobby)
+    {
+        _lobbyRepo.UpdateLobby(lobby);
     }
 }

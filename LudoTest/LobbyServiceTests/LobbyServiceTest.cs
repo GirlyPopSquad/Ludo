@@ -4,31 +4,80 @@ using LudoAPI.Repositories;
 using LudoAPI.Services;
 using Moq;
 
-namespace LudoTest.Services;
+namespace LudoTest.LobbyServiceTests;
 
 public class LobbyServiceTest
 {
-
+    
+    private readonly Mock<ILobbyRepository> _repository = new Mock<ILobbyRepository>();
+    
     [Fact]
     public void CreateLobby()
     {
-
-      var lobbyRepo = new Mock<LobbyRepository>();
-
         //Arrange
-        var lobbyService = new LobbyService(lobbyRepo.Object);
-        
-        var players = new List<LobbyPlayer>()
+        var lobbyPlayers = new List<LobbyPlayer>()
         {
-            new LobbyPlayer(1), new LobbyPlayer(2), new LobbyPlayer(3), new LobbyPlayer(4)
+            new LobbyPlayer(1),
+            new LobbyPlayer(2),
+            new LobbyPlayer(3),
+            new LobbyPlayer(4),
         };
         
-        var expected = new Lobby(players,1);
+        var expectedLobby = new Lobby(1, lobbyPlayers);
+        
+        //this disregards the content of the input list, as long as it is a List of LobbyPlayers 
+        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<LobbyPlayer>>())).Returns(expectedLobby);
+        var lobbyService = new LobbyService(_repository.Object);
         
         //Act
-        var actual = lobbyService.CreateLobby();
+        var actualLobby = lobbyService.CreateLobby();
         
         //Assert
-        expected.Should().BeEquivalentTo(actual);
+        actualLobby.Should().BeEquivalentTo(expectedLobby);
+    }
+
+    [Fact]
+    public void GetLobbyById()
+    {
+        //Arrange
+        var expectedLobby = new Lobby(1, new List<LobbyPlayer>()
+        {
+            new LobbyPlayer(1),
+            new LobbyPlayer(2),
+            new LobbyPlayer(3),
+            new LobbyPlayer(4),
+        });
+        
+        _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
+        
+        var lobbyService = new LobbyService(_repository.Object);
+        
+        //Act
+        var actualLobby = lobbyService.GetLobbyById(1);
+        
+        //Assert
+        actualLobby.Should().BeEquivalentTo(expectedLobby);
+    }
+
+    [Fact]
+    public void UpdateLobby()
+    {
+        //Arrange
+        var testLobby = new Lobby(1, new List<LobbyPlayer>
+        {
+            new LobbyPlayer(1),
+            new LobbyPlayer(2),
+            new LobbyPlayer(3),
+            new LobbyPlayer(4)
+        });
+        
+        _repository.Setup(repo => repo.UpdateLobby(testLobby));
+        
+        var lobbyService = new LobbyService(_repository.Object);
+        //Act
+        lobbyService.UpdateLobby(testLobby);
+        
+        //Assert
+        _repository.Verify(repo => repo.UpdateLobby(testLobby), Times.Once);
     }
 }

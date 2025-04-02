@@ -1,5 +1,4 @@
 ﻿using LudoAPI.Models;
-using System.Collections.Concurrent;
 
 namespace LudoAPI.Services
 {
@@ -7,15 +6,35 @@ namespace LudoAPI.Services
     {
         private readonly IPlayerService _playerService;
         private readonly IDiceService _diceService;
+        private readonly ILobbyService _lobbyService;
 
-        public StartingService(IDiceService diceService)
+        public StartingService(IDiceService diceService, ILobbyService lobbyService)
         {
             _diceService = diceService;
+            _lobbyService = lobbyService;
         }
 
         public Lobby HandleRerolls(Lobby lobby)
         {
             throw new NotImplementedException();
+        }
+
+        public Lobby HandleReroll(int lobbyId, LobbyPlayer player)
+        {
+            var lobby = _lobbyService.GetLobbyById(lobbyId);
+            var newRollValue = _diceService.RollDice();
+
+            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == player.Id);
+
+            if (oldRoll == null)
+            {
+                throw new Exception("This player hasn't rolled yet, and therefore cant reroll");
+            }
+            
+            oldRoll.Value = newRollValue;
+            
+            _lobbyService.UpdateLobby(lobby);
+            return lobby;
         }
 
         public List<LobbyPlayer> GetReRollers(List<Roll> startingRolls)
@@ -47,6 +66,9 @@ namespace LudoAPI.Services
 
             var newRoll = new Roll(player, value);
             lobby.Rolls.Add(newRoll);
+            
+            //todo: add this to test
+            _lobbyService.UpdateLobby(lobby);
 
             return lobby;
         }
