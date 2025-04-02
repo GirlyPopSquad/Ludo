@@ -217,7 +217,7 @@ class BoardGame:
         for y in range(15, 600, grid_size):  # horizontal lines
             self.make_canvas.create_line(100, y, 800, y, dash=(2, 2))  # dash pattern for horizontal lines
 
-if __name__ == "__main__":
+def open_ludoboard_window():
     root = Tk()
     game = BoardGame(root)
     root.mainloop()

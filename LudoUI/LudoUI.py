@@ -9,6 +9,7 @@ from stateManagers.LobbyStateManager import LobbyState, get_lobby_state, set_lob
 from screens.StartMenu import start_menu
 from screens.StartingRolls import starting_roll
 from clients.LobbyClient import create_lobby
+import LudoBoard as ludoBoard
 
 # Initialize Pygame
 pygame.init()
@@ -21,14 +22,17 @@ pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
 
+is_pygame_running = True
+
 
 def ludo():
     game_on = True
+    global is_pygame_running
 
     set_game_state(GameState.START_MENU)
-
     while game_on:
-        # Event handling
+        
+    # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_on = False
@@ -38,12 +42,17 @@ def ludo():
             start_menu(screen, font)
 
         if get_game_state() == GameState.LOBBY:
+            
             if get_lobby_state() == LobbyState.STARTING_ROLL:
                 starting_roll(screen, font)
             if get_lobby_state() == LobbyState.ROLLS_OVERVIEW:
                 starting_rolls_overview(screen, font)
             if get_lobby_state() == LobbyState.STARTING_REROLL:
                 starting_rerolls(screen, font)
+            
+            is_pygame_running = False
+            
+            
 
         if get_game_state() == GameState.NOT_IMPLEMENTED:
             screen.fill(WHITE)
@@ -51,8 +60,13 @@ def ludo():
             screen.blit(not_implemented_text, (
                 WIDTH // 2 - not_implemented_text.get_width() // 2,
                 HEIGHT // 2 - not_implemented_text.get_height() // 2))
-
-        pygame.display.update()
+            
+        if is_pygame_running:
+            pygame.display.update()
+        else:
+            break
 
 # Run the start menu
 ludo()
+
+ludoBoard.open_ludoboard_window()
