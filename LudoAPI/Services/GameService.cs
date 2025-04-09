@@ -13,7 +13,7 @@ namespace LudoAPI.Services
         }
 
 
-        public Game Start(Lobby lobby)
+        public Game NewGame(Lobby lobby)
         {
             var rolls = lobby.Rolls;
             var highestRoll = rolls.OrderByDescending(r => r.Value).FirstOrDefault();

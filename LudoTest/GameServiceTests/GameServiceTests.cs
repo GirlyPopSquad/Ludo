@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using FluentAssertions;
+﻿using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Repositories;
 using LudoAPI.Services;
@@ -42,32 +41,12 @@ namespace LudoTest.GameServiceTests
             GameService service = new GameService(_gameRepository.Object);
 
             //Act
-            var newGame = service.Start(lobby);
+            var newGame = service.NewGame(lobby);
 
             //Assert
             newGame.CurrentPlayerId.Should().Be(expectedStartingPlayerId);
             newGame.Players.Count.Should().Be(lobby.Players.Count);
             newGame.Should().BeEquivalentTo(game);
         }
-    }
-    
-    public class LobbyTestData : IEnumerable<object[]>
-    {
-        private readonly List<object[]> _data =
-        [
-            new object[]
-            {
-                new Lobby(1, [
-                    new LobbyPlayer(1),
-                    new LobbyPlayer(2),
-                    new LobbyPlayer(3),
-                    new LobbyPlayer(4)
-                ])
-            }
-        ];
-
-        public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
