@@ -27,7 +27,7 @@ namespace LudoTest.ControllerTests
                 .Returns(expectedLobby);
 
             //Act
-            var result = _controller.CreateLobby();
+            var result = _controller.Create();
 
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>()
@@ -42,7 +42,7 @@ namespace LudoTest.ControllerTests
             _lobbyServiceMock.Setup(s => s.CreateLobby()).Returns((Lobby)null);
 
             // Act
-            var result = _controller.CreateLobby();
+            var result = _controller.Create();
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>()

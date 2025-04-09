@@ -9,5 +9,6 @@ namespace LudoAPI.Services
         bool ShouldReRoll(List<Roll> startingRolls);
         Lobby StartingRoll(Lobby lobby);
         Lobby HandleReroll(int lobbyId, LobbyPlayer player);
+        void RemoveOldRolls(int id, List<LobbyPlayer> rerollers);
     }
 }

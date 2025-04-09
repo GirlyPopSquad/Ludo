@@ -3,10 +3,10 @@ from models.Roll import Roll
 
 
 class Lobby:
-    def __init__(self, lobby_id, players: [LobbyPlayer], rolls: [Roll]):
+    def __init__(self, lobby_id, players: list[LobbyPlayer], rolls: list[Roll]):
         self.lobby_id = lobby_id
-        self.players: [LobbyPlayer] = players
-        self.rolls: [Roll] = rolls
+        self.players: list[LobbyPlayer] = players
+        self.rolls: list[Roll] = rolls
 
     @classmethod
     def from_json(cls, json_data):

@@ -32,6 +32,11 @@ public class LobbyService : ILobbyService
         return _lobbyRepo.Get(id);
     }
 
+    public void RemoveOldRolls(int id, List<LobbyPlayer> rerollers)
+    {
+        _lobbyRepo.RemoveOldRolls(id, rerollers);
+    }
+
     public void UpdateLobby(Lobby lobby)
     {
         _lobbyRepo.UpdateLobby(lobby);

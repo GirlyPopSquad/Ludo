@@ -3,12 +3,13 @@ import pygame
 from Constants import WHITE, WIDTH, BLACK, HEIGHT, DEEP_PINK
 from PlayerColor import get_piece_colorcode
 from clients.StartingRollClient import next_starting_roll
+from clients.LobbyClient import get_lobby
 from draw.button import init_standard_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
 from screens.StartingRollsOverview import starting_rolls_overview
 from stateManagers.GameStateManager import GameState, get_game_state, quit_game
-from stateManagers.LobbyStateManager import LobbyState, get_lobby, get_lobby_state, set_lobby, set_lobby_state
+from stateManagers.LobbyStateManager import LobbyState, get_lobby_id, get_lobby_state, set_lobby, set_lobby_state
 
 
 def starting_roll(screen, font):
@@ -27,8 +28,9 @@ def starting_roll_frame(screen, font, player_id, dice_value, button_text, state)
     player_color = get_piece_colorcode(player_id)
 
     def on_click_next():
+        lobby_id = get_lobby_id()
         updated_player_id = player_id + 1
-        lobby = get_lobby()
+        lobby = get_lobby(lobby_id)
         if updated_player_id > len(lobby.players):
             starting_roll_frame(screen, font, player_id, dice_value, "Done", 3)
 

@@ -2,7 +2,6 @@
 
 public class Lobby
 {
-    
     public int Id { get; set; }
     
     public List<LobbyPlayer> Players { get; set; } 
@@ -14,6 +13,4 @@ public class Lobby
         Players = players;
         Id = id;
     }
-
- 
 }
