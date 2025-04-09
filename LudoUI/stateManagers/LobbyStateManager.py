@@ -9,8 +9,8 @@ def set_lobby(new_lobby: Lobby):
     lobby = new_lobby
 
 
-def get_lobby():
-    return lobby
+def get_lobby_id():
+    return lobby.lobby_id
 
 
 class LobbyState(Enum):

@@ -32,6 +32,20 @@ namespace LudoAPI.Controllers
             return Ok(rerollers);
         }
 
+        [HttpPost("RemoveOldRolls/{lobbyId}")]
+        public ActionResult RemoveOldRolls(int lobbyId, [FromBody] List<LobbyPlayer> rerollers)
+        {
+            try
+            {
+                _startingService.RemoveOldRolls(lobbyId, rerollers);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Could not remove old rolls: " + ex.Message);
+            }
+        }
+
         [HttpPost("GetShouldReroll")]
         public ActionResult<bool> GetShouldReRoll([FromBody] List<Roll> startingRolls)
         {
