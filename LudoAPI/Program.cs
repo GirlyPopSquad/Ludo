@@ -23,6 +23,9 @@ namespace LudoAPI
             builder.Services.AddScoped<ILobbyService, LobbyService>();
             
             builder.Services.AddScoped<IStartingService, StartingService>();
+            
+            builder.Services.AddSingleton<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IGameService, GameService>();
 
             var app = builder.Build();
 

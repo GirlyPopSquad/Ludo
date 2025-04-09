@@ -2,7 +2,7 @@
 
 namespace LudoAPI.Repositories
 {
-    public class GameRepository
+    public class GameRepository : IGameRepository
     {
         private List<Game> Games { get; } = new List<Game>();
 
