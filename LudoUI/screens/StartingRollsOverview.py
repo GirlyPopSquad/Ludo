@@ -11,8 +11,7 @@ from models.Roll import Roll
 from screens.StartingRerolls import starting_rerolls
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
 from stateManagers.LobbyStateManager import LobbyState, get_lobby, get_lobby_state, set_lobby, set_lobby_state
-
-is_pygame_running = True
+from stateManagers.IsPygameRunning import set_is_pygame_running, get_is_pygame_running
 
 def starting_rolls_overview(screen, font):
     pygame.display.set_caption("Ludo - Starting Rolls Overview")
@@ -41,13 +40,13 @@ def starting_rolls_overview(screen, font):
     button.draw(screen, font)
 
     while get_lobby_state() == LobbyState.ROLLS_OVERVIEW and get_game_state() == GameState.LOBBY:
-        if is_pygame_running:
+        if get_is_pygame_running():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit_game()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     button.check_click()
-            if is_pygame_running:
+            if get_is_pygame_running():
                 pygame.display.update()
             else:
                 break
@@ -57,8 +56,6 @@ def setup_start_game_button():
 
 # TODO: implement
 def on_start_game():
-    global is_pygame_running
     print("ON START")
-    is_pygame_running = False
+    set_is_pygame_running(False)
     pygame.quit()
-    #set_game_state(GameState.NOT_IMPLEMENTED)

@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 
+from stateManagers.IsPygameRunning import get_is_pygame_running
 from Constants import WHITE, BLACK, WIDTH, HEIGHT
 from screens.StartingRerolls import starting_rerolls
 from screens.StartingRollsOverview import starting_rolls_overview
@@ -22,12 +23,8 @@ pygame.display.set_caption("Ludo - Start Menu")
 
 font = pygame.font.Font(None, 50)
 
-is_pygame_running = True
-
-
 def ludo():
     game_on = True
-    global is_pygame_running
 
     set_game_state(GameState.START_MENU)
     while game_on:
@@ -49,10 +46,6 @@ def ludo():
                 starting_rolls_overview(screen, font)
             if get_lobby_state() == LobbyState.STARTING_REROLL:
                 starting_rerolls(screen, font)
-            
-            is_pygame_running = False
-            
-            
 
         if get_game_state() == GameState.NOT_IMPLEMENTED:
             screen.fill(WHITE)
@@ -61,7 +54,7 @@ def ludo():
                 WIDTH // 2 - not_implemented_text.get_width() // 2,
                 HEIGHT // 2 - not_implemented_text.get_height() // 2))
             
-        if is_pygame_running:
+        if get_is_pygame_running():
             pygame.display.update()
         else:
             break
