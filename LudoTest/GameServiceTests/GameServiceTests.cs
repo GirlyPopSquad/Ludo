@@ -10,20 +10,28 @@ namespace LudoTest.GameServiceTests
 
         [Theory]
         [ClassData(typeof(LobbyTestData))]
-        public void StartNewGame(Lobby lobby)
+        public void StartNewGame_ShouldReturnANewGame(Lobby lobby)
         {
             //Arrange
+            var startingRolls = new List<Roll>
+            {
+                new Roll(lobby.Players[0], 4),
+                new Roll(lobby.Players[1], 1),
+                new Roll(lobby.Players[2], 6),
+                new Roll(lobby.Players[3], 4),
+            };
+            lobby.Rolls = startingRolls;
+            
+            var expectedStartingPlayerId = lobby.Players[2].Id;
+            
             GameService service = new GameService();
 
             //Act
             var newGame = service.Start(lobby);
 
             //Assert
-
-            //A starting player hasn't yet been decided
-            newGame.CurrentPlayerId.Should().BeNull();
-            newGame.Players.Count.Should().Be(4);
-            newGame.Players.Should().BeEquivalentTo(lobby.Players);
+            newGame.CurrentPlayerId.Should().Be(expectedStartingPlayerId);
+            newGame.Players.Count.Should().Be(lobby.Players.Count);
         }
     }
     
