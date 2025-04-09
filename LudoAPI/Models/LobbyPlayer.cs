@@ -3,9 +3,8 @@
     public class LobbyPlayer
     {
         // number from 1-4
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public LobbyPlayer() { }
         public LobbyPlayer(int id)
         {
             Id = id;

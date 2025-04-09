@@ -3,17 +3,16 @@
 public class Game
 {
     public int Id {  get; }
-    //todo could be private if not for test?
-    public List<LobbyPlayer> players { get; }
+    public List<Player> Players { get; }
     //Is initially decided by who rolls the highest number on the dice
-    public int? currentPlayerId {get; set;}
+    public int? CurrentPlayerId {get; set;}
 
-    //todo board/tiles
-    
-    public Game(List<LobbyPlayer> players, int currentPlayerId)
+
+    public Game(int id, List<Player> players, int? currentPlayerId)
     {
-        this.players = players;
-        this.currentPlayerId = currentPlayerId;
+        Id = id;
+        Players = players;
+        CurrentPlayerId = currentPlayerId;
     }
 }
     

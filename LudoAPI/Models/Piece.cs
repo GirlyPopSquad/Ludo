@@ -2,12 +2,12 @@
 {
     public class Piece
     {
-        public Guid Id { get; } = Guid.NewGuid();
-        public Color Color;
-        
-        public Piece(Color color)
+        public int Id { get; }
+        // will probably need a playerID or some sort of reference to its player
+
+        public Piece(int id)
         {
-            Color = color;
+            Id = id;
         }
     }
 }

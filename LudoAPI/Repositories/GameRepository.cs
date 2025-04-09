@@ -15,5 +15,10 @@ namespace LudoAPI.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Game NewGame(int currentPlayerId, List<Player> players)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,10 +12,11 @@ public class ArrowTileTest
         var defaultMove = new Move(1, 0);
         var arrowMove = new Move(0, 1);
         var redColor = Color.Red;
-        var blueColor = Color.Blue;
         var arrowTile = new ArrowTile(defaultMove, arrowMove, redColor);
-        var redPiece = new Piece(redColor);
-        var bluePiece = new Piece(blueColor);
+        
+        //todo: pieces needs a reference to player/color, for now the color cannot be determined by the piece alone
+        var redPiece = new Piece(1);
+        var bluePiece = new Piece(2);
 
         //Act
         var matchingColor = arrowTile.nextMove(redPiece);
