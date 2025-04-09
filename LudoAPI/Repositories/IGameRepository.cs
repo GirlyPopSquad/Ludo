@@ -4,5 +4,5 @@ namespace LudoAPI.Repositories;
 
 public interface IGameRepository
 {
-    Game NewGame(int currentPlayerId, List<Player> players);
+    Game NewGame(int startingPlayerId, List<Player> players);
 }

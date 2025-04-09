@@ -16,9 +16,18 @@ namespace LudoAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public Game NewGame(int currentPlayerId, List<Player> players)
+        public Game NewGame(int startingPlayerId, List<Player> players)
         {
-            throw new NotImplementedException();
+            var newGame = new Game(GetNextId(), players, startingPlayerId);
+            Games.Add(newGame);
+            return newGame;
+        }
+        
+        private int GetNextId()
+        {
+            if (Games.Count == 0) return 1;
+
+            return Games.Last().Id + 1;
         }
     }
 }
