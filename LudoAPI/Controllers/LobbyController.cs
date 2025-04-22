@@ -15,9 +15,20 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Lobby> CreateLobby()
+        public ActionResult<Lobby> Create()
         {
             var lobby = _lobbyService.CreateLobby();
+            if (lobby == null)
+            {
+                return BadRequest("Lobby could not be created");
+            }
+            return Ok(lobby);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Lobby> Get(int id)
+        {
+            var lobby = _lobbyService.GetLobbyById(id);
             if (lobby == null)
             {
                 return BadRequest("Lobby could not be created");

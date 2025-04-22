@@ -23,6 +23,23 @@ namespace LudoAPI.Repositories
             return Lobbies[Lobbies.Count - 1].Id + 1;
         }
 
+        public void RemoveOldRolls(int lobbyId, List<LobbyPlayer> rerollers)
+        {
+            var lobby = Lobbies.First(lobby => lobby.Id == lobbyId);
+            var rollsToKeep = new List<Roll>(); 
+            foreach(var roll in lobby.Rolls)
+            {
+                foreach(var reroller in rerollers)
+                {
+                    if (roll.Player.Id == reroller.Id)
+                    {
+                        rollsToKeep.Add(roll);
+                    }
+                }   
+            }
+            lobby.Rolls = rollsToKeep;
+        }
+
         public Lobby Get(int id)
         {
             return Lobbies.First(lobby => lobby.Id == id);

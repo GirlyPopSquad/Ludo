@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Repositories;
 
 namespace LudoAPI.Services
 {
@@ -42,6 +43,11 @@ namespace LudoAPI.Services
             int highest = startingRolls.Max(x => x.Value);
             return startingRolls.Where(x => x.Value == highest)
                 .Select(x => x.Player).ToList();
+        }
+
+        public void RemoveOldRolls(int id, List<LobbyPlayer> rerollers)
+        {
+            _lobbyService.RemoveOldRolls(id, rerollers);
         }
 
         public bool ShouldReRoll(List<Roll> startingRolls)
