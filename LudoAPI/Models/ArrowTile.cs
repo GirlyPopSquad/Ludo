@@ -2,14 +2,20 @@
 
 public class ArrowTile : Tile
 {
-    private Color color;
-    private Move arrowMove;
     
-    public ArrowTile(Move move, Move arrowMove, Color color) : base(move)
+    public Coordinate Coordinate { get; }
+    private Move arrowMove;
+    public Color? Color;
+    //todo arrow direction
+    
+    
+    public ArrowTile(Coordinate coordinate, Color color, Move move, Move arrowMove) : base(coordinate, color, move)
     {
         this.arrowMove = arrowMove;
-        this.color = color;
+        Color = color;
+        Coordinate = coordinate;
     }
+
 
     public override Move nextMove(Piece piece)
     {

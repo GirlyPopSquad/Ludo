@@ -2,13 +2,34 @@
 
 public class Tile
 {
-    private Move move;
+    public Coordinate Coordinate { get; }
+    private Move? move;
+    public Color? Color { get; }
 
-    public Tile(Move move)
+    public Tile(Coordinate coordinate)
     {
-        this.move = move;
+        Coordinate = coordinate;
     }
     
+    public Tile(Coordinate coordinate, Color color)
+    {
+        Coordinate = coordinate;
+        Color = color;
+    }
+
+    public Tile(Coordinate coordinate, Move move)
+    {
+        Coordinate = coordinate;
+        this.move = move;
+    }
+
+    public Tile(Coordinate coordinate, Color color, Move move)
+    {
+        this.move = move;
+        Color = color;
+        Coordinate = coordinate;
+    }
+
 
     public virtual Move nextMove(Piece piece)
     {
