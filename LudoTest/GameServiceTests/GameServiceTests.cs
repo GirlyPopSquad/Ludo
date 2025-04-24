@@ -21,9 +21,9 @@ namespace LudoTest.GameServiceTests
             //Assert
 
             //A starting player hasn't yet been decided
-            newGame.currentPlayerId.Should().BeNull();
-            newGame.players.Count.Should().Be(4);
-            newGame.players.Should().BeEquivalentTo(lobby.Players);
+            newGame.CurrentPlayerId.Should().BeNull();
+            newGame.Players.Count.Should().Be(4);
+            newGame.Players.Should().BeEquivalentTo(lobby.Players);
         }
     }
     

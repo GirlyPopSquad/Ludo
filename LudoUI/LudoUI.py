@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 
+from stateManagers import LobbyStateManager
 from stateManagers.IsPygameRunning import get_is_pygame_running
 from Constants import WHITE, BLACK, WIDTH, HEIGHT
 from screens.StartingRerolls import starting_rerolls
@@ -61,5 +62,6 @@ def ludo():
 
 # Run the start menu
 ludo()
-
+lobby = LobbyStateManager.lobby
+print(lobby)
 ludoBoard.open_ludoboard_window()
