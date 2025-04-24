@@ -101,7 +101,7 @@ class BoardGame:
         self.add_grid_overlay()
         
         # Red Pieces
-        self.place_object_on_grid(0, 0, "red")  # Placing a red circle
+        self.place_object_on_grid(2, 2, "red")  # Placing a red circle
         self.place_object_on_grid(3, 2, "red")  # Placing a red circle 
         self.place_object_on_grid(2, 3, "red")  # Placing a red circle 
         self.place_object_on_grid(3, 3, "red")  # Placing a red circle 

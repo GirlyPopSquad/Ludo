@@ -12,8 +12,8 @@ class BoardFromTiles:
     grid_size = 40
     padding = 15
 
-    grid_height = board.height
-    grid_width = board.width
+    grid_height = board.rows
+    grid_width = board.cols
 
     board_x0 = padding
     board_y0 = padding
@@ -33,9 +33,6 @@ class BoardFromTiles:
         # Draw a frame for the board
         self.make_canvas.create_rectangle(self.board_x0, self.board_y0, self.board_x1, self.board_y1, width=2, fill="white")
 
-        #self.make_canvas.create_rectangle(self.board_x0, self.board_y0, self.board_x0 + self.grid_size, self.board_y0 + self.grid_size, width=0, fill="red")
-        #self.make_canvas.create_rectangle(self.board_x0 + self.grid_size, self.board_y0, self.board_x0 + self.grid_size * 2,self.board_y0 + self.grid_size, width=0, fill="blue")
-
         for(tile) in self.board.tiles.values():
             self.draw_from_tile(tile)
 
@@ -46,7 +43,6 @@ class BoardFromTiles:
 
         color = "white"
         if tile.color is not None:
-            print(coords)
             color = get_tkinter_colorcode(tile.color)
 
         self.make_canvas.create_rectangle(self.board_x0 + (self.grid_size * coords.x), self.board_y0 + (self.grid_size * coords.y),
