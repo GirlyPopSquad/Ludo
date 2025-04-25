@@ -62,6 +62,5 @@ def ludo():
 
 # Run the start menu
 ludo()
-lobby = LobbyStateManager.lobby
-print(lobby)
+
 ludoBoard.open_ludoboard_window()
