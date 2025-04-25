@@ -1,4 +1,4 @@
-﻿using LudoAPI.Models;
+using LudoAPI.Models;
 
 namespace LudoTest.Models;
 
@@ -15,7 +15,7 @@ public class TileTest
         var piece = new Piece(blueColor);
         
         //Act
-        var actual = tile.nextMove(piece);
+        var actual = tile.NextMove(piece);
         
         //Assert
         Assert.Equal(actual, move);

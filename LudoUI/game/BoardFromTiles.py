@@ -4,6 +4,8 @@ from PlayerColor import get_tkinter_colorcode
 from game.importFromBE import test_board
 from models.Tile import Tile
 
+#TODO ARROW TILES: make them look like arrows
+
 
 class BoardFromTiles:
 
@@ -20,10 +22,13 @@ class BoardFromTiles:
     board_x1 = padding + (grid_size * grid_height)
     board_y1 = padding + (grid_size * grid_width)
 
+    canvas_width = 2 * padding + (grid_size * grid_width)
+    canvas_height = 2 * padding + (grid_size * grid_height)
+
     def __init__(self, root):
         self.root = root
         self.root.title("Board Game")
-        self.make_canvas = Canvas(root, width=800, height=700)
+        self.make_canvas = Canvas(root, width=self.canvas_width, height=self.canvas_height)
         self.make_canvas.pack()
 
         self.board_set_up()

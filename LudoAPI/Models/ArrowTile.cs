@@ -1,23 +1,20 @@
 ﻿namespace LudoAPI.Models;
 
+//TODO fund out how to make this recognisable from FE - so that it can look like an arrow
+
 public class ArrowTile : Tile
 {
     
-    public Coordinate Coordinate { get; }
     private Move arrowMove;
-    public Color? Color;
-    //todo arrow direction
     
     
     public ArrowTile(Coordinate coordinate, Color color, Move move, Move arrowMove) : base(coordinate, color, move)
     {
         this.arrowMove = arrowMove;
-        Color = color;
-        Coordinate = coordinate;
     }
 
 
-    public override Move nextMove(Piece piece)
+    public override Move NextMove(Piece piece)
     {
         throw new NotImplementedException();
     }

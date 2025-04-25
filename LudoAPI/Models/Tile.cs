@@ -31,7 +31,7 @@ public class Tile
     }
 
 
-    public virtual Move nextMove(Piece piece)
+    public virtual Move NextMove(Piece piece)
     {
         throw new NotImplementedException();
     }

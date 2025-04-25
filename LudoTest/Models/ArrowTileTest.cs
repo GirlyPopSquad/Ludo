@@ -18,8 +18,8 @@ public class ArrowTileTest
         var bluePiece = new Piece(blueColor);
 
         //Act
-        var matchingColor = arrowTile.nextMove(redPiece);
-        var nonMatchingColor = arrowTile.nextMove(bluePiece);
+        var matchingColor = arrowTile.NextMove(redPiece);
+        var nonMatchingColor = arrowTile.NextMove(bluePiece);
 
         //Assert
         Assert.Equal(arrowMove, matchingColor);
