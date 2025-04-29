@@ -1,4 +1,6 @@
-﻿namespace LudoAPI.Models;
+﻿using LudoAPI.Models;
+
+namespace LudoAPI.Services;
 
 public interface IBoardService
 {
