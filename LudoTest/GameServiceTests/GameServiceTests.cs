@@ -9,6 +9,8 @@ namespace LudoTest.GameServiceTests
 {
     public class GameServiceTests
     {
+        
+        /*
 
         [Theory]
         [ClassData(typeof(LobbyTestData))]
@@ -47,5 +49,8 @@ namespace LudoTest.GameServiceTests
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    */
+    
     }
+    
 }

@@ -27,6 +27,9 @@ namespace LudoAPI
             
             builder.Services.AddScoped<IStartingService, StartingService>();
 
+            builder.Services.AddSingleton<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IGameService, GameService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

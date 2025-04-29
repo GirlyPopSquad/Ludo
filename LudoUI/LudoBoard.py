@@ -210,4 +210,4 @@ def open_ludoboard_window():
     BoardGame(root)
     root.mainloop()
 
-open_ludoboard_window()
+#open_ludoboard_window()
