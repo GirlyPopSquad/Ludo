@@ -26,9 +26,7 @@ public class BoardService : IBoardService
         return new Board(-1, gameId,tiles, rows, cols);
     }
 
-    //Todo handle "*" 
     //TODO handle "end"(winning) tiles
-    //TODO handle moves for the inner corners - needs a name maybe like "UR" for Up-Right?
     //TODO handle starttile (the tile you land on after the first 6). the move from "home" to "start"
     
     private Tile TranslateToTile(string tileString, Coordinate coordinate)
@@ -45,6 +43,14 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, new Move(0, 1));
             case "D": //down
                 return new Tile(coordinate, new Move(0, -1));
+            case "UL": //Up-Left
+                return new Tile(coordinate, new Move(-1, +1));
+            case "UR" : //Up-Right
+                return new Tile(coordinate, new Move(1, +1));
+            case "DL": //Down-Left
+                return new Tile(coordinate, new Move(-1, -1));
+            case "DR": //Down-Right:
+                return new Tile(coordinate, new Move(1, -1));
             case "r": //red
                 return new Tile(coordinate,Color.Red);
             case "rL": //redLeft
@@ -99,11 +105,11 @@ public class BoardService : IBoardService
         { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
         { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
         { "r", "", "", "", "", "r", "U", "gD", "D", "g", "", "", "", "", "g" },
-        { "r", "r", "r", "r", "r", "r", "U", "gD", "*", "g", "g", "g", "g", "g", "g" },
-        { "R", "rR", "R", "R", "R", "*", "", "greenEnd", "", "*", "R", "R", "R", "R", "D" },
+        { "r", "r", "r", "r", "r", "r", "U", "gD", "DR", "g", "g", "g", "g", "g", "g" },
+        { "R", "rR", "R", "R", "R", "RU", "", "greenEnd", "", "R", "R", "R", "R", "R", "D" },
         { "rR-U", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-D" }, 
-        { "U", "L", "L", "L", "L", "L", "", "blueEnd", "", "*", "L", "L", "L", "yL", "L" },
-        { "b", "b", "b", "b", "b", "b", "*", "bU", "D", "y", "y", "y", "y", "y", "y" },
+        { "U", "L", "L", "L", "L", "L", "", "blueEnd", "", "DL", "L", "L", "L", "yL", "L" },
+        { "b", "b", "b", "b", "b", "b", "UL", "bU", "D", "y", "y", "y", "y", "y", "y" },
         { "b", "", "", "", "", "b", "U", "bU", "D", "y", "", "", "", "", "y" },
         { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
         { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
