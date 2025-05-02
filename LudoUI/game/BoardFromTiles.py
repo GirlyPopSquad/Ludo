@@ -4,6 +4,8 @@ import random
 from PlayerColor import get_tkinter_colorcode
 from game.importFromBE import test_board
 from models.Tile import Tile
+from clients.RollClient import Roll
+import clients.GameClient as gameClient
 
 class BoardFromTiles:
 
@@ -28,8 +30,9 @@ class BoardFromTiles:
     canvas_width = padding_left + (grid_size * grid_width) + padding_right
     canvas_height = padding_top + (grid_size * grid_height) + padding_bottom
 
-    def __init__(self, root):
+    def __init__(self, root, game_id):
         self.root = root
+        self.game_id = game_id
         self.root.title("Board Game")
         self.make_canvas = Canvas(root, width=self.canvas_width, height=self.canvas_height)
         self.make_canvas.pack()
@@ -145,9 +148,8 @@ class BoardFromTiles:
         self.draw_dice_eyes(1)
 
     def roll_dice(self, event=None):
-        roll = random.randint(1, 6)
+        roll = Roll()
         self.draw_dice_eyes(roll)
-        return roll
 
     def draw_dice_eyes(self, value):
         # Clear old dots
@@ -188,9 +190,7 @@ class BoardFromTiles:
             dot = self.make_canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
 
-def open_ludoboard_window():
+def open_ludoboard_window(game_id):
     root = Tk()
-    BoardFromTiles(root)
+    BoardFromTiles(root, game_id)
     root.mainloop()
-
-open_ludoboard_window()
