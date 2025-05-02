@@ -29,6 +29,7 @@ namespace LudoTest.GameServiceTests
         }
     }
 
+    
     public class LobbyTestData : IEnumerable<object[]>
     {
         private readonly List<object[]> _data =
