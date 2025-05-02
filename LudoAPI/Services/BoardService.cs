@@ -49,7 +49,7 @@ public class BoardService : IBoardService
                 return new Tile(coordinate,Color.Red);
             case "rL": //redLeft
                 return new Tile(coordinate,Color.Red, new Move(-1,0));
-            case "rh": //redhome
+            case "rH": //redhome
                 return new Tile(coordinate, Color.Red);
             case "rR": //redRight
                 return new Tile(coordinate, Color.Red, new Move(1,0));
@@ -63,8 +63,24 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, Color.Green, new Move(0,-1));
             case "gD-R": //greenDown else Right
                 return new ArrowTile(coordinate, Color.Green, new Move(1, 0), new Move(0, -1));
-            case "gh": //greenhome
+            case "gH": //greenhome
                 return new Tile(coordinate, Color.Green);
+            case "b":
+                return new Tile(coordinate, Color.Blue);
+            case "bL":
+                return new Tile(coordinate, Color.Blue, new Move(-1, 0));
+            case "bH":
+                return new Tile(coordinate, Color.Blue, new Move(+1, 0));
+            case "bU":
+                return new Tile(coordinate, Color.Blue, new Move(0, 1));
+            case "bD":
+                return new Tile(coordinate, Color.Blue, new Move(0, -1));
+            case "bU-L":
+                return new ArrowTile(coordinate, Color.Blue, new Move(-1, 0), new Move(0, 1));
+            case "y":
+                return new Tile(coordinate,Color.Yellow);
+            case "yH":
+                return new Tile(coordinate, Color.Yellow);
             case "yL": // yellow Left
                 return new Tile(coordinate, Color.Yellow, new Move( -1, 0));
             case "yL-D": //yellow Left else Down
@@ -80,18 +96,18 @@ public class BoardService : IBoardService
     {
         { "r", "r", "r", "r", "r", "r", "R", "gD-R", "D", "g", "g", "g", "g", "g", "g" },
         { "r", "", "", "", "", "r", "D", "gU", "gD", "g", "", "", "", "", "g" },
-        { "r", "", "rh", "rh", "", "r", "U", "gD", "D", "g", "", "gh", "gh", "", "g" },
-        { "r", "", "rh", "rh", "", "r", "U", "gD", "D", "g", "", "gh", "gh", "", "g" },
+        { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
+        { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
         { "r", "", "", "", "", "r", "U", "gD", "D", "g", "", "", "", "", "g" },
         { "r", "r", "r", "r", "r", "r", "U", "gD", "*", "g", "g", "g", "g", "g", "g" },
         { "R", "rR", "R", "R", "R", "*", "", "greenEnd", "", "*", "R", "R", "R", "R", "D" },
-        { "rR-U", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-D" }, //TODO. Jeg er nået hertil
-        { "*", "*", "*", "*", "*", "*", "", "bluehome", "", "*", "*", "*", "*", "*", "*" },
-        { "", "", "", "", "", "", "*", "blue", "*", "", "", "", "", "", "" },
-        { "", "", "", "", "", "", "*", "blue", "*", "", "", "", "", "", "" },
-        { "", "", "blue", "blue", "", "", "*", "blue", "*", "", "", "yellow", "yellow", "", "" },
-        { "", "", "blue", "blue", "", "", "*", "blue", "*", "", "", "yellow", "yellow", "", "" },
-        { "", "", "", "", "", "", "*", "blue", "*", "", "", "", "", "", "" },
-        { "", "", "", "", "", "", "*", "blueup", "*", "", "", "", "", "", "" },
+        { "rR-U", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-D" }, 
+        { "U", "L", "L", "L", "L", "L", "", "blueEnd", "", "*", "L", "L", "L", "yL", "L" },
+        { "b", "b", "b", "b", "b", "b", "*", "bU", "D", "y", "y", "y", "y", "y", "y" },
+        { "b", "", "", "", "", "b", "U", "bU", "D", "y", "", "", "", "", "y" },
+        { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
+        { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
+        { "b", "", "", "", "", "b", "bU", "bU", "D", "y", "", "", "", "", "y" },
+        { "b", "b", "b", "b", "b", "b", "U", "bU-L", "L", "y", "y", "y", "y", "y", "y" },
     };
 }
