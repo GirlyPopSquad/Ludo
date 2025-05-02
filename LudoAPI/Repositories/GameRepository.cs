@@ -8,7 +8,6 @@ namespace LudoAPI.Repositories
 
         public int Add(Game game)
         {
-
             var nextId = 1;
             
             if (Games.Count >= 1)
@@ -24,7 +23,19 @@ namespace LudoAPI.Repositories
 
         public Game Get(int id)
         {
-            throw new NotImplementedException();
+            return Games[id];
+        }
+
+        public void Update(int id, Game game)
+        {
+            if (Games.ContainsKey(id))
+            {
+                Games[id] = game;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Game with ID {id} not found.");
+            }
         }
     }
 }
