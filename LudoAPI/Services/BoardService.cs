@@ -53,22 +53,22 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, Color.Red);
             case "rR": //redRight
                 return new Tile(coordinate, Color.Red, new Move(1,0));
-            case "rR-D": //redRight else Down
-                return new ArrowTile(coordinate,Color.Red, new Move(0, -1), new Move(1,0));
+            case "rR-U": //redRight else UP
+                return new ArrowTile(coordinate,Color.Red, new Move(0, 1), new Move(1,0));
             case "g":  //green
                 return new Tile(coordinate, Color.Green);
             case "gU": //greenUp
                 return new Tile(coordinate, Color.Green, new Move(0, 1));
             case "gD": //greenDown
                 return new Tile(coordinate, Color.Green, new Move(0,-1));
-            case "gD-L": //greenDown else Left
-                return new ArrowTile(coordinate, Color.Green, new Move(-1, 0), new Move(0, -1));
+            case "gD-R": //greenDown else Right
+                return new ArrowTile(coordinate, Color.Green, new Move(1, 0), new Move(0, -1));
             case "gh": //greenhome
                 return new Tile(coordinate, Color.Green);
             case "yL": // yellow Left
                 return new Tile(coordinate, Color.Yellow, new Move( -1, 0));
-            case "yL-U": //yellow Left else Up
-                return new ArrowTile(coordinate, Color.Yellow, new Move(0, 1), new Move(-1, 0));
+            case "yL-D": //yellow Left else Down
+                return new ArrowTile(coordinate, Color.Yellow, new Move(0, -1), new Move(-1, 0));
             default:
                 return new Tile(coordinate);
         }
@@ -78,14 +78,14 @@ public class BoardService : IBoardService
     
     private readonly string[,] _standardBoard = new string[15, 15]
     {
-        { "r", "r", "r", "r", "r", "r", "D", "gD-L", "L", "g", "g", "g", "g", "g", "g" },
-        { "r", "", "", "", "", "r", "D", "gD", "gU", "g", "", "", "", "", "g" },
-        { "r", "", "rh", "rh", "", "r", "D", "gD", "U", "g", "", "gh", "gh", "", "g" },
-        { "r", "", "rh", "rh", "", "r", "D", "gD", "U", "g", "", "gh", "gh", "", "g" },
-        { "r", "", "", "", "", "r", "D", "gD", "U", "g", "", "", "", "", "g" },
-        { "r", "r", "r", "r", "r", "r", "*", "gD", "U", "g", "g", "g", "g", "g", "g" },
-        { "L", "rL", "L", "L", "L", "L", "", "greenEnd", "", "*", "L", "L", "L", "L", "L" },
-        { "rR-D", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-U" }, //TODO. Jeg er nået hertil
+        { "r", "r", "r", "r", "r", "r", "R", "gD-R", "D", "g", "g", "g", "g", "g", "g" },
+        { "r", "", "", "", "", "r", "D", "gU", "gD", "g", "", "", "", "", "g" },
+        { "r", "", "rh", "rh", "", "r", "U", "gD", "D", "g", "", "gh", "gh", "", "g" },
+        { "r", "", "rh", "rh", "", "r", "U", "gD", "D", "g", "", "gh", "gh", "", "g" },
+        { "r", "", "", "", "", "r", "U", "gD", "D", "g", "", "", "", "", "g" },
+        { "r", "r", "r", "r", "r", "r", "U", "gD", "*", "g", "g", "g", "g", "g", "g" },
+        { "R", "rR", "R", "R", "R", "*", "", "greenEnd", "", "*", "R", "R", "R", "R", "D" },
+        { "rR-U", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-D" }, //TODO. Jeg er nået hertil
         { "*", "*", "*", "*", "*", "*", "", "bluehome", "", "*", "*", "*", "*", "*", "*" },
         { "", "", "", "", "", "", "*", "blue", "*", "", "", "", "", "", "" },
         { "", "", "", "", "", "", "*", "blue", "*", "", "", "", "", "", "" },
