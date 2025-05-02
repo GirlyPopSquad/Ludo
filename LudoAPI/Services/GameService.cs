@@ -27,6 +27,12 @@ namespace LudoAPI.Services
             return newGameId;
         }
 
+        public int GetCurrentPlayerId(int gameId)
+        {
+            var game = _repository.Get(gameId);
+            return game.CurrentPlayerId;
+        }
+
         public int NextTurn(int gameId)
         {
             var game = _repository.Get(gameId);
