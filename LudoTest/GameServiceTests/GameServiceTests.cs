@@ -2,31 +2,33 @@
 using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Services;
+using Reqnroll;
 
 namespace LudoTest.GameServiceTests
 {
+    [Binding]
     public class GameServiceTests
     {
-
+        [Given(@"That no player exists")]
+        [When(@"I start a new game")]
+        [Then(@"The game should have no current player and four players from the lobby")]
         [Theory]
         [ClassData(typeof(LobbyTestData))]
         public void StartNewGame(Lobby lobby)
         {
-            //Arrange
+            // Arrange
             GameService service = new GameService();
 
-            //Act
+            // Act
             var newGame = service.Start(lobby);
 
-            //Assert
-
-            //A starting player hasn't yet been decided
+            // Assert
             newGame.currentPlayerId.Should().BeNull();
             newGame.players.Count.Should().Be(4);
             newGame.players.Should().BeEquivalentTo(lobby.Players);
         }
     }
-    
+
     public class LobbyTestData : IEnumerable<object[]>
     {
         private readonly List<object[]> _data =
