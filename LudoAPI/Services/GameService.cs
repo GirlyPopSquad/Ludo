@@ -19,7 +19,7 @@ namespace LudoAPI.Services
         {
             var lobby = _lobbyRepository.Get(lobbyId);
             
-            var gamePlayers = lobby.Players.Select(lp => new GamePlayer(lp.Id)).ToList();
+            var gamePlayers = lobby.Players.Select(lp => new GamePlayer(lp.Id, )).ToList();
             var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).Player.Id;
 
             var newGameId = _repository.Add(new Game(gamePlayers, startingPlayer));

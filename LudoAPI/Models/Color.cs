@@ -1,5 +1,6 @@
 ﻿namespace LudoAPI.Models
 {
+    // Color enum number is player id
     public enum Color
     {
         Blue = 1,
@@ -7,5 +8,4 @@
         Red = 3,
         Yellow = 4
     }
-
 }

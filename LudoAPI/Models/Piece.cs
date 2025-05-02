@@ -3,11 +3,13 @@
     public class Piece
     {
         public Guid Id { get; } = Guid.NewGuid();
-        public Color Color;
+        public Tile Tile { get; set; }
+        public int PlayerId { get; }
         
-        public Piece(Color color)
+        public Piece(Tile tile, int playerId)
         {
-            Color = color;
+            Tile = tile;
+            PlayerId = playerId;
         }
     }
 }
