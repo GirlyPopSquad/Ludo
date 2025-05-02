@@ -21,7 +21,7 @@ public class GameController: ControllerBase
         return Ok(gameId);
     }
 
-    [HttpGet("getCurrentPlayerId/{gameId}")]
+    [HttpPost("getCurrentPlayerId/{gameId}")]
     public ActionResult<int> GetCurrentPlayerId(int gameId)
     {
         var currentPlayerId = _gameService.GetCurrentPlayerId(gameId);

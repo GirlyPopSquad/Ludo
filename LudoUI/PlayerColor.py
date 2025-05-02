@@ -4,10 +4,10 @@ from Constants import BLUE, YELLOW, RED, GREEN
 
 
 class PlayerColor(Enum):
-    BLUE = 1
+    RED = 1
     GREEN = 2
-    RED = 3
-    YELLOW = 4
+    YELLOW = 3
+    BLUE = 4
 
 
 colorcode = {

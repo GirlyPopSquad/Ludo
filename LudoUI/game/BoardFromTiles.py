@@ -1,7 +1,7 @@
 from tkinter import *
 import random
 
-from PlayerColor import get_tkinter_colorcode
+from PlayerColor import get_piece_colorcode, get_tkinter_colorcode
 from game.importFromBE import test_board
 from models.Tile import Tile
 from clients.RollClient import Roll
@@ -143,6 +143,8 @@ class BoardFromTiles:
 
         # Bind click to the box
         self.make_canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
+        
+        self.draw_player_identifier()
 
         # Initial roll
         self.draw_dice_eyes(1)
@@ -150,6 +152,25 @@ class BoardFromTiles:
     def roll_dice(self, event=None):
         roll = Roll()
         self.draw_dice_eyes(roll)
+        gameClient.next_turn(self.game_id) #Needs to be removed, not the correct place it makes next turn
+        self.draw_player_identifier()
+        
+    def draw_player_identifier(self):
+        playerId = gameClient.get_current_playerid(self.game_id)
+        
+        self.make_canvas.delete("player_indicator")
+
+        
+        circle_radius = 10
+        circle_center_x = (self.dice_x0 + self.dice_x1) / 2
+        circle_center_y = self.dice_y1 + 20  # below the dice
+        
+        self.make_canvas.create_oval(
+            circle_center_x - circle_radius, circle_center_y - circle_radius,
+            circle_center_x + circle_radius, circle_center_y + circle_radius,
+            fill=get_tkinter_colorcode(playerId), outline="black",
+            tags="player_indicator"
+        )
 
     def draw_dice_eyes(self, value):
         # Clear old dots
