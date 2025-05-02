@@ -11,3 +11,8 @@ def next_turn(game_id: int) -> int:
     response = requests.post(f"{url}/nextturn/{game_id}")
     response.raise_for_status()
     return int(response.text)
+
+def get_current_player(game_id: int) -> int:
+    response = requests.post(f"{url}/getCurrentPlayerId/{game_id}")
+    response.raise_for_status()
+    return int(response.text)
