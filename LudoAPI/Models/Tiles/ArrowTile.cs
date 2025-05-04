@@ -1,6 +1,6 @@
-﻿namespace LudoAPI.Models;
+﻿namespace LudoAPI.Models.Tiles;
 
-//TODO fund out how to make this recognisable from FE - so that it can look like an arrow
+//TODO find out how to make this recognisable from FE - so that it can look like an arrow
 
 public class ArrowTile : Tile
 {
