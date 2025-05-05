@@ -10,6 +10,7 @@ namespace LudoTest.GameServiceTests
     public class GameServiceTests
     {
         
+        //todo: bring tests back when theres a plan for how we'll do lobby to game
         /*
 
         [Theory]

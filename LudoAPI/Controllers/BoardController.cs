@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers;
 
-//TODO: for testing purposes, too se result of board in UI
+//TODO: for testing purposes, to easily be able to see result of board in UI.
 
 [Route("api/[controller]")]
 [ApiController]

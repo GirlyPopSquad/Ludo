@@ -55,7 +55,7 @@ public class BoardService : IBoardService
         }).ToArray();
     }
 
-
+    //todo: could be moved to different class
     private Tile TranslateToTile(string tileString, Coordinate coordinate)
     {
         switch (tileString)
