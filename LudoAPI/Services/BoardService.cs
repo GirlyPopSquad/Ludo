@@ -1,46 +1,60 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Models.Tiles;
+using LudoAPI.Services.Utils;
 
 namespace LudoAPI.Services;
 
 public class BoardService : IBoardService
 {
-    public Board InitStandardBoard(int gameId)
+    public Board MakeBoardFromMap(int gameId, string[,] boardMap)
     {
-        var schema = _standardBoard;
-        int rows = schema.GetLength(0);
-        int cols = schema.GetLength(1);
+        Dictionary<string, Tile> tiles = IdentifyTiles(boardMap);
+
+        var startTiles = tiles.Values.OfType<StartTile>().ToList();
+        var homeTiles = tiles.Values.OfType<HomeTile>().ToArray();
+
+        //setup home tiles - happens here because StartTiles needs to be identified first
+        SetupHomeTiles(homeTiles, startTiles);
+
+        int rows = boardMap.GetLength(0);
+        int cols = boardMap.GetLength(1);
+
+        return new Board(-1, gameId, tiles, rows, cols);
+    }
+
+    public Board InitStandardBoard(int i)
+    {
+        return MakeBoardFromMap(i, BoardMapLibrary.StandardBoard);
+    }
+
+    private Dictionary<string, Tile> IdentifyTiles(string[,] map)
+    {
         Dictionary<string, Tile> tiles = new();
-
-
-        //convert map to tile
-        for (int row = 0; row < rows; row++)
+        //convert map to tiles
+        for (int row = 0; row < map.GetLength(0); row++)
         {
-            for (int col = 0; col < cols; col++)
+            for (int col = 0; col < map.GetLength(1); col++)
             {
                 var coordinate = new Coordinate(col, row);
-                var tileString = schema[row, col];
+                var tileString = map[row, col];
 
                 var tile = TranslateToTile(tileString, coordinate);
                 tiles.Add(coordinate.ToString(), tile);
             }
         }
 
-        //setup home tiles - happens here because Starttiles needs to be identified first
-        var startTiles = tiles.Values.OfType<StartTile>().ToArray();
-
-        foreach (var homeTile in tiles.Values.OfType<HomeTile>().ToArray())
-        {
-            var color = homeTile.Color;
-            homeTile.StartTiles = startTiles.Where(tile => tile.Color == color).ToArray();
-        }
-        
-        return new Board(-1, gameId, tiles, rows, cols);
+        return tiles;
     }
 
+    private HomeTile[] SetupHomeTiles(HomeTile[] homeTiles, List<StartTile> startTiles)
+    {
+        return homeTiles.Select(ht =>
+        {
+            ht.StartTiles = startTiles.Where(tile => tile.Color == ht.Color).ToArray();
+            return ht;
+        }).ToArray();
+    }
 
-    //TODO handle "end"(winning) tiles
-    //TODO handle starttile (the tile you land on after the first 6). the move from "home" to "start"
 
     private Tile TranslateToTile(string tileString, Coordinate coordinate)
     {
@@ -124,23 +138,4 @@ public class BoardService : IBoardService
                 return new Tile(coordinate);
         }
     }
-    
-    private readonly string[,] _standardBoard = new string[15, 15]
-    {
-        { "r", "r", "r", "r", "r", "r", "R", "gD-R", "D", "g", "g", "g", "g", "g", "g" },
-        { "r", "", "", "", "", "r", "D", "gU", "gSD", "g", "", "", "", "", "g" },
-        { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
-        { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
-        { "r", "", "", "", "", "r", "U", "gD", "D", "g", "", "", "", "", "g" },
-        { "r", "r", "r", "r", "r", "r", "U", "gD", "DR", "g", "g", "g", "g", "g", "g" },
-        { "R", "rSR", "R", "R", "R", "RU", "", "gE", "", "R", "R", "R", "R", "R", "D" },
-        { "rR-U", "rR", "rR", "rR", "rR", "rR", "rE", "", "yE", "yL", "yL", "yL", "yL", "yL", "yL-D" },
-        { "U", "L", "L", "L", "L", "L", "", "bE", "", "DL", "L", "L", "L", "ySL", "L" },
-        { "b", "b", "b", "b", "b", "b", "UL", "bU", "D", "y", "y", "y", "y", "y", "y" },
-        { "b", "", "", "", "", "b", "U", "bU", "D", "y", "", "", "", "", "y" },
-        { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
-        { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },
-        { "b", "", "", "", "", "b", "bSU", "bU", "D", "y", "", "", "", "", "y" },
-        { "b", "b", "b", "b", "b", "b", "U", "bU-L", "L", "y", "y", "y", "y", "y", "y" },
-    };
 }

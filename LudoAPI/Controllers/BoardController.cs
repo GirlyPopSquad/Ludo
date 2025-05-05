@@ -8,9 +8,8 @@ namespace LudoAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BoardController: ControllerBase
+public class BoardController : ControllerBase
 {
-    
     private readonly IBoardService _boardService;
 
     public BoardController(IBoardService boardService)
@@ -23,8 +22,7 @@ public class BoardController: ControllerBase
     public ActionResult<Board> Test()
     {
         var board = _boardService.InitStandardBoard(-1);
-        
+
         return Ok(board);
     }
-    
 }
