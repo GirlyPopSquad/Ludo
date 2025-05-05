@@ -29,10 +29,10 @@ public class BoardService : IBoardService
         //setup home tiles - happens here because Starttiles needs to be identified first
         var startTiles = tiles.Values.OfType<StartTile>().ToArray();
 
-        foreach (var hometile in tiles.Values.OfType<HomeTile>().ToArray())
+        foreach (var homeTile in tiles.Values.OfType<HomeTile>().ToArray())
         {
-            var color = hometile.Color;
-            hometile.StartTiles = startTiles.Where(tile => tile.Color == color).ToArray();
+            var color = homeTile.Color;
+            homeTile.StartTiles = startTiles.Where(tile => tile.Color == color).ToArray();
         }
         
         return new Board(-1, gameId, tiles, rows, cols);
@@ -70,6 +70,8 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, Color.Red, new Move(-1, 0));
             case "rH": //redHome
                 return new HomeTile(coordinate, Color.Red);
+            case "rE": //redEnd
+                return new EndTile(coordinate, Color.Red);
             case "rSR": //red Start Right
                 return new StartTile(coordinate, Color.Red, new Move(1, 0));
             case "rR": //redRight
@@ -86,6 +88,8 @@ public class BoardService : IBoardService
                 return new ArrowTile(coordinate, Color.Green, new Move(1, 0), new Move(0, -1));
             case "gH": // greenhome
                 return new HomeTile(coordinate, Color.Green);
+            case "gE":
+                return new EndTile(coordinate, Color.Green);
             case "gSD":
                 return new StartTile(coordinate, Color.Green, new Move(0, -1));
             case "b":
@@ -94,6 +98,8 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, Color.Blue, new Move(-1, 0));
             case "bH":
                 return new HomeTile(coordinate, Color.Blue);
+            case "bE":
+                return new EndTile(coordinate, Color.Blue);
             case "bSU":
                 return new StartTile(coordinate, Color.Blue, new Move(0, 1));
             case "bU":
@@ -106,6 +112,8 @@ public class BoardService : IBoardService
                 return new Tile(coordinate, Color.Yellow);
             case "yH":
                 return new HomeTile(coordinate, Color.Yellow);
+            case "yE":
+                return new EndTile(coordinate, Color.Yellow);
             case "ySL":
                 return new StartTile(coordinate, Color.Yellow, new Move(-1, 0));
             case "yL": // yellow Left
@@ -116,9 +124,7 @@ public class BoardService : IBoardService
                 return new Tile(coordinate);
         }
     }
-
-    //TODO FINISH map
-
+    
     private readonly string[,] _standardBoard = new string[15, 15]
     {
         { "r", "r", "r", "r", "r", "r", "R", "gD-R", "D", "g", "g", "g", "g", "g", "g" },
@@ -127,9 +133,9 @@ public class BoardService : IBoardService
         { "r", "", "rH", "rH", "", "r", "U", "gD", "D", "g", "", "gH", "gH", "", "g" },
         { "r", "", "", "", "", "r", "U", "gD", "D", "g", "", "", "", "", "g" },
         { "r", "r", "r", "r", "r", "r", "U", "gD", "DR", "g", "g", "g", "g", "g", "g" },
-        { "R", "rSR", "R", "R", "R", "RU", "", "greenEnd", "", "R", "R", "R", "R", "R", "D" },
-        { "rR-U", "rR", "rR", "rR", "rR", "rR", "redEnd", "", "yellowend", "yL", "yL", "yL", "yL", "yL", "yL-D" },
-        { "U", "L", "L", "L", "L", "L", "", "blueEnd", "", "DL", "L", "L", "L", "ySL", "L" },
+        { "R", "rSR", "R", "R", "R", "RU", "", "gE", "", "R", "R", "R", "R", "R", "D" },
+        { "rR-U", "rR", "rR", "rR", "rR", "rR", "rE", "", "yE", "yL", "yL", "yL", "yL", "yL", "yL-D" },
+        { "U", "L", "L", "L", "L", "L", "", "bE", "", "DL", "L", "L", "L", "ySL", "L" },
         { "b", "b", "b", "b", "b", "b", "UL", "bU", "D", "y", "y", "y", "y", "y", "y" },
         { "b", "", "", "", "", "b", "U", "bU", "D", "y", "", "", "", "", "y" },
         { "b", "", "bH", "bH", "", "b", "U", "bU", "D", "y", "", "yH", "yH", "", "y" },

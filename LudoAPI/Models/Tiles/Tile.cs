@@ -6,6 +6,7 @@ namespace LudoAPI.Models.Tiles;
 [JsonDerivedType(typeof(ArrowTile), nameof(ArrowTile))]
 [JsonDerivedType(typeof(StartTile), nameof(StartTile))]
 [JsonDerivedType(typeof(HomeTile), nameof(HomeTile))]
+[JsonDerivedType(typeof(EndTile), nameof(EndTile))]
 public class Tile
 {
     public Coordinate Coordinate { get; }
