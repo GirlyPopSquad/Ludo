@@ -1,4 +1,6 @@
-﻿namespace LudoAPI.Models;
+﻿using LudoAPI.Models.Tiles;
+
+namespace LudoAPI.Models;
 
 public class Board
 {

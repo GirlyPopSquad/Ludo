@@ -1,9 +1,11 @@
 ﻿using System.Text.Json.Serialization;
-using LudoAPI.Models.Tiles;
 
-namespace LudoAPI.Models;
+namespace LudoAPI.Models.Tiles;
 
-[JsonDerivedType(typeof(ArrowTile), typeof(HomeTile), typeof(StartTile)]
+[JsonDerivedType(typeof(Tile), nameof(Tile))]
+[JsonDerivedType(typeof(ArrowTile), nameof(ArrowTile))]
+[JsonDerivedType(typeof(StartTile), nameof(StartTile))]
+[JsonDerivedType(typeof(HomeTile), nameof(HomeTile))]
 public class Tile
 {
     public Coordinate Coordinate { get; }
