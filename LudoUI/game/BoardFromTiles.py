@@ -210,5 +210,3 @@ def open_ludoboard_window(game_id):
     root = Tk()
     BoardFromTiles(root, game_id)
     root.mainloop()
-
-open_ludoboard_window(1)
