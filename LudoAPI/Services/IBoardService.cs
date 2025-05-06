@@ -4,5 +4,6 @@ namespace LudoAPI.Services;
 
 public interface IBoardService
 {
-    Board InitStandardBoard(int gameId);
+    Board MakeBoardFromMap(int gameId, string[,] boardMap);
+    Board InitStandardBoard(int i);
 }

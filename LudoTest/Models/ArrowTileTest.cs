@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Models.Tiles;
 
 namespace LudoTest.Models;
 
