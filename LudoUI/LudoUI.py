@@ -11,7 +11,6 @@ from stateManagers.LobbyStateManager import LobbyState, get_lobby_state, set_lob
 from screens.StartMenu import start_menu
 from screens.StartingRolls import starting_roll
 from clients.LobbyClient import create_lobby
-#import LudoBoard as ludoBoard
 import game.BoardFromTiles as ludoBoard
 import clients.GameClient as gameClient
 

@@ -1,11 +1,12 @@
 from tkinter import *
-import random
 
-from PlayerColor import get_piece_colorcode, get_tkinter_colorcode
-from game.importFromBE import test_board
-from models.Tile import Tile
-from clients.RollClient import Roll
 import clients.GameClient as gameClient
+from PlayerColor import get_tkinter_colorcode
+from clients.RollClient import Roll
+from game.importFromBE import test_board
+from models.ArrowTile import ArrowTile, ArrowDirection
+from models.Tile import Tile
+
 
 class BoardFromTiles:
 
@@ -47,79 +48,73 @@ class BoardFromTiles:
         self.make_canvas.create_rectangle(self.board_x0, self.board_y0, self.board_x1, self.board_y1, width=2, fill="white")
 
         for tile in self.board.tiles.values():
-            self.draw_from_tile(tile)
+
+            if isinstance(tile, Tile):
+                self.draw_from_tile(tile)
+            if isinstance(tile, ArrowTile):
+                self.draw_from_arrow_tile(tile)
+
+
+    def draw_tile(self, coords, color):
+        x0 = self.board_x0 + (self.grid_size * coords.x)
+        y0 = self.board_y0 + (self.grid_size * coords.y)
+        x1 = x0 + self.grid_size
+        y1 = y0 + self.grid_size
+        self.make_canvas.create_rectangle(x0, y0, x1, y1, width=0, fill=color)
 
     def draw_from_tile(self, tile: Tile):
         coords = tile.coordinate
 
-        # Check if the tile is an arrow tile (you can define this with a condition)
-        # For example, let's assume if the tile has a specific color or another attribute, it's an arrow tile
         color = "white"
         if tile.color is not None:
             color = get_tkinter_colorcode(tile.color)
 
-        # Check if the tile should be an arrow, for example based on its coordinate or color
-        # For now, we'll just make tiles at coordinates (2, 3) and (4, 4) as arrows as an example
-        if (coords.x, coords.y) in [(0, 7), (7, 0), (14, 7), (7, 14)]:  
-            self.draw_arrow_on_tile(coords)
-        else:
-            x0 = self.board_x0 + (self.grid_size * coords.x)
-            y0 = self.board_y0 + (self.grid_size * coords.y)
-            x1 = x0 + self.grid_size
-            y1 = y0 + self.grid_size
-            self.make_canvas.create_rectangle(x0, y0, x1, y1, width=0, fill=color)
+        self.draw_tile(coords, color)
 
-    def draw_arrow_on_tile(self, coords):
+    def draw_from_arrow_tile(self, tile: ArrowTile):
+        coords = tile.coordinate
+
+        color = "white"
+        self.draw_tile(coords, color)
+
         # Draw an arrow on the tile at (coords.x, coords.y)
         x0 = self.board_x0 + (self.grid_size * coords.x)
         y0 = self.board_y0 + (self.grid_size * coords.y)
         
         # Coordinates for the arrow (you can adjust these to make the arrow look better)
-        arrow_width = self.grid_size * 0.4
-        arrow_height = self.grid_size * 0.6
-        
-        direction = "up" 
-        arrow_color = "blue"
+        arrow_width = self.grid_size * 0.5
+        arrow_height = self.grid_size * 0.5
 
+        arrow_points=[]
 
-        if (coords.x, coords.y) == (0, 7):
-            direction = "right"  
-            arrow_color = "red"
-
-        elif (coords.x, coords.y) == (7, 0):
-            direction = "down" 
-            arrow_color = "green"
- 
-        elif (coords.x, coords.y) == (14, 7):
-            direction = "left"
-            arrow_color = "yellow"
-
-        if direction == "up":
+        if tile.arrow_direction == ArrowDirection.Up:
             arrow_points = [
                 (x0 + self.grid_size / 2 - arrow_width / 2, y0 + self.grid_size / 2),
                 (x0 + self.grid_size / 2 + arrow_width / 2, y0 + self.grid_size / 2),
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 - arrow_height)
             ]
-        elif direction == "down":
+        elif tile.arrow_direction == ArrowDirection.Down:
             arrow_points = [
                 (x0 + self.grid_size / 2 - arrow_width / 2, y0 + self.grid_size / 2),
                 (x0 + self.grid_size / 2 + arrow_width / 2, y0 + self.grid_size / 2),
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 + arrow_height)
             ]
-        elif direction == "left":
+        elif tile.arrow_direction == ArrowDirection.Left:
             arrow_points = [
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 - arrow_height / 2),
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 + arrow_height / 2),
                 (x0 + self.grid_size / 2 - arrow_width, y0 + self.grid_size / 2)
             ]
-        elif direction == "right":
+        elif tile.arrow_direction == ArrowDirection.Right:
             arrow_points = [
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 - arrow_height / 2),
                 (x0 + self.grid_size / 2, y0 + self.grid_size / 2 + arrow_height / 2),
                 (x0 + self.grid_size / 2 + arrow_width, y0 + self.grid_size / 2)
             ]
-        
-        self.make_canvas.create_polygon(arrow_points, fill=arrow_color, outline="black", width=2)
+
+        color = get_tkinter_colorcode(tile.color)
+
+        self.make_canvas.create_polygon(arrow_points, fill=color, outline="black", width=2)
         
         
     def add_grid_overlay(self):
@@ -215,3 +210,5 @@ def open_ludoboard_window(game_id):
     root = Tk()
     BoardFromTiles(root, game_id)
     root.mainloop()
+
+open_ludoboard_window(1)

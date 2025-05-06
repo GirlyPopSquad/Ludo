@@ -14,5 +14,12 @@ class Tile:
 
     @classmethod
     def from_json(cls, data):
+        tile_type = data.get("$type", "Tile")
         coordinate = Coordinate.from_json(data["coordinate"])
-        return cls(coordinate=coordinate, color=data.get("color"))
+        color = data.get("color")
+
+        # Dynamically resolve the class based on the $type field
+        if tile_type == "ArrowTile":
+            from models.ArrowTile import ArrowTile, ArrowDirection
+            return ArrowTile(coordinate=coordinate, color=color, arrow_direction=ArrowDirection(data.get("arrowDirection")))
+        return cls(coordinate=coordinate, color=color)
