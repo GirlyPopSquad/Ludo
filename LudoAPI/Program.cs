@@ -21,6 +21,7 @@ namespace LudoAPI
             builder.Services.AddSingleton<ILobbyRepository, LobbyRepository>();
             builder.Services.AddScoped<ILobbyService, LobbyService>();
             
+            builder.Services.AddSingleton<IBoardRepository, BoardRepository>();
             builder.Services.AddScoped<IBoardService, BoardService>();
             
             builder.Services.AddScoped<IStartingService, StartingService>();

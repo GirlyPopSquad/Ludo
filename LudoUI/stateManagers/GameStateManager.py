@@ -3,6 +3,14 @@ from enum import Enum
 
 import pygame
 
+game_id: int
+
+def set_game_id(new_game_id: int):
+    global game_id
+    game_id = new_game_id
+
+def get_game_id():
+    return game_id
 
 class GameState(Enum):
     NOT_IMPLEMENTED = 0

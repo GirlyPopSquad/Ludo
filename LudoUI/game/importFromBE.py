@@ -11,4 +11,7 @@ def test_board():
     board = Board.from_json(json.loads(response.text))
     return board
 
-print(test_board())
+def get_board_from_game_id(game_id):
+    response = requests.get(url + "/getByGameId/" + str(game_id))
+    board = Board.from_json(json.loads(response.text))
+    return board

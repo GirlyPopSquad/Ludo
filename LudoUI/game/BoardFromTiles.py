@@ -3,14 +3,16 @@ from tkinter import *
 import clients.GameClient as gameClient
 from PlayerColor import get_tkinter_colorcode
 from clients.RollClient import Roll
-from game.importFromBE import test_board
+from game.importFromBE import get_board_from_game_id
 from models.ArrowTile import ArrowTile, ArrowDirection
 from models.Tile import Tile
+from stateManagers.GameStateManager import get_game_id
 
 
 class BoardFromTiles:
 
-    board = test_board()
+    game_id = get_game_id()
+    board = get_board_from_game_id(game_id)
 
     grid_size = 40
 
@@ -31,9 +33,11 @@ class BoardFromTiles:
     canvas_width = padding_left + (grid_size * grid_width) + padding_right
     canvas_height = padding_top + (grid_size * grid_height) + padding_bottom
 
-    def __init__(self, root, game_id):
+    def __init__(self, root):
+
+        print(self.game_id)
+
         self.root = root
-        self.game_id = game_id
         self.root.title("Board Game")
         self.make_canvas = Canvas(root, width=self.canvas_width, height=self.canvas_height)
         self.make_canvas.pack()
@@ -206,7 +210,7 @@ class BoardFromTiles:
             dot = self.make_canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
 
-def open_ludoboard_window(game_id):
+def open_ludoboard_window():
     root = Tk()
-    BoardFromTiles(root, game_id)
+    BoardFromTiles(root)
     root.mainloop()

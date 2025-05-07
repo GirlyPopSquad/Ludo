@@ -22,7 +22,7 @@ public class Board
     public Board(int id, Board board)
     {
         Id = id;
-        GameId = board.Id;
+        GameId = board.GameId;
         Tiles = board.Tiles;
         Rows = board.Rows;
         Cols = board.Cols;

@@ -1,12 +1,44 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Models.Tiles;
+using LudoAPI.Repositories;
 using LudoAPI.Services.Utils;
 
 namespace LudoAPI.Services;
 
 public class BoardService : IBoardService
 {
-    public Board MakeBoardFromMap(int gameId, string[,] boardMap)
+    private readonly IBoardRepository _boardRepository;
+
+    public BoardService(IBoardRepository boardRepository)
+    {
+        _boardRepository = boardRepository;
+    }
+
+    public Board GetBoard(int boardId)
+    {
+        return _boardRepository.Get(boardId);
+    }
+
+    public Board GetBoardFromGameId(int gameId)
+    {
+        return _boardRepository.GetByGameId(gameId);
+    }
+
+    public int InitStandardBoard(int gameId)
+    {
+        //todo check if gameId is valid, before proceeding   
+        
+        var boardMap = BoardMapLibrary.StandardBoard;
+        int rows = boardMap.GetLength(0);
+        int cols = boardMap.GetLength(1);
+        
+        var tiles = MakeTilesFromMap(boardMap);
+        
+        var newBoard = new Board(gameId, tiles, rows, cols);
+        return _boardRepository.Add(newBoard);
+    }
+    
+    public Dictionary<string, Tile> MakeTilesFromMap(string[,] boardMap)
     {
         Dictionary<string, Tile> tiles = IdentifyTiles(boardMap);
 
@@ -16,15 +48,7 @@ public class BoardService : IBoardService
         //setup home tiles - happens here because StartTiles needs to be identified first
         SetupHomeTiles(homeTiles, startTiles);
 
-        int rows = boardMap.GetLength(0);
-        int cols = boardMap.GetLength(1);
-
-        return new Board(gameId, tiles, rows, cols);
-    }
-
-    public Board InitStandardBoard(int i)
-    {
-        return MakeBoardFromMap(i, BoardMapLibrary.StandardBoard);
+        return tiles;
     }
 
     private Dictionary<string, Tile> IdentifyTiles(string[,] map)

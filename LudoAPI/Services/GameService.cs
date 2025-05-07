@@ -11,10 +11,11 @@ namespace LudoAPI.Services
         private readonly ILobbyRepository _lobbyRepository;
         private readonly IBoardService _boardService;
 
-        public GameService(IGameRepository gameRepository, ILobbyRepository lobbyRepository)
+        public GameService(IGameRepository gameRepository, ILobbyRepository lobbyRepository, IBoardService boardService)
         {
             _gameRepository = gameRepository;
             _lobbyRepository = lobbyRepository;
+            _boardService = boardService;
         }
 
         public int CreateFromLobby(int lobbyId)
@@ -27,7 +28,8 @@ namespace LudoAPI.Services
             var newGameId = _gameRepository.Add(new Game(gamePlayers, startingPlayer));
             
             //add board
-            var board = _boardService.InitStandardBoard(newGameId);
+            var boardId = _boardService.InitStandardBoard(newGameId);
+            var board = _boardService.GetBoard(boardId);
             
             //create piece 1 pr. Hometile
             var homeTiles = board.Tiles.Values.OfType<HomeTile>().ToList();

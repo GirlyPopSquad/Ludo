@@ -1,13 +1,21 @@
 ﻿using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Models.Tiles;
+using LudoAPI.Repositories;
 using LudoAPI.Services;
+using Moq;
 
 namespace LudoTest.Services;
 
 public class BoardServiceTest
 {
-    private BoardService service = new BoardService();
+    private readonly Mock<IBoardRepository> _boardRepositoryMock = new();
+    private readonly BoardService _service;
+
+    public BoardServiceTest()
+    {
+        _service = new BoardService(_boardRepositoryMock.Object);
+    }
 
 
     [Fact]
@@ -15,15 +23,18 @@ public class BoardServiceTest
     {
         //arrange
         var gameId = -1;
-
+        
         //act
-        var result = service.InitStandardBoard(gameId);
+        var result = _service.InitStandardBoard(gameId);
 
         //assert
-        result.Should().BeOfType<Board>();
-        result.GameId.Should().Be(gameId);
-        result.Rows.Should().Be(15);
-        result.Cols.Should().Be(15);
+        result.Should().Be(1);
+        
+        _boardRepositoryMock.Verify(x => x.Add(It.Is<Board>(b =>
+            b.GameId == -1
+            && b.Rows == 15
+            && b.Cols == 15
+        )), Times.Once);
     }
 
     [Theory]
@@ -31,14 +42,11 @@ public class BoardServiceTest
     public void MakeBoardFromMap_CreatesExpectedBoard(string[,] testMap, Dictionary<string, Tile> expectedTiles)
     {
         //act
-        var board = service.MakeBoardFromMap(-1, testMap);
+        var tiles = _service.MakeTilesFromMap(testMap);
 
         //assert
-        board.Should().NotBeNull();
-        board.GameId.Should().Be(-1);
-        board.Rows.Should().Be(4);
-        board.Cols.Should().Be(4);
-        board.Tiles.Values.Should().HaveCount(16);
-        board.Tiles.Should().BeEquivalentTo(expectedTiles);
+        tiles.Should().NotBeNull();
+        tiles.Values.Should().HaveCount(16);
+        tiles.Should().BeEquivalentTo(expectedTiles);
     }
 }
