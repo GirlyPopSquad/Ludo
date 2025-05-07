@@ -77,8 +77,8 @@ def on_start_game():
 
     set_game_id(game_id)
 
-    from game.BoardFromTiles import open_ludoboard_window
-    open_ludoboard_window()
-
     set_is_pygame_running(False)
     pygame.quit()
+
+    from game.BoardFromTiles import open_ludoboard_window
+    open_ludoboard_window()
