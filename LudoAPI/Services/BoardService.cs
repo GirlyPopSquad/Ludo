@@ -19,7 +19,7 @@ public class BoardService : IBoardService
         int rows = boardMap.GetLength(0);
         int cols = boardMap.GetLength(1);
 
-        return new Board(-1, gameId, tiles, rows, cols);
+        return new Board(gameId, tiles, rows, cols);
     }
 
     public Board InitStandardBoard(int i)

@@ -10,8 +10,8 @@ public class Game
     
     public Game(List<GamePlayer> players, int currentPlayerId)
     {
-        this.Players = players;
-        this.CurrentPlayerId = currentPlayerId;
+        Players = players;
+        CurrentPlayerId = currentPlayerId;
     }
 
     public Game (int id, Game game)
