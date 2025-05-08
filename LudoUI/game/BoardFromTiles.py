@@ -42,8 +42,8 @@ class BoardFromTiles:
 
         self.root = root
         self.root.title("Board Game")
-        self.make_canvas = Canvas(root, width=self.canvas_width, height=self.canvas_height)
-        self.make_canvas.pack()
+        self.canvas = Canvas(root, width=self.canvas_width, height=self.canvas_height)
+        self.canvas.pack()
 
         self.dice_dots = []  # store dot IDs
 
@@ -54,8 +54,8 @@ class BoardFromTiles:
         self.add_clickable_dice()
 
     def board_set_up(self):
-        self.make_canvas.create_rectangle(self.board_x0, self.board_y0, self.board_x1, self.board_y1, width=0,
-                                          fill="white")
+        self.canvas.create_rectangle(self.board_x0, self.board_y0, self.board_x1, self.board_y1, width=0,
+                                     fill="white")
 
         for tile in self.board.tiles.values():
 
@@ -82,7 +82,7 @@ class BoardFromTiles:
         x1 = x0 + self.grid_size - 2 * piece_margin
         y1 = y0 + self.grid_size - 2 * piece_margin
 
-        return self.make_canvas.create_oval(
+        return self.canvas.create_oval(
             x0, y0,
             x1, y1,  # Adjusting for a margin (5px offset)
             fill=get_tkinter_colorcode(int(color)), outline="black"
@@ -93,7 +93,7 @@ class BoardFromTiles:
         y0 = self.board_y0 + (self.grid_size * coords.y)
         x1 = x0 + self.grid_size
         y1 = y0 + self.grid_size
-        self.make_canvas.create_rectangle(x0, y0, x1, y1, width=1, fill=color, outline="black")
+        self.canvas.create_rectangle(x0, y0, x1, y1, width=1, fill=color, outline="black")
 
     def draw_from_tile(self, tile: Tile):
         coords = tile.coordinate
@@ -147,7 +147,7 @@ class BoardFromTiles:
 
         color = get_tkinter_colorcode(tile.color)
 
-        self.make_canvas.create_polygon(arrow_points, fill=color, outline="black", width=2)
+        self.canvas.create_polygon(arrow_points, fill=color, outline="black", width=2)
 
     def add_clickable_dice(self):
         # Dice box coords
@@ -157,11 +157,11 @@ class BoardFromTiles:
         self.dice_y1 = 110
 
         # Draw the dice rectangle
-        self.make_canvas.create_rectangle(self.dice_x0, self.dice_y0, self.dice_x1, self.dice_y1, fill="white",
-                                          outline="black", tags="dice_box")
+        self.canvas.create_rectangle(self.dice_x0, self.dice_y0, self.dice_x1, self.dice_y1, fill="white",
+                                     outline="black", tags="dice_box")
 
         # Bind click to the box
-        self.make_canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
+        self.canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
 
         self.draw_player_identifier()
 
@@ -177,13 +177,13 @@ class BoardFromTiles:
     def draw_player_identifier(self):
         playerId = gameClient.get_current_playerid(self.game_id)
 
-        self.make_canvas.delete("player_indicator")
+        self.canvas.delete("player_indicator")
 
         circle_radius = 10
         circle_center_x = (self.dice_x0 + self.dice_x1) / 2
         circle_center_y = self.dice_y1 + 20  # below the dice
 
-        self.make_canvas.create_oval(
+        self.canvas.create_oval(
             circle_center_x - circle_radius, circle_center_y - circle_radius,
             circle_center_x + circle_radius, circle_center_y + circle_radius,
             fill=get_tkinter_colorcode(playerId), outline="black",
@@ -193,7 +193,7 @@ class BoardFromTiles:
     def draw_dice_eyes(self, value):
         # Clear old dots
         for dot in self.dice_dots:
-            self.make_canvas.delete(dot)
+            self.canvas.delete(dot)
         self.dice_dots.clear()
 
         # Dice face layout (3x3 positions)
@@ -226,7 +226,7 @@ class BoardFromTiles:
         radius = 4
         for pos in dice_faces[value]:
             x, y = positions[pos]
-            dot = self.make_canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
+            dot = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
 
 
