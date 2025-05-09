@@ -27,16 +27,25 @@ namespace LudoAPI.Services
             return newGameId;
         }
 
-        public LobbyPlayer HaveTurn(Game game, LobbyPlayer player)
+        public int GetCurrentPlayerId(int gameId)
         {
-            throw new NotImplementedException();
+            var game = _repository.Get(gameId);
+            return game.CurrentPlayerId;
         }
 
-        public void NewTurn()
+        public int NextTurn(int gameId)
         {
-            //tager currentplayer til køen og sætter den næste player til currentplayer
-
-            throw new NotImplementedException();
+            var game = _repository.Get(gameId);
+            if(game.CurrentPlayerId == game.Players.Count)
+            {
+                game.CurrentPlayerId = 1;
+            }
+            else
+            {
+                game.CurrentPlayerId++;
+            }
+            _repository.Update(gameId, game);
+            return game.CurrentPlayerId;
         }
     }
 }

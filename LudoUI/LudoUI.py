@@ -11,7 +11,8 @@ from stateManagers.LobbyStateManager import LobbyState, get_lobby_state, set_lob
 from screens.StartMenu import start_menu
 from screens.StartingRolls import starting_roll
 from clients.LobbyClient import create_lobby
-import LudoBoard as ludoBoard
+import game.BoardFromTiles as ludoBoard
+import clients.GameClient as gameClient
 
 # Initialize Pygame
 pygame.init()
@@ -63,4 +64,8 @@ def ludo():
 # Run the start menu
 ludo()
 
-ludoBoard.open_ludoboard_window()
+lobby_id = LobbyStateManager.get_lobby_id()
+
+game_id = gameClient.create_game(lobby_id)
+
+ludoBoard.open_ludoboard_window(game_id)

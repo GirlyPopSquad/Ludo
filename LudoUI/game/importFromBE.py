@@ -11,4 +11,4 @@ def test_board():
     board = Board.from_json(json.loads(response.text))
     return board
 
-#print(test_board())
+print(test_board())

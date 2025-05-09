@@ -2,8 +2,8 @@
 
 public class Move
 {
-    private int XChange { get; }
-    private int YChange { get; }
+    public int XChange { get; }
+    public int YChange { get; }
 
     public Move(int xChange, int yChange)
     {

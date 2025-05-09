@@ -14,10 +14,24 @@ public class GameController: ControllerBase
         _gameService = gameService;
     }
 
-    [HttpPost("create")]
-    public ActionResult<int> CreateGame([FromBody] int lobbyId)
+    [HttpPost("create/{lobbyId}")]
+    public ActionResult<int> CreateGame(int lobbyId)
     {
-        var game = _gameService.CreateFromLobby(lobbyId);
-        return Ok(game);
+        var gameId = _gameService.CreateFromLobby(lobbyId);
+        return Ok(gameId);
+    }
+
+    [HttpPost("getCurrentPlayerId/{gameId}")]
+    public ActionResult<int> GetCurrentPlayerId(int gameId)
+    {
+        var currentPlayerId = _gameService.GetCurrentPlayerId(gameId);
+        return Ok(currentPlayerId);
+    }
+
+    [HttpPost("nextturn/{gameId}")]
+    public ActionResult<int> NextTurn(int gameId)
+    {
+        var currentPlayerId = _gameService.NextTurn(gameId);
+        return Ok(currentPlayerId);
     }
 }
