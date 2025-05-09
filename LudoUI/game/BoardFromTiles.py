@@ -271,7 +271,7 @@ class BoardFromTiles:
 
         highlight_id = self.canvas.create_oval(
             x0, y0, x1, y1,
-            outline="black", width=5, tags="highlight"
+            outline="black", width=4, tags="highlight"
         )
 
         # Optionally store the highlight_id if you want to remove it later
