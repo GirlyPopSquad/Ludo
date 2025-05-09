@@ -2,12 +2,15 @@
 {
     public class Piece
     {
-        public Guid Id { get; } = Guid.NewGuid();
-        public Color Color;
-        
-        public Piece(Color color)
+        public int PieceNumber { get; }
+        public Color Color { get; }
+        public Coordinate Coordinate { get; }
+
+        public Piece(int pieceNumber, Color color, Coordinate coordinate)
         {
             Color = color;
+            PieceNumber = pieceNumber;
+            Coordinate = coordinate;
         }
     }
 }

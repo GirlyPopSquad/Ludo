@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers;
 
-//TODO: for testing purposes, to easily be able to see result of board in UI.
-
 [Route("api/[controller]")]
 [ApiController]
 public class BoardController : ControllerBase
@@ -17,12 +15,19 @@ public class BoardController : ControllerBase
         _boardService = boardService;
     }
 
-
+    //TODO: for testing purposes, to easily be able to see result of board in UI.
     [HttpGet]
     public ActionResult<Board> Test()
     {
-        var board = _boardService.InitStandardBoard(-1);
+        var boardId = _boardService.InitStandardBoard(-1);
+        var board = _boardService.GetBoard(boardId);
 
         return Ok(board);
+    }
+
+    [HttpGet("getByGameId/{gameId}")]
+    public ActionResult<Board> Get(int gameId)
+    {
+        return Ok(_boardService.GetBoardFromGameId(gameId));
     }
 }

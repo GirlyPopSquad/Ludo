@@ -1,18 +1,15 @@
 import pygame
 import pygame.freetype
 
-from stateManagers import LobbyStateManager
-from stateManagers.IsPygameRunning import get_is_pygame_running
 from Constants import WHITE, BLACK, WIDTH, HEIGHT
+from clients.LobbyClient import create_lobby
+from screens.StartMenu import start_menu
 from screens.StartingRerolls import starting_rerolls
+from screens.StartingRolls import starting_roll
 from screens.StartingRollsOverview import starting_rolls_overview
 from stateManagers.GameStateManager import set_game_state, get_game_state, quit_game, GameState
+from stateManagers.IsPygameRunning import get_is_pygame_running
 from stateManagers.LobbyStateManager import LobbyState, get_lobby_state, set_lobby
-from screens.StartMenu import start_menu
-from screens.StartingRolls import starting_roll
-from clients.LobbyClient import create_lobby
-import game.BoardFromTiles as ludoBoard
-import clients.GameClient as gameClient
 
 # Initialize Pygame
 pygame.init()
@@ -63,9 +60,3 @@ def ludo():
 
 # Run the start menu
 ludo()
-
-lobby_id = LobbyStateManager.get_lobby_id()
-
-game_id = gameClient.create_game(lobby_id)
-
-ludoBoard.open_ludoboard_window(game_id)
