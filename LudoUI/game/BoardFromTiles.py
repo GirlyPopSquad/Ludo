@@ -1,10 +1,10 @@
 from tkinter import *
 
 import clients.GameClient as gameClient
-from PlayerColor import get_tkinter_colorcode
+from PlayerColor import get_tkinter_colorcode, get_player_color_from_int
 from clients.BoardClient import get_board_from_game_id
 from clients.PieceClient import get_pieces_from_game
-from clients.RollClient import Roll
+from clients.RollClient import Roll, Isita6
 from models.ArrowTile import ArrowTile, ArrowDirection
 from models.Tile import Tile
 from stateManagers.GameStateManager import get_game_id
@@ -15,6 +15,7 @@ class BoardFromTiles:
 
     board = get_board_from_game_id(game_id)
     pieces = get_pieces_from_game(game_id)
+
 
     # Dictionary to store piece ID, when they are created with tkinter, so that they may be removed again
     pieces_dict = {}
@@ -68,12 +69,12 @@ class BoardFromTiles:
         for piece in self.pieces:
             coords = piece.coordinate
             color = piece.color.value
-            piece_id = self.place_piece(coords, color)
+            piece_id = self.place_piece(coords, color, piece.piece_number)
 
             self.pieces_dict.update({piece.piece_number: piece_id})
 
-    def place_piece(self, coords, color):
-
+    def place_piece(self, coords, color, piice_number):
+        self.canvas
         # the amount the piece is offset from the tile
         piece_margin = 7
 
@@ -85,8 +86,21 @@ class BoardFromTiles:
         return self.canvas.create_oval(
             x0, y0,
             x1, y1,  # Adjusting for a margin (5px offset)
-            fill=get_tkinter_colorcode(int(color)), outline="black"
+            fill=get_tkinter_colorcode(int(color)), outline="black",
         )
+    
+    def move_piece(self, piece_number, new_coords, color):
+        # Remove the old piece if it exists
+        piece_id = self.pieces_dict.get(piece_number)
+        if piece_id:
+            self.canvas.delete(piece_id)
+
+        # Create the new piece at new_coords
+        piece_id = self.place_piece(new_coords, color)
+
+        # Update the dictionary with the new ID
+        self.pieces_dict[piece_number] = piece_id
+
 
     def draw_tile(self, coords, color):
         x0 = self.board_x0 + (self.grid_size * coords.x)
@@ -162,20 +176,29 @@ class BoardFromTiles:
 
         # Bind click to the box
         self.canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
+        
+        startingPlayer =  playerId = gameClient.get_current_playerid(self.game_id)
 
-        self.draw_player_identifier()
+
+        self.draw_player_identifier(startingPlayer)
 
         # Initial roll
         self.draw_dice_eyes(1)
 
     def roll_dice(self, event=None):
+        playerId = gameClient.get_current_playerid(self.game_id)
         roll = Roll()
         self.draw_dice_eyes(roll)
+        #isItA6 = Isita6(roll)
+        isItA6 = 'true'
+        if isItA6 == 'true':
+            self.highlight_movable_pieces(playerId)
+        
         gameClient.next_turn(self.game_id)  # Needs to be removed, not the correct place it makes next turn
-        self.draw_player_identifier()
+        self.draw_player_identifier(playerId)
 
-    def draw_player_identifier(self):
-        playerId = gameClient.get_current_playerid(self.game_id)
+    def draw_player_identifier(self, playerId):
+        
 
         self.canvas.delete("player_indicator")
 
@@ -228,6 +251,36 @@ class BoardFromTiles:
             x, y = positions[pos]
             dot = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
+    
+    def highlight_movable_pieces(self, player_id):
+        player_color = get_player_color_from_int(player_id)
+        # Example: get pieces that belong to the current player
+        movable_pieces = [p for p in self.pieces if p.color == player_color] # and self.can_piece_move(p)]
+
+        for piece in movable_pieces:
+            self.highlight_piece(piece)
+            
+    def highlight_piece(self, piece):
+        coords = piece.coordinate
+        margin = 3  # Less margin so it looks like a ring around the piece
+
+        x0 = self.board_x0 + (self.grid_size * coords.x) + margin
+        y0 = self.board_y0 + (self.grid_size * coords.y) + margin
+        x1 = x0 + self.grid_size - 2 * margin
+        y1 = y0 + self.grid_size - 2 * margin
+
+        highlight_id = self.canvas.create_oval(
+            x0, y0, x1, y1,
+            outline="black", width=5, tags="highlight"
+        )
+
+        # Optionally store the highlight_id if you want to remove it later
+        #self.highlight_ids.append(highlight_id)
+
+    def clear_highlights(self):
+        self.canvas.delete("highlight")
+        self.highlight_ids.clear()
+
 
 
 def open_ludoboard_window():

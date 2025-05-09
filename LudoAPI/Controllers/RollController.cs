@@ -1,4 +1,5 @@
-﻿using LudoAPI.Services;
+﻿using LudoAPI.Models;
+using LudoAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,12 @@ namespace LudoAPI.Controllers
         public ActionResult<int> Get()
         {
             return _diceService.RollDice();
+        }
+
+        [HttpPost("isItA6/{roll}")]
+        public ActionResult<bool> Isita6(int roll)
+        {
+            return _diceService.IsItA6(roll);
         }
     }
 }
