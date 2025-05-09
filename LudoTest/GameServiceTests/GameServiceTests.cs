@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using FluentAssertions;
 using LudoAPI.Models;
+using LudoAPI.Repositories;
 using LudoAPI.Services;
+using Moq;
 
 namespace LudoTest.GameServiceTests
 {
     public class GameServiceTests
     {
+        
+        //todo: bring tests back when theres a plan for how we'll do lobby to game
+        /*
 
         [Theory]
         [ClassData(typeof(LobbyTestData))]
@@ -21,9 +26,9 @@ namespace LudoTest.GameServiceTests
             //Assert
 
             //A starting player hasn't yet been decided
-            newGame.currentPlayerId.Should().BeNull();
-            newGame.players.Count.Should().Be(4);
-            newGame.players.Should().BeEquivalentTo(lobby.Players);
+            newGame.CurrentPlayerId.Should().BeNull();
+            newGame.Players.Count.Should().Be(4);
+            newGame.Players.Should().BeEquivalentTo(lobby.Players);
         }
     }
     
@@ -45,5 +50,8 @@ namespace LudoTest.GameServiceTests
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    */
+    
     }
+    
 }

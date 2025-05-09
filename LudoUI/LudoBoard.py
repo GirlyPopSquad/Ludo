@@ -1,27 +1,15 @@
 from tkinter import *
-from tkinter import messagebox
-from PIL import Image, ImageTk
-import time
-from random import randint, choice
+
 
 class BoardGame:
     def __init__(self, root):
         self.root = root
         self.root.title("Board Game")
-        self.make_canvas = Canvas(root, width=800, height=600)
+        self.make_canvas = Canvas(root, width=800, height=700)
         self.make_canvas.pack()
 
-        # Initialize lists to store coins and labels
-        self.made_red_coin = []
-        self.red_number_label = []
-        self.made_green_coin = []
-        self.green_number_label = []
-        self.made_sky_blue_coin = []
-        self.sky_blue_number_label = []
-        self.made_yellow_coin = []
-        self.yellow_number_label = []
-
         self.board_set_up()
+
 
     def board_set_up(self):
         # Cover Box made
@@ -113,7 +101,7 @@ class BoardGame:
         self.add_grid_overlay()
         
         # Red Pieces
-        self.place_object_on_grid(2, 2, "red")  # Placing a red circle 
+        self.place_object_on_grid(2, 2, "red")  # Placing a red circle
         self.place_object_on_grid(3, 2, "red")  # Placing a red circle 
         self.place_object_on_grid(2, 3, "red")  # Placing a red circle 
         self.place_object_on_grid(3, 3, "red")  # Placing a red circle 
@@ -157,7 +145,7 @@ class BoardGame:
         canvas_x = 100 + grid_x * grid_size
         canvas_y = 15 + grid_y * grid_size
         
-        self.make_canvas.create_oval(
+        return self.make_canvas.create_oval(
             canvas_x + 5, canvas_y + 5,  # Adjusting for a margin (5px offset)
             canvas_x + 35, canvas_y + 35,  # Adjusting for a margin (5px offset)
             fill=color, outline="black"
@@ -219,5 +207,7 @@ class BoardGame:
 
 def open_ludoboard_window():
     root = Tk()
-    game = BoardGame(root)
+    BoardGame(root)
     root.mainloop()
+
+#open_ludoboard_window()

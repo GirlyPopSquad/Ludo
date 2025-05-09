@@ -1,4 +1,3 @@
-
 using LudoAPI.Repositories;
 using LudoAPI.Services;
 
@@ -22,7 +21,12 @@ namespace LudoAPI
             builder.Services.AddSingleton<ILobbyRepository, LobbyRepository>();
             builder.Services.AddScoped<ILobbyService, LobbyService>();
             
+            builder.Services.AddScoped<IBoardService, BoardService>();
+            
             builder.Services.AddScoped<IStartingService, StartingService>();
+
+            builder.Services.AddSingleton<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IGameService, GameService>();
 
             var app = builder.Build();
 
