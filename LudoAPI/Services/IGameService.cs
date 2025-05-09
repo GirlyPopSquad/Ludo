@@ -5,6 +5,6 @@ namespace LudoAPI.Services;
 public interface IGameService
 {
     int CreateFromLobby(int lobbyId);
-    int NextTurn(int gameId);
-    int GetCurrentPlayerId(int gameId);
+    Color NextTurn(int gameId);
+    Color GetCurrentPlayerId(int gameId);
 }

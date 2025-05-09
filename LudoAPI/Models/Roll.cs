@@ -2,11 +2,11 @@
 {
     public class Roll
     {
-        public LobbyPlayer Player { get; set; }
+        public Player Player { get; set; }
 
         public int Value { get; set; }
 
-        public Roll(LobbyPlayer player, int value)
+        public Roll(Player player, int value)
         {
             this.Player = player;
             this.Value = value;

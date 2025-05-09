@@ -24,8 +24,8 @@ namespace LudoAPI.Services
         {
             var lobby = _lobbyRepository.Get(lobbyId);
 
-            var gamePlayers = lobby.Players.Select(lp => new GamePlayer(lp.Id)).ToList();
-            var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).Player.Id;
+            var gamePlayers = lobby.Players.Select(lp => new Player(lp.Color)).ToList();
+            var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).Player.Color;
 
             var newGameId = _gameRepository.Add(new Game(gamePlayers, startingPlayer));
 
@@ -57,25 +57,25 @@ namespace LudoAPI.Services
             return newGameId;
         }
 
-        public int GetCurrentPlayerId(int gameId)
+        public Color GetCurrentPlayerId(int gameId)
         {
             var game = _gameRepository.Get(gameId);
-            return game.CurrentPlayerId;
+            return game.CurrentPlayerColor;
         }
 
-        public int NextTurn(int gameId)
+        public Color NextTurn(int gameId)
         {
             var game = _gameRepository.Get(gameId);
-            if(game.CurrentPlayerId == game.Players.Count)
+            if((int)game.CurrentPlayerColor == game.Players.Count)
             {
-                game.CurrentPlayerId = 1;
+                game.CurrentPlayerColor = (Color)1;
             }
             else
             {
-                game.CurrentPlayerId++;
+                game.CurrentPlayerColor++;
             }
             _gameRepository.Update(gameId, game);
-            return game.CurrentPlayerId;
+            return game.CurrentPlayerColor;
         }
     }
 }

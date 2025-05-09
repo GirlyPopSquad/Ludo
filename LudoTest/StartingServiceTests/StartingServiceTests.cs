@@ -36,10 +36,10 @@ namespace LudoTest.StartingServiceTests
             [
                 new List<Roll>
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 2),
-                    new Roll(new LobbyPlayer(3), 4),
-                    new Roll(new LobbyPlayer(4), 4),
+                    new Roll(new Player(1), 1),
+                    new Roll(new Player(2), 2),
+                    new Roll(new Player(3), 4),
+                    new Roll(new Player(4), 4),
                 },
                 true
             ];
@@ -48,10 +48,10 @@ namespace LudoTest.StartingServiceTests
             [
                 new List<Roll>
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 2),
-                    new Roll(new LobbyPlayer(3), 3),
-                    new Roll(new LobbyPlayer(4), 4),
+                    new Roll(new Player(1), 1),
+                    new Roll(new Player(2), 2),
+                    new Roll(new Player(3), 3),
+                    new Roll(new Player(4), 4),
                 },
                 false
             ];
@@ -60,10 +60,10 @@ namespace LudoTest.StartingServiceTests
             [
                 new List<Roll>()
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 2),
-                    new Roll(new LobbyPlayer(3), 2),
-                    new Roll(new LobbyPlayer(4), 4),
+                    new Roll(new Player(1), 1),
+                    new Roll(new Player(2), 2),
+                    new Roll(new Player(3), 2),
+                    new Roll(new Player(4), 4),
                 },
                 false
             ];
@@ -71,7 +71,7 @@ namespace LudoTest.StartingServiceTests
 
         [Theory]
         [ClassData(typeof(ReRollersData))]
-        public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<LobbyPlayer> expected)
+        public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<Player> expected)
         {
             //Act
             var actual = _startingService.GetReRollers(rolls);
@@ -87,20 +87,20 @@ namespace LudoTest.StartingServiceTests
             _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
 
             Lobby lobby = new Lobby(1, [
-                new LobbyPlayer(1),
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
+                new Player(1),
+                new Player(2),
+                new Player(3),
+                new Player(4)
             ]);
 
             Lobby expectedLobby = new Lobby(1, [
-                new LobbyPlayer(1),
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
+                new Player(1),
+                new Player(2),
+                new Player(3),
+                new Player(4)
             ]);
 
-            var expectedRoll = new Roll(new LobbyPlayer(1), 1);
+            var expectedRoll = new Roll(new Player(1), 1);
             expectedLobby.Rolls.Add(expectedRoll);
 
             //Act
@@ -115,15 +115,15 @@ namespace LudoTest.StartingServiceTests
         {
             //Arrange
             const int lobbyId = 1;
-            var testplayer = new LobbyPlayer(1);
+            var testplayer = new Player(1);
             var initialRoll = new Roll(testplayer, 6);
 
-            var lobbyPlayers = new List<LobbyPlayer>
+            var lobbyPlayers = new List<Player>
             {
                 testplayer,
-                new LobbyPlayer(2),
-                new LobbyPlayer(3),
-                new LobbyPlayer(4)
+                new Player(2),
+                new Player(3),
+                new Player(4)
             };
             
             var initialLobby = new Lobby(lobbyId, lobbyPlayers);
@@ -174,31 +174,31 @@ namespace LudoTest.StartingServiceTests
             {
                 new List<Roll>
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 2),
-                    new Roll(new LobbyPlayer(3), 6),
-                    new Roll(new LobbyPlayer(4), 6),
+                    new Roll(new Player(1), 1),
+                    new Roll(new Player(2), 2),
+                    new Roll(new Player(3), 6),
+                    new Roll(new Player(4), 6),
                 },
-                new List<LobbyPlayer>
+                new List<Player>
                 {
-                    new LobbyPlayer(3),
-                    new LobbyPlayer(4)
+                    new Player(3),
+                    new Player(4)
                 }
             },
             new object[]
             {
                 new List<Roll>
                 {
-                    new Roll(new LobbyPlayer(1), 1),
-                    new Roll(new LobbyPlayer(2), 4),
-                    new Roll(new LobbyPlayer(3), 4),
-                    new Roll(new LobbyPlayer(4), 4),
+                    new Roll(new Player(1), 1),
+                    new Roll(new Player(2), 4),
+                    new Roll(new Player(3), 4),
+                    new Roll(new Player(4), 4),
                 },
-                new List<LobbyPlayer>()
+                new List<Player>()
                 {
-                    new LobbyPlayer(2),
-                    new LobbyPlayer(3),
-                    new LobbyPlayer(4)
+                    new Player(2),
+                    new Player(3),
+                    new Player(4)
                 }
             }
         ];

@@ -20,12 +20,12 @@ namespace LudoAPI.Services
             throw new NotImplementedException();
         }
 
-        public Lobby HandleReroll(int lobbyId, LobbyPlayer player)
+        public Lobby HandleReroll(int lobbyId, Player player)
         {
             var lobby = _lobbyService.GetLobbyById(lobbyId);
             var newRollValue = _diceService.RollDice();
 
-            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == player.Id);
+            var oldRoll = lobby.Rolls.Find(r => r.Player.Color == player.Color);
 
             if (oldRoll == null)
             {
@@ -38,14 +38,14 @@ namespace LudoAPI.Services
             return lobby;
         }
 
-        public List<LobbyPlayer> GetReRollers(List<Roll> startingRolls)
+        public List<Player> GetReRollers(List<Roll> startingRolls)
         {
             int highest = startingRolls.Max(x => x.Value);
             return startingRolls.Where(x => x.Value == highest)
                 .Select(x => x.Player).ToList();
         }
 
-        public void RemoveOldRolls(int id, List<LobbyPlayer> rerollers)
+        public void RemoveOldRolls(int id, List<Player> rerollers)
         {
             _lobbyService.RemoveOldRolls(id, rerollers);
         }

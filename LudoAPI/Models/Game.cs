@@ -3,20 +3,20 @@
 public class Game
 {
     public int Id {  get; }
-    public List<GamePlayer> Players { get; }
-    public int CurrentPlayerId {get; set;}
+    public List<Player> Players { get; }
+    public Color CurrentPlayerColor {get; set;}
     
-    public Game(List<GamePlayer> players, int currentPlayerId)
+    public Game(List<Player> players, Color currentPlayerColor)
     {
         Players = players;
-        CurrentPlayerId = currentPlayerId;
+        CurrentPlayerColor = currentPlayerColor;
     }
 
     public Game (int id, Game game)
     {
         Id = id;
         Players = game.Players;
-        CurrentPlayerId = game.CurrentPlayerId;
+        CurrentPlayerColor = game.CurrentPlayerColor;
     }
 }
     

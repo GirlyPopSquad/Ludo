@@ -5,10 +5,10 @@ namespace LudoAPI.Services
     public interface IStartingService
     {
         Lobby HandleRerolls(Lobby lobby);
-        List<LobbyPlayer> GetReRollers(List<Roll> startingRolls);
+        List<Player> GetReRollers(List<Roll> startingRolls);
         bool ShouldReRoll(List<Roll> startingRolls);
         Lobby StartingRoll(Lobby lobby);
-        Lobby HandleReroll(int lobbyId, LobbyPlayer player);
-        void RemoveOldRolls(int id, List<LobbyPlayer> rerollers);
+        Lobby HandleReroll(int lobbyId, Player player);
+        void RemoveOldRolls(int id, List<Player> rerollers);
     }
 }
