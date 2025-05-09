@@ -8,4 +8,9 @@ public class HomeTile : Tile
     {
         
     }
+
+    public Coordinate[] GetStartCoordinates()
+    {
+        return StartTiles.Select(x => x.Coordinate).ToArray();
+    }
 }

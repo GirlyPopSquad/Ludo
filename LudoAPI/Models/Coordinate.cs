@@ -11,4 +11,12 @@ public record Coordinate(int X, int Y)
     {
         return $"{X},{Y}";
     }
+    
+    public Coordinate CalcNextCoordinateFromMove(Move move)
+    {
+        var nextX = X + move.XChange;
+        var nextY = Y + move.YChange;
+
+        return new Coordinate(nextX, nextY);
+    }
 }
