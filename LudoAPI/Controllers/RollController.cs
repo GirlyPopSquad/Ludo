@@ -1,4 +1,5 @@
-﻿using LudoAPI.Services;
+﻿using LudoAPI.Models;
+using LudoAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers
@@ -8,10 +9,12 @@ namespace LudoAPI.Controllers
     public class RollController : ControllerBase
     {
         private readonly IDiceService _diceService;
+        private readonly IRollService _rollService;
 
-        public RollController(IDiceService diceService)
+        public RollController(IDiceService diceService, IRollService rollService)
         {
             _diceService = diceService;
+            _rollService = rollService;
         }
         
         [HttpGet]
@@ -25,5 +28,11 @@ namespace LudoAPI.Controllers
         {
             return _diceService.IsItA6(roll);
         }
+
+        [HttpPost("NextRoll/{gameId}")]
+        public ActionResult<Roll> DoNextRoll(int gameId)
+        {
+            return Ok(_rollService.DoNextRoll(gameId));
+        } 
     }
 }

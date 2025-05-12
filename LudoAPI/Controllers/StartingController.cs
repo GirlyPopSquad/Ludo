@@ -14,6 +14,8 @@ namespace LudoAPI.Controllers
             _startingService = startingService;
         }
 
+        
+        //todo: could take lobbyId as only param (is true for most of these)
         [HttpPost("StartingRoll")]
         public ActionResult<Lobby> GetStartingRoll([FromBody] Lobby lobby)
         {

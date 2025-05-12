@@ -5,6 +5,7 @@ public class Game
     public int Id {  get; }
     public List<Player> Players { get; }
     public int CurrentPlayerId {get; set;}
+    public bool TimeToRoll {get; set;} = true;
     
     public Game(List<Player> players, int currentPlayerId)
     {

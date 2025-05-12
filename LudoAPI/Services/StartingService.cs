@@ -1,5 +1,4 @@
 ﻿using LudoAPI.Models;
-using LudoAPI.Repositories;
 
 namespace LudoAPI.Services
 {
@@ -19,7 +18,7 @@ namespace LudoAPI.Services
             var lobby = _lobbyService.GetLobbyById(lobbyId);
             var newRollValue = _diceService.RollDice();
 
-            var oldRoll = lobby.Rolls.Find(r => r.Player.Id == player.Id);
+            var oldRoll = lobby.Rolls.Find(r => r.PlayerId == player.Id);
 
             if (oldRoll == null)
             {
@@ -36,7 +35,9 @@ namespace LudoAPI.Services
         {
             int highest = startingRolls.Max(x => x.Value);
             return startingRolls.Where(x => x.Value == highest)
-                .Select(x => x.Player).ToList();
+                //todo: fix
+                .Select(x => new Player(x.PlayerId))
+                .ToList();
         }
 
         public void RemoveOldRolls(int id, List<Player> rerollers)

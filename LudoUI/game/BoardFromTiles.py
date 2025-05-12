@@ -4,7 +4,7 @@ import clients.GameClient as gameClient
 from PlayerColor import get_tkinter_colorcode, get_player_color_from_int
 from clients.BoardClient import get_board_from_game_id
 from clients.PieceClient import get_pieces_from_game
-from clients.RollClient import Roll, Isita6
+from clients.RollClient import do_next_roll
 from models.ArrowTile import ArrowTile, ArrowDirection
 from models.Tile import Tile
 from stateManagers.GameStateManager import get_game_id
@@ -69,12 +69,11 @@ class BoardFromTiles:
         for piece in self.pieces:
             coords = piece.coordinate
             color = piece.color.value
-            piece_id = self.place_piece(coords, color, piece.piece_number)
+            piece_id = self.place_piece(coords, color)
 
             self.pieces_dict.update({piece.piece_number: piece_id})
 
-    def place_piece(self, coords, color, piice_number):
-        self.canvas
+    def place_piece(self, coords, color):
         # the amount the piece is offset from the tile
         piece_margin = 7
 
@@ -187,8 +186,8 @@ class BoardFromTiles:
 
     def roll_dice(self, event=None):
         playerId = gameClient.get_current_playerid(self.game_id)
-        roll = Roll()
-        self.draw_dice_eyes(roll)
+        roll = do_next_roll(self.game_id)
+        self.draw_dice_eyes(roll.value)
         #isItA6 = Isita6(roll)
         isItA6 = 'true'
         if isItA6 == 'true':
@@ -276,7 +275,7 @@ class BoardFromTiles:
 
         # Optionally store the highlight_id if you want to remove it later
         #self.highlight_ids.append(highlight_id)
-
+#todo: fix
     def clear_highlights(self):
         self.canvas.delete("highlight")
         self.highlight_ids.clear()

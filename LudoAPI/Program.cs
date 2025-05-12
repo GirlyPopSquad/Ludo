@@ -31,6 +31,9 @@ namespace LudoAPI
             
             builder.Services.AddSingleton<IPieceRepository, PieceRepository>();
             builder.Services.AddScoped<IPieceService, PieceService>();
+            
+            builder.Services.AddSingleton<IRollRepository, RollRepository>();
+            builder.Services.AddScoped<IRollService, RollService>();
 
             var app = builder.Build();
 

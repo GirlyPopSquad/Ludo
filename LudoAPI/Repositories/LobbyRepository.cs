@@ -31,7 +31,7 @@ namespace LudoAPI.Repositories
             {
                 foreach(var reroller in rerollers)
                 {
-                    if (roll.Player.Id == reroller.Id)
+                    if (roll.PlayerId == reroller.Id)
                     {
                         rollsToKeep.Add(roll);
                     }

@@ -9,8 +9,6 @@ public class PieceRepository : IPieceRepository
 
     public void SavePieces(int gameId, List<Piece> pieces)
     {
-        // todo check that gameId is valid
-        
         _pieces.Add(gameId, pieces);   
     }
 

@@ -7,4 +7,6 @@ public interface IGameService
     int CreateFromLobby(int lobbyId);
     int NextTurn(int gameId);
     int GetCurrentPlayerId(int gameId);
+    bool GetIsTimeToRoll(int gameId);
+    void UpdateIsTimeToRoll(int gameId, bool isTimeToRoll);
 }

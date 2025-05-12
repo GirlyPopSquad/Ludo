@@ -25,7 +25,7 @@ namespace LudoAPI.Services
             var lobby = _lobbyRepository.Get(lobbyId);
 
             var gamePlayers = lobby.Players.Select(lp => new Player(lp.Id)).ToList();
-            var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).Player.Id;
+            var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).PlayerId;
 
             var newGameId = _gameRepository.Add(new Game(gamePlayers, startingPlayer));
 
@@ -76,6 +76,19 @@ namespace LudoAPI.Services
             }
             _gameRepository.Update(gameId, game);
             return game.CurrentPlayerId;
+        }
+
+        public bool GetIsTimeToRoll(int gameId)
+        {
+            var game = _gameRepository.Get(gameId);
+            return game.TimeToRoll;
+        }
+
+        public void UpdateIsTimeToRoll(int gameId, bool isTimeToRoll)
+        {
+            var game = _gameRepository.Get(gameId);
+            game.TimeToRoll = isTimeToRoll;
+            _gameRepository.Update(gameId, game);
         }
     }
 }
