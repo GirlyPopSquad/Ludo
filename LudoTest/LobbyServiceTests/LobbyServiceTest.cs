@@ -15,18 +15,18 @@ public class LobbyServiceTest
     public void CreateLobby()
     {
         //Arrange
-        var lobbyPlayers = new List<LobbyPlayer>()
+        var lobbyPlayers = new List<Player>()
         {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4),
+            new Player(1),
+            new Player(2),
+            new Player(3),
+            new Player(4),
         };
         
         var expectedLobby = new Lobby(1, lobbyPlayers);
         
         //this disregards the content of the input list, as long as it is a List of LobbyPlayers 
-        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<LobbyPlayer>>())).Returns(expectedLobby);
+        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<Player>>())).Returns(expectedLobby);
         var lobbyService = new LobbyService(_repository.Object);
         
         //Act
@@ -40,12 +40,12 @@ public class LobbyServiceTest
     public void GetLobbyById()
     {
         //Arrange
-        var expectedLobby = new Lobby(1, new List<LobbyPlayer>()
+        var expectedLobby = new Lobby(1, new List<Player>()
         {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4),
+            new Player(1),
+            new Player(2),
+            new Player(3),
+            new Player(4),
         });
         
         _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
@@ -63,12 +63,12 @@ public class LobbyServiceTest
     public void UpdateLobby()
     {
         //Arrange
-        var testLobby = new Lobby(1, new List<LobbyPlayer>
+        var testLobby = new Lobby(1, new List<Player>
         {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4)
+            new Player(1),
+            new Player(2),
+            new Player(3),
+            new Player(4)
         });
         
         _repository.Setup(repo => repo.UpdateLobby(testLobby));

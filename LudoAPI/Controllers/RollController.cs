@@ -1,6 +1,4 @@
-﻿using LudoAPI.Models;
-using LudoAPI.Services;
-using Microsoft.AspNetCore.Http;
+﻿using LudoAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LudoAPI.Controllers
@@ -15,7 +13,7 @@ namespace LudoAPI.Controllers
         {
             _diceService = diceService;
         }
-
+        
         [HttpGet]
         public ActionResult<int> Get()
         {

@@ -12,7 +12,7 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var players = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
+            var players = new List<Player> { new Player(1), new Player(2) };
             var expectedLobby = new Lobby(1, players);
 
             // Act
@@ -29,7 +29,7 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var players = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
+            var players = new List<Player> { new Player(1), new Player(2) };
             var lobby = new Lobby(2, players);
 
             repository.AddNewLobby(players);
@@ -48,8 +48,8 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var initialPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2) };
-            var updatedPlayers = new List<LobbyPlayer> { new LobbyPlayer(1), new LobbyPlayer(2), new LobbyPlayer(3) };
+            var initialPlayers = new List<Player> { new Player(1), new Player(2) };
+            var updatedPlayers = new List<Player> { new Player(1), new Player(2), new Player(3) };
             var initialLobby = repository.AddNewLobby(initialPlayers);
             var updatedLobby = new Lobby(initialLobby.Id, updatedPlayers);
         

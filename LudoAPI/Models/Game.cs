@@ -3,10 +3,10 @@
 public class Game
 {
     public int Id {  get; }
-    public List<GamePlayer> Players { get; }
+    public List<Player> Players { get; }
     public int CurrentPlayerId {get; set;}
     
-    public Game(List<GamePlayer> players, int currentPlayerId)
+    public Game(List<Player> players, int currentPlayerId)
     {
         Players = players;
         CurrentPlayerId = currentPlayerId;

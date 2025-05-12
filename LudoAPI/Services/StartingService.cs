@@ -5,7 +5,6 @@ namespace LudoAPI.Services
 {
     public class StartingService : IStartingService
     {
-        private readonly IPlayerService _playerService;
         private readonly IDiceService _diceService;
         private readonly ILobbyService _lobbyService;
 
@@ -15,12 +14,7 @@ namespace LudoAPI.Services
             _lobbyService = lobbyService;
         }
 
-        public Lobby HandleRerolls(Lobby lobby)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Lobby HandleReroll(int lobbyId, LobbyPlayer player)
+        public Lobby HandleReroll(int lobbyId, Player player)
         {
             var lobby = _lobbyService.GetLobbyById(lobbyId);
             var newRollValue = _diceService.RollDice();
@@ -38,14 +32,14 @@ namespace LudoAPI.Services
             return lobby;
         }
 
-        public List<LobbyPlayer> GetReRollers(List<Roll> startingRolls)
+        public List<Player> GetReRollers(List<Roll> startingRolls)
         {
             int highest = startingRolls.Max(x => x.Value);
             return startingRolls.Where(x => x.Value == highest)
                 .Select(x => x.Player).ToList();
         }
 
-        public void RemoveOldRolls(int id, List<LobbyPlayer> rerollers)
+        public void RemoveOldRolls(int id, List<Player> rerollers)
         {
             _lobbyService.RemoveOldRolls(id, rerollers);
         }

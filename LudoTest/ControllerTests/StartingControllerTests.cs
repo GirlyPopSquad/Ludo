@@ -24,7 +24,7 @@ namespace LudoTest.ControllerTests
         public void GetStartingRoll_ShouldReturnStartingRoll()
         {
             // Arrange
-            var lobby = new Lobby(1, new List<LobbyPlayer>());
+            var lobby = new Lobby(1, new List<Player>());
             _startingServiceMock.Setup(s => s.StartingRoll(It.IsAny<Lobby>())).Returns(lobby);
 
             // Act
@@ -39,7 +39,7 @@ namespace LudoTest.ControllerTests
         {
             // Arrange
             var startingRolls = new List<Roll>();
-            var reRollers = new List<LobbyPlayer> { new LobbyPlayer(1) };
+            var reRollers = new List<Player> { new Player(1) };
             _startingServiceMock.Setup(service => service.GetReRollers(It.IsAny<List<Roll>>())).Returns(reRollers);
 
             // Act
@@ -55,7 +55,7 @@ namespace LudoTest.ControllerTests
         {
             // Arrange
             var startingRolls = new List<Roll>();
-            var reRollers = new List<LobbyPlayer>();
+            var reRollers = new List<Player>();
             _startingServiceMock.Setup(service => service.GetReRollers(It.IsAny<List<Roll>>())).Returns(reRollers);
 
             // Act

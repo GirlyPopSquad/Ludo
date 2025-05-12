@@ -4,7 +4,7 @@ namespace LudoAPI.Services
 {
     public class MoveService
     {
-        public LobbyPlayer MovePiece(LobbyPlayer piece)
+        public Player MovePiece(Player piece)
         {
             throw new NotImplementedException();
         }

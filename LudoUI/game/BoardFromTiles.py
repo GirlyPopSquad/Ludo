@@ -194,7 +194,7 @@ class BoardFromTiles:
         if isItA6 == 'true':
             self.highlight_movable_pieces(playerId)
         
-        gameClient.next_turn(self.game_id)  # Needs to be removed, not the correct place it makes next turn
+        gameClient.next_turn(self.game_id)  # todo: Needs to be removed, not the correct place it makes next turn
         self.draw_player_identifier(playerId)
 
     def draw_player_identifier(self, playerId):
