@@ -1,3 +1,4 @@
+using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Models.Tiles;
 
@@ -13,13 +14,14 @@ public class TileTest
         var move = new Move(1,0);
         var tile = new Tile(new Coordinate(0,0), move);
         var blueColor = Color.Blue;
-        var piece = new Piece(blueColor);
+        var piece = new Piece(1, blueColor, tile.Coordinate);
+        var expected = piece.Coordinate.CalcNextCoordinateFromMove(move);
         
         //Act
-        var actual = tile.NextMove(piece);
+        var actual = tile.NextCoordinate(piece);
         
         //Assert
-        Assert.Equal(actual, move);
+        actual.Should().BeEquivalentTo(expected);
         
     }
 }

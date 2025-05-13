@@ -42,9 +42,9 @@ public class ArrowTile : Tile
         throw new NotImplementedException("ArrowDirection is not supported");
     }
 
-    public override Move NextMove(Piece piece)
+    public override Coordinate NextCoordinate(Piece piece)
     {
-        throw new NotImplementedException();
+        return piece.Coordinate.CalcNextCoordinateFromMove(piece.Color == Color ? arrowMove : Move);
     }
 }
 
