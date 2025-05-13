@@ -27,12 +27,12 @@ public class Tile
     public Tile(Coordinate coordinate, Move move)
     {
         Coordinate = coordinate;
-        this.Move = move;
+        Move = move;
     }
 
     public Tile(Coordinate coordinate, Color color, Move move)
     {
-        this.Move = move;
+        Move = move;
         Color = color;
         Coordinate = coordinate;
     }

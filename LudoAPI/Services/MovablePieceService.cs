@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Repositories;
 
 namespace LudoAPI.Services;
 
@@ -9,15 +10,17 @@ public class MovablePieceService : IMovablePieceService
     private readonly IBoardService _boardService;
     private readonly IRollService _rollService;
     private readonly IRuleService _ruleService;
+    private readonly IMovablePieceRepository _movablePieceRepository;
 
     public MovablePieceService(IPieceService pieceService, IGameService gameService, IBoardService boardService,
-        IRollService rollService, IRuleService ruleService)
+        IRollService rollService, IRuleService ruleService, IMovablePieceRepository movablePieceRepository)
     {
         _pieceService = pieceService;
         _gameService = gameService;
         _boardService = boardService;
         _rollService = rollService;
         _ruleService = ruleService;
+        _movablePieceRepository = movablePieceRepository;
     }
 
     public List<Piece> GetMovablePieces(int gameId)
@@ -69,7 +72,27 @@ public class MovablePieceService : IMovablePieceService
             _gameService.UpdateIsTimeToRoll(gameId, true);
         }
 
-
+        _movablePieceRepository.SetMovablePieces(gameId, movablePieces);
         return movablePieces;
+    }
+
+    public Piece MovePiece(int gameId, int pieceNumber)
+    {
+        var movablePieces = _movablePieceRepository.GetMovablePieces(gameId);
+        var isPieceMovable = movablePieces.Select(p => p.PieceNumber).Contains(pieceNumber);
+        if (!isPieceMovable)
+        {
+            throw new Exception("Piece is not movable");
+        }
+
+        var piece = _pieceService.GetPiece(gameId, pieceNumber);
+        
+        var currentTile = _boardService.GetTileFromCoordinate(gameId, piece.Coordinate);
+        var nextcoordinate = currentTile.NextCoordinate(piece);
+        
+        piece.Coordinate = nextcoordinate;
+        _pieceService.UpdatePiece(gameId, piece);
+        
+        return piece;
     }
 }

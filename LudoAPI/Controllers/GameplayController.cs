@@ -20,4 +20,10 @@ public class GameplayController: ControllerBase
     {
         return Ok(_movablePieceService.GetMovablePieces(gameId));
     }
+
+    [HttpPut("movePiece/{gameId}")]
+    public ActionResult<Piece> ChoosePieceToMove(int gameId, [FromBody] int pieceNumber)
+    {
+        return Ok(_movablePieceService.MovePiece(gameId, pieceNumber));
+    }
 }

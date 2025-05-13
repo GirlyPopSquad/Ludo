@@ -9,4 +9,5 @@ public interface IBoardService
     Board GetBoard(int boardId);
     Board GetBoardFromGameId(int gameId);
     List<HomeTile> GetHomeTiles(int gameId);
+    Tile GetTileFromCoordinate(int gameId, Coordinate coordinate);
 }

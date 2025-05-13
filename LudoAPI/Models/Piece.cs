@@ -4,7 +4,7 @@
     {
         public int PieceNumber { get; }
         public Color Color { get; }
-        public Coordinate Coordinate { get; }
+        public Coordinate Coordinate { get; set; }
 
         public Piece(int pieceNumber, Color color, Coordinate coordinate)
         {

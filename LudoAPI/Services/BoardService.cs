@@ -24,6 +24,14 @@ public class BoardService : IBoardService
         return _boardRepository.GetByGameId(gameId);
     }
 
+    public Tile GetTileFromCoordinate(int gameId, Coordinate coordinate)
+    {
+        var board = GetBoardFromGameId(gameId);
+        var tiles = board.Tiles;
+
+        return tiles[coordinate.ToString()];
+    }
+
     public List<HomeTile> GetHomeTiles(int gameId)
     {
         return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToList();
@@ -32,17 +40,17 @@ public class BoardService : IBoardService
     public int InitStandardBoard(int gameId)
     {
         //todo check if gameId is valid, before proceeding   
-        
+
         var boardMap = BoardMapLibrary.StandardBoard;
         int rows = boardMap.GetLength(0);
         int cols = boardMap.GetLength(1);
-        
+
         var tiles = MakeTilesFromMap(boardMap);
-        
+
         var newBoard = new Board(gameId, tiles, rows, cols);
         return _boardRepository.Add(newBoard);
     }
-    
+
     public Dictionary<string, Tile> MakeTilesFromMap(string[,] boardMap)
     {
         Dictionary<string, Tile> tiles = IdentifyTiles(boardMap);
@@ -51,7 +59,10 @@ public class BoardService : IBoardService
         var homeTiles = tiles.Values.OfType<HomeTile>().ToArray();
 
         //setup home tiles - happens here because StartTiles needs to be identified first
-        SetupHomeTiles(homeTiles, startTiles);
+        foreach (var ht in homeTiles)
+        {
+            ht.StartTiles = startTiles.Where(tile => tile.Color == ht.Color).ToArray();
+        }
 
         return tiles;
     }
@@ -73,15 +84,6 @@ public class BoardService : IBoardService
         }
 
         return tiles;
-    }
-
-    private HomeTile[] SetupHomeTiles(HomeTile[] homeTiles, List<StartTile> startTiles)
-    {
-        return homeTiles.Select(ht =>
-        {
-            ht.StartTiles = startTiles.Where(tile => tile.Color == ht.Color).ToArray();
-            return ht;
-        }).ToArray();
     }
 
     //todo: could be moved to different class

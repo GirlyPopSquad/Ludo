@@ -36,6 +36,7 @@ namespace LudoAPI
             builder.Services.AddScoped<IRollService, RollService>();
             
             builder.Services.AddScoped<IMovablePieceService, MovablePieceService>();
+            builder.Services.AddSingleton<IMovablePieceRepository, MovablePieceRepository>();
             
             builder.Services.AddScoped<IRuleService, RuleService>();
 

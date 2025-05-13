@@ -3,7 +3,7 @@ using LudoAPI.Repositories;
 
 namespace LudoAPI.Services;
 
-public class  PieceService : IPieceService
+public class PieceService : IPieceService
 {
     private readonly IPieceRepository _pieceRepository;
 
@@ -27,5 +27,14 @@ public class  PieceService : IPieceService
         return _pieceRepository.GetPiecesFromGameId(gameId)
             .Where(piece => piece.Color == (Color)playerId).ToList();
     }
-    
+
+    public void UpdatePiece(int gameId, Piece piece)
+    {
+        _pieceRepository.UpdatePiece(gameId, piece);
+    }
+
+    public Piece GetPiece(int gameId, int pieceNumber)
+    {
+        return _pieceRepository.GetPiece(gameId, pieceNumber);
+    }
 }
