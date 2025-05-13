@@ -87,6 +87,7 @@ public class BoardService : IBoardService
     }
 
     //todo: could be moved to different class
+    //todo: Up Down is opposite of what you would think,
     private Tile TranslateToTile(string tileString, Coordinate coordinate)
     {
         switch (tileString)
