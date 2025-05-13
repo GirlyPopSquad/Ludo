@@ -58,9 +58,8 @@ public class MovablePieceService : IMovablePieceService
                 movablePieces.AddRange(piecesAtHome);
             }
         }
-
-
-        var canHaveAnotherTurn = _ruleService.PlayerIsAllowedAnotherRoll(gameId, latestRoll);
+        
+        var canHaveAnotherTurn = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
 
         if (movablePieces.Count == 0)
         {
@@ -92,6 +91,14 @@ public class MovablePieceService : IMovablePieceService
         
         piece.Coordinate = nextcoordinate;
         _pieceService.UpdatePiece(gameId, piece);
+
+        var canRoleAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
+        if (!canRoleAgain)
+        {
+            _gameService.NextTurn(gameId);
+        }
+        
+        _gameService.UpdateIsTimeToRoll(gameId, true);
         
         return piece;
     }

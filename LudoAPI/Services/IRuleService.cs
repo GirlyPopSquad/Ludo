@@ -5,5 +5,5 @@ namespace LudoAPI.Services;
 public interface IRuleService
 {
     bool DoesRollAllowLeavingHome(Roll roll);
-    bool PlayerIsAllowedAnotherRoll(int gameId, Roll roll);
+    bool PlayerIsAllowedAnotherRoll(int gameId);
 }

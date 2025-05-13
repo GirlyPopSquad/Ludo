@@ -20,11 +20,13 @@ public class RuleService : IRuleService
         return roll.Value == 6;
     }
 
-    public bool PlayerIsAllowedAnotherRoll(int gameId, Roll roll)
+    public bool PlayerIsAllowedAnotherRoll(int gameId)
     {
+        
+        var roll = _rollService.GetLastestRoll(gameId);
         //if player rolled a 6, they can roll again
         if (roll.Value == 6) return true;
-
+        
         var last3Rolls = _rollService.GetLatestRolls(gameId, 3);
 
         //is player has all pieces at home, and has rolled less than 3 times in a row, they can roll again
