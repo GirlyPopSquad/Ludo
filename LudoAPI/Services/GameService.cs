@@ -63,7 +63,7 @@ namespace LudoAPI.Services
             return game.CurrentPlayerId;
         }
 
-        public int NextTurn(int gameId)
+        public void NextTurn(int gameId)
         {
             var game = _gameRepository.Get(gameId);
             if(game.CurrentPlayerId == game.Players.Count)
@@ -75,7 +75,6 @@ namespace LudoAPI.Services
                 game.CurrentPlayerId++;
             }
             _gameRepository.Update(gameId, game);
-            return game.CurrentPlayerId;
         }
 
         public bool GetIsTimeToRoll(int gameId)

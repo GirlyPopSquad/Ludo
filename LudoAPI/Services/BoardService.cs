@@ -24,6 +24,11 @@ public class BoardService : IBoardService
         return _boardRepository.GetByGameId(gameId);
     }
 
+    public List<HomeTile> GetHomeTiles(int gameId)
+    {
+        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToList();
+    }
+
     public int InitStandardBoard(int gameId)
     {
         //todo check if gameId is valid, before proceeding   

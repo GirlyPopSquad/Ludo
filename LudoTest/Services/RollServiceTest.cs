@@ -48,7 +48,7 @@ public class RollServiceTest
         result.Should().NotBeNull()
             .And.Subject.As<Roll>().Should().BeEquivalentTo(expectedRoll);
 
-        mockRollRepository.Verify(repo => repo.SaveRolls(gameId, It.IsAny<List<Roll>>()), Times.Once);
+        mockRollRepository.Verify(repo => repo.SaveRollToGame(gameId, It.IsAny<Roll>()), Times.Once);
 
     }
 }

@@ -27,11 +27,4 @@ public class GameController: ControllerBase
         var currentPlayerId = _gameService.GetCurrentPlayerId(gameId);
         return Ok(currentPlayerId);
     }
-
-    [HttpPost("nextturn/{gameId}")]
-    public ActionResult<int> NextTurn(int gameId)
-    {
-        var currentPlayerId = _gameService.NextTurn(gameId);
-        return Ok(currentPlayerId);
-    }
 }

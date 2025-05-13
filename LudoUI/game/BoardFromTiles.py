@@ -1,8 +1,9 @@
 from tkinter import *
 
 import clients.GameClient as gameClient
-from PlayerColor import get_tkinter_colorcode, get_player_color_from_int
+from PlayerColor import get_tkinter_colorcode
 from clients.BoardClient import get_board_from_game_id
+from clients.GameplayClient import get_movable_pieces
 from clients.PieceClient import get_pieces_from_game
 from clients.RollClient import do_next_roll
 from models.ArrowTile import ArrowTile, ArrowDirection
@@ -38,6 +39,12 @@ class BoardFromTiles:
 
     canvas_width = padding_left + (grid_size * grid_width) + padding_right
     canvas_height = padding_top + (grid_size * grid_height) + padding_bottom
+
+    # Dice box coords
+    dice_x0 = 20
+    dice_y0 = 50
+    dice_x1 = 80
+    dice_y1 = 110
 
     def __init__(self, root):
 
@@ -163,11 +170,6 @@ class BoardFromTiles:
         self.canvas.create_polygon(arrow_points, fill=color, outline="black", width=2)
 
     def add_clickable_dice(self):
-        # Dice box coords
-        self.dice_x0 = 20
-        self.dice_y0 = 50
-        self.dice_x1 = 80
-        self.dice_y1 = 110
 
         # Draw the dice rectangle
         self.canvas.create_rectangle(self.dice_x0, self.dice_y0, self.dice_x1, self.dice_y1, fill="white",
@@ -176,29 +178,29 @@ class BoardFromTiles:
         # Bind click to the box
         self.canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
         
-        startingPlayer =  playerId = gameClient.get_current_playerid(self.game_id)
+        starting_player = gameClient.get_current_playerid(self.game_id)
 
-
-        self.draw_player_identifier(startingPlayer)
+        self.draw_player_identifier(starting_player)
 
         # Initial roll
         self.draw_dice_eyes(1)
 
     def roll_dice(self, event=None):
-        playerId = gameClient.get_current_playerid(self.game_id)
         roll = do_next_roll(self.game_id)
+
+        #todo: this doesnt happen
         self.draw_dice_eyes(roll.value)
-        #isItA6 = Isita6(roll)
-        isItA6 = 'true'
-        if isItA6 == 'true':
-            self.highlight_movable_pieces(playerId)
-        
-        gameClient.next_turn(self.game_id)  # todo: Needs to be removed, not the correct place it makes next turn
-        self.draw_player_identifier(playerId)
 
-    def draw_player_identifier(self, playerId):
-        
+        movable_pieces = get_movable_pieces(self.game_id)
 
+        if len(movable_pieces) > 0:
+            self.highlight_movable_pieces(movable_pieces)
+
+        player_id = gameClient.get_current_playerid(self.game_id)
+
+        self.draw_player_identifier(player_id)
+
+    def draw_player_identifier(self, player_id):
         self.canvas.delete("player_indicator")
 
         circle_radius = 10
@@ -208,7 +210,7 @@ class BoardFromTiles:
         self.canvas.create_oval(
             circle_center_x - circle_radius, circle_center_y - circle_radius,
             circle_center_x + circle_radius, circle_center_y + circle_radius,
-            fill=get_tkinter_colorcode(playerId), outline="black",
+            fill=get_tkinter_colorcode(player_id), outline="black",
             tags="player_indicator"
         )
 
@@ -251,11 +253,7 @@ class BoardFromTiles:
             dot = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
     
-    def highlight_movable_pieces(self, player_id):
-        player_color = get_player_color_from_int(player_id)
-        # Example: get pieces that belong to the current player
-        movable_pieces = [p for p in self.pieces if p.color == player_color] # and self.can_piece_move(p)]
-
+    def highlight_movable_pieces(self, movable_pieces):
         for piece in movable_pieces:
             self.highlight_piece(piece)
             
