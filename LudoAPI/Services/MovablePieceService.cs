@@ -36,17 +36,16 @@ public class MovablePieceService : IMovablePieceService
 
         var playerPieces = _pieceService.GetPieces(gameId, currentPlayerId);
 
-        //determine whether all pieces are at home => then you get max three rolls
-
-        var homeCoordinates = _boardService
+        var homeTiles = _boardService
             .GetHomeTiles(gameId)
             .Where(tile => tile.Color == (Color)currentPlayerId)
-            .Select(tile => tile.Coordinate)
             .ToList();
+
+        var homeCoordinates = homeTiles.Select(ht => ht.Coordinate);
 
         var piecesAtHome = playerPieces.IntersectBy(homeCoordinates, piece => piece.Coordinate).ToList();
 
-        var movablePieces = new List<Piece>();
+        var movablePieces = new List<MovablePiece>();
 
         if (piecesAtHome.Count != 0)
         {
@@ -55,10 +54,50 @@ public class MovablePieceService : IMovablePieceService
 
             if (piecesCanLeaveHome)
             {
-                movablePieces.AddRange(piecesAtHome);
+                var movableHomePieces = piecesAtHome.Select(hp =>
+                {
+                    var homeTile = homeTiles.First(th => th.Coordinate == hp.Coordinate);
+                    var nextCoordinate = homeTile.NextCoordinate(hp);
+                    return new MovablePiece(hp.PieceNumber, nextCoordinate);
+                });
+
+                movablePieces.AddRange(movableHomePieces);
             }
         }
-        
+
+        //remove pieces at home - they are already handled
+        var piecesLeft = playerPieces.Except(piecesAtHome).ToList();
+
+        //remove pieces at end - they are finished
+        var endTiles = _boardService.GetEndTiles(gameId);
+        piecesLeft = piecesLeft
+            .ExceptBy(endTiles
+                .Select(t => t.Coordinate), piece => piece.Coordinate)
+            .ToList();
+
+        foreach (var piece in piecesLeft)
+        {
+            var currentTile = _boardService.GetTileFromCoordinate(gameId, piece.Coordinate);
+            var rollValue = latestRoll.Value;
+
+            var nextCoordinate = currentTile.NextCoordinate(piece);
+
+            if (rollValue > 1)
+            {
+                for (var i = 1; i < rollValue; i++)
+                {
+                    var tempTile = _boardService.GetTileFromCoordinate(gameId, nextCoordinate);
+                    nextCoordinate = tempTile.NextCoordinate(piece);
+
+                    Console.WriteLine(nextCoordinate);
+                }
+            }
+
+            //todo check if someone is blocking next coordinate    
+            movablePieces.Add(new MovablePiece(piece.PieceNumber, nextCoordinate));
+        }
+
+        //todo: check if not-at-home-pieces actually are movable
         var canHaveAnotherTurn = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
 
         if (movablePieces.Count == 0)
@@ -72,24 +111,25 @@ public class MovablePieceService : IMovablePieceService
         }
 
         _movablePieceRepository.SetMovablePieces(gameId, movablePieces);
-        return movablePieces;
+
+        var pieces = playerPieces
+            .IntersectBy(movablePieces.Select(pt => pt.PieceNumber), piece => piece.PieceNumber)
+            .ToList();
+
+        return pieces;
     }
 
     public Piece MovePiece(int gameId, int pieceNumber)
     {
-        var movablePieces = _movablePieceRepository.GetMovablePieces(gameId);
-        var isPieceMovable = movablePieces.Select(p => p.PieceNumber).Contains(pieceNumber);
-        if (!isPieceMovable)
+        var chosenPiece = _movablePieceRepository.GetPiece(gameId, pieceNumber);
+        if (chosenPiece == null)
         {
-            throw new Exception("Piece is not movable");
+            throw new Exception("Piece is not movable at this point");
         }
 
         var piece = _pieceService.GetPiece(gameId, pieceNumber);
-        
-        var currentTile = _boardService.GetTileFromCoordinate(gameId, piece.Coordinate);
-        var nextcoordinate = currentTile.NextCoordinate(piece);
-        
-        piece.Coordinate = nextcoordinate;
+
+        piece!.Coordinate = chosenPiece.PotentialCoordinate;
         _pieceService.UpdatePiece(gameId, piece);
 
         var canRoleAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
@@ -97,9 +137,9 @@ public class MovablePieceService : IMovablePieceService
         {
             _gameService.NextTurn(gameId);
         }
-        
+
         _gameService.UpdateIsTimeToRoll(gameId, true);
-        
+
         return piece;
     }
 }

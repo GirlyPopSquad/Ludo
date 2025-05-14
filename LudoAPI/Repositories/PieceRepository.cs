@@ -27,7 +27,7 @@ public class PieceRepository : IPieceRepository
         }
     }
 
-    public Piece GetPiece(int gameId, int pieceNumber)
+    public Piece? GetPiece(int gameId, int pieceNumber)
     {
         return _pieces[gameId]
             .Find(p => p.PieceNumber == pieceNumber);

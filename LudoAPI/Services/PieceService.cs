@@ -33,7 +33,7 @@ public class PieceService : IPieceService
         _pieceRepository.UpdatePiece(gameId, piece);
     }
 
-    public Piece GetPiece(int gameId, int pieceNumber)
+    public Piece? GetPiece(int gameId, int pieceNumber)
     {
         return _pieceRepository.GetPiece(gameId, pieceNumber);
     }

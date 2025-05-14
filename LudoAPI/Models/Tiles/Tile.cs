@@ -40,9 +40,9 @@ public class Tile
 
     public virtual Coordinate NextCoordinate(Piece piece)
     {
-        if (Move == null) return piece.Coordinate;
+        if (Move == null) return Coordinate;
         
-        var nextCoordinate = piece.Coordinate.CalcNextCoordinateFromMove(Move);
+        var nextCoordinate = Coordinate.CalcNextCoordinateFromMove(Move);
         
         return nextCoordinate;
     }

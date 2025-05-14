@@ -30,9 +30,9 @@ public class ArrowTile : Tile
             case 0:
                 switch (yChange)
                 {
-                    case 1:
-                        return ArrowDirection.Up;
                     case -1:
+                        return ArrowDirection.Up;
+                    case 1:
                         return ArrowDirection.Down;
                 }
 
@@ -44,7 +44,7 @@ public class ArrowTile : Tile
 
     public override Coordinate NextCoordinate(Piece piece)
     {
-        return piece.Coordinate.CalcNextCoordinateFromMove(piece.Color == Color ? arrowMove : Move);
+        return Coordinate.CalcNextCoordinateFromMove(piece.Color == Color ? arrowMove : Move);
     }
 }
 
