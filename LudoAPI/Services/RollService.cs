@@ -29,8 +29,6 @@ public class RollService : IRollService
 
         var newRoll = new Roll(currentPlayer, _diceService.RollDice());
         
-        Console.Out.WriteLine("roll value: " + newRoll.Value);
-            
         _rollRepository.SaveRollToGame(gameId, newRoll);
         _gameService.UpdateIsTimeToRoll(gameId, false);
             

@@ -88,8 +88,6 @@ public class MovablePieceService : IMovablePieceService
                 {
                     var tempTile = _boardService.GetTileFromCoordinate(gameId, nextCoordinate);
                     nextCoordinate = tempTile.NextCoordinate(piece);
-
-                    Console.WriteLine(nextCoordinate);
                 }
             }
 
