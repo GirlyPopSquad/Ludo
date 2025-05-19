@@ -40,9 +40,22 @@ public class RuleService : IRuleService
         if (!isAllPiecesHome) return false;
 
         var hasRolledLessThan3TimesInARow = last3Rolls.Count(r => r.PlayerId == roll.PlayerId) < 3;
-        if (hasRolledLessThan3TimesInARow) return true;
+        return hasRolledLessThan3TimesInARow;
+    }
 
+    public bool CanPiecePassTroughCoordinate(int gameId, Piece piece, Coordinate nextCoordinate)
+    {
+        var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, nextCoordinate);
 
-        return false;
+        switch (piecesOnCoordinate.Length)
+        {
+            case 0:
+                return true;
+            case >= 2:
+                return false;
+        }
+
+        var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p=> p.Color == piece.Color);
+        return pieceOfSameColor == null;
     }
 }

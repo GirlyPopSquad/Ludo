@@ -37,4 +37,10 @@ public class PieceService : IPieceService
     {
         return _pieceRepository.GetPiece(gameId, pieceNumber);
     }
+
+    public Piece[] GetPiecesFromCoordinate(int gameId, Coordinate nextCoordinate)
+    {
+        return _pieceRepository.GetPiecesFromGameId(gameId)
+            .Where(piece => piece.Coordinate == nextCoordinate).ToArray();
+    }
 }

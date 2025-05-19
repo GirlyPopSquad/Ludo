@@ -49,7 +49,6 @@ public class MovablePieceService : IMovablePieceService
 
         if (piecesAtHome.Count != 0)
         {
-            //todo: check if someone is blocking the starttile
             var piecesCanLeaveHome = _ruleService.DoesRollAllowLeavingHome(latestRoll);
 
             if (piecesCanLeaveHome)
@@ -79,23 +78,33 @@ public class MovablePieceService : IMovablePieceService
         {
             var currentTile = _boardService.GetTileFromCoordinate(gameId, piece.Coordinate);
             var rollValue = latestRoll.Value;
+            var isPieceMovable = true;
 
             var nextCoordinate = currentTile.NextCoordinate(piece);
 
             if (rollValue > 1)
             {
+                //handle intermediate coordinates
                 for (var i = 1; i < rollValue; i++)
                 {
+                    var canPassTroughCoordinate = _ruleService.CanPiecePassTroughCoordinate(gameId, piece, nextCoordinate);
+                    if (!canPassTroughCoordinate)
+                    {
+                        isPieceMovable = false;
+                        continue;
+                    }
+                    
                     var tempTile = _boardService.GetTileFromCoordinate(gameId, nextCoordinate);
                     nextCoordinate = tempTile.NextCoordinate(piece);
                 }
             }
 
-            //todo check if someone is blocking next coordinate    
-            movablePieces.Add(new MovablePiece(piece.PieceNumber, nextCoordinate));
+            if (isPieceMovable)
+            {
+                movablePieces.Add(new MovablePiece(piece.PieceNumber, nextCoordinate));
+            }
         }
 
-        //todo: check if not-at-home-pieces actually are movable
         var canHaveAnotherTurn = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
 
         if (movablePieces.Count == 0)
@@ -119,6 +128,8 @@ public class MovablePieceService : IMovablePieceService
 
     public Piece MovePiece(int gameId, int pieceNumber)
     {
+     
+        //todo: check if someone is blocking the tile
         var chosenPiece = _movablePieceRepository.GetPiece(gameId, pieceNumber);
         if (chosenPiece == null)
         {
