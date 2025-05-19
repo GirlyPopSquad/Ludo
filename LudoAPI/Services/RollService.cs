@@ -18,11 +18,17 @@ public class RollService : IRollService
 
     public Roll DoNextRoll(int gameId)
     {
+        var hasGameEnded = _gameService.HasGameEnded(gameId);
+        if (hasGameEnded)
+        {
+            throw new Exception("Game has ended, and no further rolls can be made");
+        }
+        
         var isValidRoll = _gameService.GetIsTimeToRoll(gameId);
 
         if (!isValidRoll)
         {
-            throw new Exception("This game is not ready for next roll, if game exists, current Roll might need to be handled first");
+            throw new Exception("This game is not ready for next roll, current Roll might need to be handled first");
         }
         
         var currentPlayer = _gameService.GetCurrentPlayerId(gameId);

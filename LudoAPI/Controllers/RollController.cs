@@ -8,25 +8,11 @@ namespace LudoAPI.Controllers
     [ApiController]
     public class RollController : ControllerBase
     {
-        private readonly IDiceService _diceService;
         private readonly IRollService _rollService;
 
-        public RollController(IDiceService diceService, IRollService rollService)
+        public RollController(IRollService rollService)
         {
-            _diceService = diceService;
             _rollService = rollService;
-        }
-        
-        [HttpGet]
-        public ActionResult<int> Get()
-        {
-            return _diceService.RollDice();
-        }
-
-        [HttpPost("isItA6/{roll}")]
-        public ActionResult<bool> Isita6(int roll)
-        {
-            return _diceService.IsItA6(roll);
         }
 
         [HttpPost("NextRoll/{gameId}")]
