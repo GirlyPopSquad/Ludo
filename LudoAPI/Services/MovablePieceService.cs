@@ -1,5 +1,4 @@
 ﻿using LudoAPI.Models;
-using LudoAPI.Models.Tiles;
 using LudoAPI.Repositories;
 
 namespace LudoAPI.Services;
@@ -130,7 +129,6 @@ public class MovablePieceService : IMovablePieceService
 
     public Piece MovePiece(int gameId, int pieceNumber)
     {
-        //todo: check if someone is blocking the tile
         var chosenPiece = _movablePieceRepository.GetPiece(gameId, pieceNumber);
         if (chosenPiece == null)
         {
@@ -138,11 +136,6 @@ public class MovablePieceService : IMovablePieceService
         }
 
         var piece = _pieceService.GetPiece(gameId, pieceNumber);
-        if (piece == null)
-        {
-            //todo move to method
-            throw new Exception("No piece exists with this pieceNumber in this game");
-        }
 
         var predictedCoordinate = chosenPiece.PotentialCoordinate;
         var finalCoordinate = predictedCoordinate;
@@ -180,8 +173,6 @@ public class MovablePieceService : IMovablePieceService
         _pieceService.UpdatePiece(gameId, piece);
     }
 
-
-    //todo: could be moved to boardService?
     private Coordinate FindAvailableHomeCoordinate(int gameId, Piece piece)
     {
         var homeTiles = _boardService.GetHomeTilesFromColor(gameId, piece.Color);

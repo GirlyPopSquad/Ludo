@@ -33,9 +33,16 @@ public class PieceService : IPieceService
         _pieceRepository.UpdatePiece(gameId, piece);
     }
 
-    public Piece? GetPiece(int gameId, int pieceNumber)
+    public Piece GetPiece(int gameId, int pieceNumber)
     {
-        return _pieceRepository.GetPiece(gameId, pieceNumber);
+        var piece = _pieceRepository.GetPiece(gameId, pieceNumber);
+
+        if (piece == null)
+        {
+            throw new Exception($"No piece exists with this pieceNumber: {pieceNumber} in this game with id: {gameId}");
+        }
+
+        return piece;
     }
 
     public Piece[] GetPiecesFromCoordinate(int gameId, Coordinate nextCoordinate)

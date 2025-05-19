@@ -22,11 +22,10 @@ public class RuleService : IRuleService
 
     public bool PlayerIsAllowedAnotherRoll(int gameId)
     {
-        
         var roll = _rollService.GetLastestRoll(gameId);
         //if player rolled a 6, they can roll again
         if (roll.Value == 6) return true;
-        
+
         var last3Rolls = _rollService.GetLatestRolls(gameId, 3);
 
         //is player has all pieces at home, and has rolled less than 3 times in a row, they can roll again
@@ -43,7 +42,6 @@ public class RuleService : IRuleService
         return hasRolledLessThan3TimesInARow;
     }
 
-    //todo change piece to MovablePiece
     public bool CanPiecePassTroughCoordinate(int gameId, Piece piece, Coordinate nextCoordinate)
     {
         var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, nextCoordinate);
@@ -56,7 +54,7 @@ public class RuleService : IRuleService
                 return false;
         }
 
-        var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p=> p.Color == piece.Color);
+        var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p => p.Color == piece.Color);
         return pieceOfSameColor == null;
     }
 
@@ -75,15 +73,9 @@ public class RuleService : IRuleService
         {
             return [];
         }
-        
+
         var piece = _pieceService.GetPiece(gameId, chosenPiece.PieceNumber);
-        
-        //todo: move error? - include piece number + gameId
-        if (piece == null)
-        {
-            throw new Exception("Piece not found");
-        }
-        
-        return piecesAtCoordinate.Where(p=> p.Color != piece.Color).ToArray();
+
+        return piecesAtCoordinate.Where(p => p.Color != piece.Color).ToArray();
     }
 }
