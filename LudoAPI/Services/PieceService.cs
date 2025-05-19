@@ -43,4 +43,10 @@ public class PieceService : IPieceService
         return _pieceRepository.GetPiecesFromGameId(gameId)
             .Where(piece => piece.Coordinate == nextCoordinate).ToArray();
     }
+
+    public Piece[] GetPiecesFromColor(int gameId, Color pieceColor)
+    {
+        return _pieceRepository.GetPiecesFromGameId(gameId)
+            .Where(piece => piece.Color == pieceColor).ToArray();
+    }
 }

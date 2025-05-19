@@ -11,4 +11,5 @@ public interface IBoardService
     List<HomeTile> GetHomeTiles(int gameId);
     Tile GetTileFromCoordinate(int gameId, Coordinate coordinate);
     List<EndTile> GetEndTiles(int gameId);
+    HomeTile[] GetHomeTilesFromColor(int gameId, Color pieceColor);
 }

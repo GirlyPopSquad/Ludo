@@ -10,4 +10,5 @@ public interface IPieceService
     void UpdatePiece(int gameId, Piece piece);
     Piece? GetPiece(int gameId, int pieceNumber);
     Piece[] GetPiecesFromCoordinate(int gameId, Coordinate nextCoordinate);
+    Piece[] GetPiecesFromColor(int gameId, Color pieceColor);
 }

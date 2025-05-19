@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Models.Tiles;
 using LudoAPI.Repositories;
 
 namespace LudoAPI.Services;
@@ -87,13 +88,14 @@ public class MovablePieceService : IMovablePieceService
                 //handle intermediate coordinates
                 for (var i = 1; i < rollValue; i++)
                 {
-                    var canPassTroughCoordinate = _ruleService.CanPiecePassTroughCoordinate(gameId, piece, nextCoordinate);
+                    var canPassTroughCoordinate =
+                        _ruleService.CanPiecePassTroughCoordinate(gameId, piece, nextCoordinate);
                     if (!canPassTroughCoordinate)
                     {
                         isPieceMovable = false;
                         continue;
                     }
-                    
+
                     var tempTile = _boardService.GetTileFromCoordinate(gameId, nextCoordinate);
                     nextCoordinate = tempTile.NextCoordinate(piece);
                 }
@@ -128,7 +130,6 @@ public class MovablePieceService : IMovablePieceService
 
     public Piece MovePiece(int gameId, int pieceNumber)
     {
-     
         //todo: check if someone is blocking the tile
         var chosenPiece = _movablePieceRepository.GetPiece(gameId, pieceNumber);
         if (chosenPiece == null)
@@ -137,8 +138,28 @@ public class MovablePieceService : IMovablePieceService
         }
 
         var piece = _pieceService.GetPiece(gameId, pieceNumber);
+        if (piece == null)
+        {
+            //todo move to method
+            throw new Exception("No piece exists with this pieceNumber in this game");
+        }
 
-        piece!.Coordinate = chosenPiece.PotentialCoordinate;
+        var predictedCoordinate = chosenPiece.PotentialCoordinate;
+        var finalCoordinate = predictedCoordinate;
+        var willThisPieceBeKickedHome = _ruleService.WillThisPieceBeKickedHome(gameId, predictedCoordinate);
+        if (willThisPieceBeKickedHome)
+        {
+            finalCoordinate = FindAvailableHomeCoordinate(gameId, piece);
+        }
+
+        var piecesToKick = _ruleService.GetPiecesThatWillBeKickedHome(gameId, chosenPiece);
+
+        foreach (var pieceToBeKicked in piecesToKick)
+        {
+            KickPieceHome(gameId, pieceToBeKicked);
+        }
+
+        piece.Coordinate = finalCoordinate;
         _pieceService.UpdatePiece(gameId, piece);
 
         var canRoleAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
@@ -150,5 +171,32 @@ public class MovablePieceService : IMovablePieceService
         _gameService.UpdateIsTimeToRoll(gameId, true);
 
         return piece;
+    }
+
+    private void KickPieceHome(int gameId, Piece piece)
+    {
+        var homeCoordinate = FindAvailableHomeCoordinate(gameId, piece);
+        piece.Coordinate = homeCoordinate;
+        _pieceService.UpdatePiece(gameId, piece);
+    }
+
+
+    //todo: could be moved to boardService?
+    private Coordinate FindAvailableHomeCoordinate(int gameId, Piece piece)
+    {
+        var homeTiles = _boardService.GetHomeTilesFromColor(gameId, piece.Color);
+
+        if (homeTiles.Any(t => t.Coordinate == piece.Coordinate))
+        {
+            //piece is already home and will stay there.
+            return piece.Coordinate;
+        }
+        
+        var coordinatesOfPlayersPieces = _pieceService.GetPiecesFromColor(gameId, piece.Color)
+            .Select(p => p.Coordinate);
+
+        var availableHomeTile = homeTiles.ExceptBy(coordinatesOfPlayersPieces, tile => tile.Coordinate)
+            .First();
+        return availableHomeTile.Coordinate;
     }
 }

@@ -43,6 +43,7 @@ public class RuleService : IRuleService
         return hasRolledLessThan3TimesInARow;
     }
 
+    //todo change piece to MovablePiece
     public bool CanPiecePassTroughCoordinate(int gameId, Piece piece, Coordinate nextCoordinate)
     {
         var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, nextCoordinate);
@@ -57,5 +58,32 @@ public class RuleService : IRuleService
 
         var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p=> p.Color == piece.Color);
         return pieceOfSameColor == null;
+    }
+
+    public bool WillThisPieceBeKickedHome(int gameId, Coordinate potentialCoordinate)
+    {
+        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, potentialCoordinate);
+
+        return piecesAtCoordinate.Length == 2;
+    }
+
+    public Piece[] GetPiecesThatWillBeKickedHome(int gameId, MovablePiece chosenPiece)
+    {
+        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, chosenPiece.PotentialCoordinate);
+
+        if (piecesAtCoordinate.Length is 2 or 0)
+        {
+            return [];
+        }
+        
+        var piece = _pieceService.GetPiece(gameId, chosenPiece.PieceNumber);
+        
+        //todo: move error? - include piece number + gameId
+        if (piece == null)
+        {
+            throw new Exception("Piece not found");
+        }
+        
+        return piecesAtCoordinate.Where(p=> p.Color != piece.Color).ToArray();
     }
 }

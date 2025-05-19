@@ -95,19 +95,17 @@ class BoardFromTiles:
             x1, y1,
             fill=get_tkinter_colorcode(color), outline="black",
         )
-    
-    def move_piece(self, piece:Piece):
-        # Remove the old piece if it exists
-        piece_id = self.pieces_dict.get(piece.piece_number)
-        if piece_id:
+
+    def redraw_pieces(self):
+        # Remove all pieces from the canvas
+        for piece_id in self.pieces_dict.values():
             self.canvas.delete(piece_id)
 
-        # Create the new piece at new_coords
-        piece_id = self.place_piece(piece.coordinate, piece.color)
+        # Clear the dictionary
+        self.pieces_dict.clear()
 
-        # Update the dictionary with the new ID
-        self.pieces_dict[piece.piece_number] = piece_id
-
+        # Re-add all pieces to the canvas
+        self.add_pieces()
 
     def draw_tile(self, coords, color):
         x0 = self.board_x0 + (self.grid_size * coords.x)
@@ -189,7 +187,6 @@ class BoardFromTiles:
     def roll_dice(self, event=None):
         roll = do_next_roll(self.game_id)
 
-        #todo: this doesnt happen
         self.draw_dice_eyes(roll.value)
 
         movable_pieces = get_movable_pieces(self.game_id)
@@ -275,7 +272,9 @@ class BoardFromTiles:
 
     def choose_piece(self, piece_number):
         updated_piece = move_piece(self.game_id, piece_number)
-        self.move_piece(updated_piece)
+        self.pieces = get_pieces_from_game(self.game_id)
+
+        self.redraw_pieces()
         self.clear_highlights()
 
     def clear_highlights(self):
