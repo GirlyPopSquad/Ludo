@@ -17,7 +17,6 @@ class BoardFromTiles:
     board = get_board_from_game_id(game_id)
     pieces = get_pieces_from_game(game_id)
 
-
     # Dictionary to store piece ID, when they are created with tkinter, so that they may be removed again
     pieces_dict = {}
 
@@ -175,7 +174,7 @@ class BoardFromTiles:
 
         # Bind click to the box
         self.canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
-        
+
         starting_player = gameClient.get_current_playerid(self.game_id)
 
         self.draw_player_identifier(starting_player)
@@ -249,11 +248,11 @@ class BoardFromTiles:
             x, y = positions[pos]
             dot = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
-    
+
     def highlight_movable_pieces(self, movable_pieces):
         for piece in movable_pieces:
             self.highlight_piece(piece)
-            
+
     def highlight_piece(self, piece):
         coords = piece.coordinate
         margin = 3  # Less margin so it looks like a ring around the piece
@@ -270,7 +269,7 @@ class BoardFromTiles:
         self.canvas.tag_bind(highlight_id, "<Button-1>", lambda event: self.choose_piece(piece.piece_number))
 
     def choose_piece(self, piece_number):
-        updated_piece = move_piece(self.game_id, piece_number)
+        move_piece(self.game_id, piece_number)
         self.pieces = get_pieces_from_game(self.game_id)
 
         self.redraw_pieces()
@@ -278,7 +277,6 @@ class BoardFromTiles:
 
     def clear_highlights(self):
         self.canvas.delete("highlight")
-
 
 
 def open_ludoboard_window():

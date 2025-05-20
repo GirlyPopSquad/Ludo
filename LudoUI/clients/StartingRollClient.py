@@ -22,8 +22,7 @@ def next_starting_roll():
     return updated_lobby
 
 
-def get_rerollers(lobby_id:int) -> list[LobbyPlayer]:
-
+def get_rerollers(lobby_id: int) -> list[LobbyPlayer]:
     response = requests.get(url + "/GetRerollers/" + str(lobby_id))
 
     rerollers = [LobbyPlayer.from_json(player) for player in json.loads(response.text)]
@@ -55,7 +54,6 @@ def handle_reroll(player_id: int):
     updated_lobby = Lobby.from_json(response.json())
     set_lobby(updated_lobby)
 
-    player_id = player_id
     rolls = updated_lobby.rolls
 
     for roll in rolls:

@@ -1,4 +1,5 @@
 from enum import Enum
+
 from models.Lobby import Lobby
 
 lobby: Lobby
