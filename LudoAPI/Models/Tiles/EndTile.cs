@@ -2,7 +2,7 @@
 
 public class EndTile : Tile
 {
-    public EndTile(Coordinate coordinate, Color color) : base(coordinate, color)
+    public EndTile(Coordinate coordinate, Color color, Move move) : base(coordinate, color, move)
     {
     }
 }

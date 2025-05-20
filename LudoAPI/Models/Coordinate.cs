@@ -7,6 +7,16 @@ public record Coordinate(int X, int Y)
         return X.GetHashCode() ^ Y.GetHashCode();
     }
 
+    public virtual bool Equals(Coordinate? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+        
+        return X == other.X && Y == other.Y;
+    }
+
     public override string ToString()
     {
         return $"{X},{Y}";
