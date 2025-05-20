@@ -14,7 +14,7 @@ public class TestBoardMapsAndExpectedBoards : IEnumerable<object[]>
             {
                 { "r", "b", "g", "y" },
                 { "rR", "bU", "gD", "yL" },
-                { "rH", "bE", "gSD", "yL-D" },
+                { "rH", "bE-D", "gSD", "yL-D" },
                 { "", "", "", "" }
             },
             new Dictionary<string, Tile>
@@ -28,7 +28,7 @@ public class TestBoardMapsAndExpectedBoards : IEnumerable<object[]>
                 { new Coordinate(2, 1).ToString(), new Tile(new Coordinate(2, 1), Color.Green, new Move(0, -1)) },
                 { new Coordinate(3, 1).ToString(), new Tile(new Coordinate(3, 1), Color.Yellow, new Move(-1, 0)) },
                 { new Coordinate(0, 2).ToString(), new HomeTile(new Coordinate(0, 2), Color.Red) },
-                { new Coordinate(1, 2).ToString(), new EndTile(new Coordinate(1, 2), Color.Blue) },
+                { new Coordinate(1, 2).ToString(), new EndTile(new Coordinate(1, 2), Color.Blue, new Move(0, +1)) },
                 { new Coordinate(2, 2).ToString(), new StartTile(new Coordinate(2, 2), Color.Green, new Move(0, -1)) },
                 {
                     new Coordinate(3, 2).ToString(),

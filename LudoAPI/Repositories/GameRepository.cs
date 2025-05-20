@@ -4,33 +4,33 @@ namespace LudoAPI.Repositories
 {
     public class GameRepository : IGameRepository
     {
-        private Dictionary<int, Game> Games { get; } = new();
+        private readonly Dictionary<int, Game> _games = new();
 
         public int Add(Game game)
         {
             var nextId = 1;
             
-            if (Games.Count >= 1)
+            if (_games.Count >= 1)
             {
-                nextId = Games.Keys.Max() + 1;
+                nextId = _games.Keys.Max() + 1;
             }
             
             var newGame = new Game(nextId, game);
-            Games.Add(nextId, newGame);
+            _games.Add(nextId, newGame);
             
             return nextId;
         }
 
         public Game Get(int id)
         {
-            return Games[id];
+            return _games[id];
         }
 
         public void Update(int id, Game game)
         {
-            if (Games.ContainsKey(id))
+            if (_games.ContainsKey(id))
             {
-                Games[id] = game;
+                _games[id] = game;
             }
             else
             {

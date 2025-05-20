@@ -4,112 +4,112 @@ using LudoAPI.Models;
 using LudoAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Collections.Generic;
-using Xunit;
+using LudoTest.Shared;
 
-namespace LudoTest.ControllerTests
+namespace LudoTest.ControllerTests;
+
+public class StartingControllerTests
 {
-    public class StartingControllerTests
+    private readonly Mock<IStartingService> _startingServiceMock;
+    private readonly StartingController _controller;
+
+    public StartingControllerTests()
     {
-        private readonly Mock<IStartingService> _startingServiceMock;
-        private readonly StartingController _controller;
+        _startingServiceMock = new Mock<IStartingService>();
+        _controller = new StartingController(_startingServiceMock.Object);
+    }
 
-        public StartingControllerTests()
-        {
-            _startingServiceMock = new Mock<IStartingService>();
-            _controller = new StartingController(_startingServiceMock.Object);
-        }
+    [Fact]
+    public void GetStartingRoll_ShouldReturnStartingRoll()
+    {
+        // Arrange
+        const int lobbyId = 1;
+        var lobby = new Lobby(lobbyId, PlayerTestData.Get4Players());
+        _startingServiceMock.Setup(s => s.DoNextStartingRoll(lobbyId))
+            .Returns(lobby);
 
-        [Fact]
-        public void GetStartingRoll_ShouldReturnStartingRoll()
-        {
-            // Arrange
-            var lobby = new Lobby(1, new List<Player>());
-            _startingServiceMock.Setup(s => s.StartingRoll(It.IsAny<Lobby>())).Returns(lobby);
+        // Act
+        var result = _controller.NextStartingRoll(lobbyId);
 
-            // Act
-            var result = _controller.GetStartingRoll(lobby);
+        // Assert
+        result.Should().BeOfType<ActionResult<Lobby>>().Which.Value.Should().Be(lobby);
+    }
 
-            // Assert
-            result.Should().BeOfType<ActionResult<Lobby>>().Which.Value.Should().BeEquivalentTo(lobby);
-        }
+    [Fact]
+    public void GetReRollers_ShouldReturnReRollers()
+    {
+        // Arrange
+        var lobbyId = 1;
+        var reRollers = new List<Player> { PlayerTestData.BluePlayer, PlayerTestData.RedPlayer };
+        _startingServiceMock.Setup(service => service.GetReRollers(lobbyId)).Returns(reRollers);
 
-        [Fact]
-        public void GetReRollers_ShouldReturnReRollers()
-        {
-            // Arrange
-            var startingRolls = new List<Roll>();
-            var reRollers = new List<Player> { new Player(1) };
-            _startingServiceMock.Setup(service => service.GetReRollers(It.IsAny<List<Roll>>())).Returns(reRollers);
+        // Act
+        var result = _controller.GetReRollers(lobbyId);
 
-            // Act
-            var result = _controller.GetReRollers(startingRolls);
+        // Assert
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeEquivalentTo(reRollers);
+    }
 
-            // Assert
-            result.Result.Should().BeOfType<OkObjectResult>()
-                .Which.Value.Should().BeEquivalentTo(reRollers);
-        }
+    [Fact]
+    public void GetReRollers_ShouldReturnEmptyList_WhenNoReRollersFound()
+    {
+        // Arrange
+        var lobbyId = 1;
+        var reRollers = new List<Player>();
+        _startingServiceMock.Setup(service => service.GetReRollers(lobbyId)).Returns(reRollers);
 
-        [Fact]
-        public void GetReRollers_ShouldReturnBadRequest_WhenNoReRollersFound()
-        {
-            // Arrange
-            var startingRolls = new List<Roll>();
-            var reRollers = new List<Player>();
-            _startingServiceMock.Setup(service => service.GetReRollers(It.IsAny<List<Roll>>())).Returns(reRollers);
+        // Act
+        var result = _controller.GetReRollers(lobbyId);
 
-            // Act
-            var result = _controller.GetReRollers(startingRolls);
+        // Assert
+        result.Result.Should().BeOfType<BadRequestObjectResult>()
+            .Which.Value.Should().Be("Could not find rerollers");
+    }
 
-            // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>()
-                .Which.Value.Should().Be("Could not find rerollers");
-        }
+    [Fact]
+    public void GetShouldReRoll_ShouldReturnTrue_WhenRerollIsNeeded()
+    {
+        // Arrange
+        var startingRolls = new List<Roll>();
+        _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>())).Returns(true);
 
-        [Fact]
-        public void GetShouldReRoll_ShouldReturnTrue_WhenRerollIsNeeded()
-        {
-            // Arrange
-            var startingRolls = new List<Roll>();
-            _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>())).Returns(true);
+        // Act
+        var result = _controller.GetShouldReRoll(startingRolls);
 
-            // Act
-            var result = _controller.GetShouldReRoll(startingRolls);
+        // Assert
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().Be(true);
+    }
 
-            // Assert
-            result.Result.Should().BeOfType<OkObjectResult>()
-                .Which.Value.Should().Be(true);
-        }
+    [Fact]
+    public void GetShouldReRoll_ShouldReturnFalse_WhenRerollIsNotNeeded()
+    {
+        // Arrange
+        var startingRolls = new List<Roll>();
+        _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>())).Returns(false);
 
-        [Fact]
-        public void GetShouldReRoll_ShouldReturnFalse_WhenRerollIsNotNeeded()
-        {
-            // Arrange
-            var startingRolls = new List<Roll>();
-            _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>())).Returns(false);
+        // Act
+        var result = _controller.GetShouldReRoll(startingRolls);
 
-            // Act
-            var result = _controller.GetShouldReRoll(startingRolls);
+        // Assert
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().Be(false);
+    }
 
-            // Assert
-            result.Result.Should().BeOfType<OkObjectResult>()
-                .Which.Value.Should().Be(false);
-        }
+    [Fact]
+    public void GetShouldReRoll_ShouldReturnBadRequest_WhenExceptionOccurs()
+    {
+        // Arrange
+        var startingRolls = new List<Roll>();
+        _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>()))
+            .Throws(new Exception("Some error"));
 
-        [Fact]
-        public void GetShouldReRoll_ShouldReturnBadRequest_WhenExceptionOccurs()
-        {
-            // Arrange
-            var startingRolls = new List<Roll>();
-            _startingServiceMock.Setup(service => service.ShouldReRoll(It.IsAny<List<Roll>>()))
-                .Throws(new Exception("Some error"));
+        // Act
+        var result = _controller.GetShouldReRoll(startingRolls);
 
-            // Act
-            var result = _controller.GetShouldReRoll(startingRolls);
-
-            // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>()
-                .Which.Value.Should().Be("Could not determine if reroll is needed");
-        }
+        // Assert
+        result.Result.Should().BeOfType<BadRequestObjectResult>()
+            .Which.Value.Should().Be("Could not determine if reroll is needed");
     }
 }

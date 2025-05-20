@@ -1,7 +1,7 @@
 ﻿using LudoAPI.Models;
 using LudoAPI.Repositories;
 using FluentAssertions;
-using Xunit;
+using LudoTest.Shared;
 
 namespace LudoTest.RepoTests
 {
@@ -12,16 +12,14 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var players = new List<Player> { new Player(1), new Player(2) };
+            var players = PlayerTestData.Get4Players();
             var expectedLobby = new Lobby(1, players);
 
             // Act
             var actualLobby = repository.AddNewLobby(players);
 
             // Assert
-            repository.Lobbies.Should().ContainEquivalentOf(expectedLobby);
             actualLobby.Should().BeEquivalentTo(expectedLobby);
-            repository.Lobbies.Count.Should().Be(1);
         }
 
         [Fact]
@@ -29,7 +27,7 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var players = new List<Player> { new Player(1), new Player(2) };
+            var players = PlayerTestData.Get4Players();
             var lobby = new Lobby(2, players);
 
             repository.AddNewLobby(players);
@@ -48,17 +46,22 @@ namespace LudoTest.RepoTests
         {
             // Arrange
             var repository = new LobbyRepository();
-            var initialPlayers = new List<Player> { new Player(1), new Player(2) };
-            var updatedPlayers = new List<Player> { new Player(1), new Player(2), new Player(3) };
-            var initialLobby = repository.AddNewLobby(initialPlayers);
-            var updatedLobby = new Lobby(initialLobby.Id, updatedPlayers);
+            var players = PlayerTestData.Get4Players();
+            var lobby = repository.AddNewLobby(players);
+
+            var roll = new Roll(players[0].Id, 6);
+            
+            lobby.Rolls.Add(roll);
+            
+            var expectedLobby = new Lobby(lobby.Id, players);
+            expectedLobby.Rolls.Add(roll);
         
             // Act
-            repository.UpdateLobby(updatedLobby);
-            var result = repository.Get(initialLobby.Id);
+            repository.UpdateLobby(lobby);
+            var result = repository.Get(lobby.Id);
         
             // Assert
-            result.Should().BeEquivalentTo(updatedLobby);
+            result.Should().BeEquivalentTo(expectedLobby);
         }
     }
 }

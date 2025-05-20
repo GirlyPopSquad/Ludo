@@ -7,7 +7,6 @@ from clients.GameplayClient import get_movable_pieces, move_piece
 from clients.PieceClient import get_pieces_from_game
 from clients.RollClient import do_next_roll
 from models.ArrowTile import ArrowTile, ArrowDirection
-from models.Piece import Piece
 from models.Tile import Tile
 from stateManagers.GameStateManager import get_game_id
 

@@ -1,19 +1,18 @@
 import json
+
 import requests
-from clients.LobbyClient import get_lobby
-from stateManagers.LobbyStateManager import get_lobby_id, set_lobby
+
 from models.Lobby import Lobby
 from models.LobbyPlayer import LobbyPlayer
 from models.Roll import Roll
+from stateManagers.LobbyStateManager import get_lobby_id, set_lobby
 
 url = 'http://localhost:5276/api/Starting'
 
+
 def next_starting_roll():
     lobby_id = get_lobby_id()
-    lobby = get_lobby(lobby_id)
-    headers = {'Content-Type': 'application/json'}
-    lobby_dict = lobby.to_dict()
-    response = requests.post(url + '/startingroll', json=lobby_dict, headers=headers)
+    response = requests.post(url + '/startingroll/' + str(lobby_id))
 
     if response.status_code != 200:
         raise ValueError(f"API error: {response.status_code}, Message: {response.text}")
@@ -22,25 +21,14 @@ def next_starting_roll():
 
     return updated_lobby
 
-def get_rerollers(rolls: list[Roll]) -> list[LobbyPlayer]:
-    headers = {'Content-Type': 'application/json'}
-    rolls_data = [roll.to_dict() for roll in rolls]
-    response = requests.post(url + "/GetRerollers", json=rolls_data, headers=headers)
 
-    if response.status_code != 200:
-        raise ValueError(f"API error: {response.status_code}, Message: {response.text}")
+def get_rerollers(lobby_id:int) -> list[LobbyPlayer]:
 
-    rerollers = [LobbyPlayer(**player) for player in json.loads(response.text)]
+    response = requests.get(url + "/GetRerollers/" + str(lobby_id))
 
+    rerollers = [LobbyPlayer.from_json(player) for player in json.loads(response.text)]
     return rerollers
 
-def remove_old_rolls(lobbyId, rerollers: list[LobbyPlayer]):
-    headers = {'Content-Type': 'application/json'}
-    rolls_data = [roll.to_dict() for roll in rerollers]
-    response = requests.post(url + f"/RemoveOldRolls/{lobbyId}", json=rolls_data, headers=headers)
-
-    if response.status_code != 200:
-        raise ValueError(f"API error: {response.status_code}, Message: {response.text}")
 
 def get_should_reroll(rolls: list[Roll]) -> bool:
     headers = {'Content-Type': 'application/json'}
@@ -54,12 +42,12 @@ def get_should_reroll(rolls: list[Roll]) -> bool:
 
     return json.loads(response.text)
 
-#returns the new value for the roll, that has been rerolled
-def handle_reroll(player: LobbyPlayer):
+
+# returns the new value for the roll, that has been rerolled
+def handle_reroll(player_id: int):
     lobby_id = get_lobby_id()
-    lobby = get_lobby(lobby_id)
     headers = {'Content-Type': 'application/json'}
-    response = requests.post(url +f"/HandleReroll/{lobby.lobby_id}", json=player.to_dict(), headers=headers)
+    response = requests.post(url + f"/HandleReroll/{lobby_id}", json=player_id, headers=headers)
 
     if response.status_code != 200:
         raise ValueError(f"API error: {response.status_code}, Message: {response.text}")
@@ -67,7 +55,7 @@ def handle_reroll(player: LobbyPlayer):
     updated_lobby = Lobby.from_json(response.json())
     set_lobby(updated_lobby)
 
-    player_id = player.id
+    player_id = player_id
     rolls = updated_lobby.rolls
 
     for roll in rolls:

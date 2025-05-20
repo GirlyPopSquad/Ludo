@@ -5,16 +5,18 @@ namespace LudoTest.Models;
 public class PlayerTest
 {
 
+    //todo: make theory, so all colors can be tested
     [Fact]
-    public void player_hasCorrectColor()
+    public void player_getsIdFromColor()
     {
         //Arrange
-        var player = new Player(1);
+        var color = Color.Yellow;
+        var player = new Player(color);
             
         //Act
-        var playerColor = (Color) player.Id;
+        var intFromColor = (int) color;
             
         //Assert
-        Assert.Equal(Color.Blue, playerColor);
+        Assert.Equal(intFromColor, player.Id);
     }
 }

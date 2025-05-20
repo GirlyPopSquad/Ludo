@@ -2,6 +2,7 @@
 using LudoAPI.Models;
 using LudoAPI.Repositories;
 using LudoAPI.Services;
+using LudoTest.Shared;
 using Moq;
 
 namespace LudoTest.LobbyServiceTests;
@@ -9,19 +10,13 @@ namespace LudoTest.LobbyServiceTests;
 public class LobbyServiceTest
 {
     
-    private readonly Mock<ILobbyRepository> _repository = new Mock<ILobbyRepository>();
+    private readonly Mock<ILobbyRepository> _repository = new();
     
     [Fact]
     public void CreateLobby()
     {
         //Arrange
-        var lobbyPlayers = new List<Player>()
-        {
-            new Player(1),
-            new Player(2),
-            new Player(3),
-            new Player(4),
-        };
+        var lobbyPlayers = PlayerTestData.Get4Players();
         
         var expectedLobby = new Lobby(1, lobbyPlayers);
         
@@ -40,13 +35,7 @@ public class LobbyServiceTest
     public void GetLobbyById()
     {
         //Arrange
-        var expectedLobby = new Lobby(1, new List<Player>()
-        {
-            new Player(1),
-            new Player(2),
-            new Player(3),
-            new Player(4),
-        });
+        var expectedLobby = new Lobby(1, PlayerTestData.Get4Players());
         
         _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
         
@@ -63,13 +52,7 @@ public class LobbyServiceTest
     public void UpdateLobby()
     {
         //Arrange
-        var testLobby = new Lobby(1, new List<Player>
-        {
-            new Player(1),
-            new Player(2),
-            new Player(3),
-            new Player(4)
-        });
+        var testLobby = new Lobby(1, PlayerTestData.Get4Players());
         
         _repository.Setup(repo => repo.UpdateLobby(testLobby));
         

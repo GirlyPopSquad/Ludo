@@ -25,11 +25,12 @@ namespace LudoAPI.Services
         {
             var lobby = _lobbyRepository.Get(lobbyId);
 
-            var gamePlayers = lobby.Players.Select(lp => new Player(lp.Id)).ToList();
+            var gamePlayers = lobby.Players;
             var startingPlayer = lobby.Rolls.MaxBy(roll => roll.Value).PlayerId;
 
             var newGameId = _gameRepository.Add(new Game(gamePlayers, startingPlayer));
-
+            //todo: delete lobby when game is made
+            
             //add board
             var boardId = _boardService.InitStandardBoard(newGameId);
             var board = _boardService.GetBoard(boardId);

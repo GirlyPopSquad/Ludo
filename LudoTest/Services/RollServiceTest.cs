@@ -2,6 +2,7 @@
 using LudoAPI.Models;
 using LudoAPI.Repositories;
 using LudoAPI.Services;
+using LudoTest.Shared;
 using Moq;
 
 namespace LudoTest.Services;
@@ -17,7 +18,7 @@ public class RollServiceTest
         var mockGameService = new Mock<IGameService>();
         var mockDiceService = new Mock<IDiceService>();
 
-        var testCurrentPlayer = new Player(1);
+        var testCurrentPlayer = PlayerTestData.RedPlayer;
 
         var gameId = 1;
 

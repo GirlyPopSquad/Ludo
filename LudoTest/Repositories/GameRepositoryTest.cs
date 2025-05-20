@@ -1,23 +1,23 @@
 ﻿using FluentAssertions;
 using LudoAPI.Models;
 using LudoAPI.Repositories;
+using LudoTest.Shared;
 
 namespace LudoTest.Repositories;
 
 public class GameRepositoryTest
 {
-    private readonly GameRepository _gameRepository = new GameRepository();
+    private readonly GameRepository _gameRepository = new();
 
     [Fact]
     public void Add_WorksAsExpected()
     {
         //Arrange
-        var startingPlayerId = 1;
-        var testPlayer1 = new Player(startingPlayerId);
+        var redPlayer = PlayerTestData.RedPlayer;
 
         var testGame =
-            new Game(new List<Player>() { testPlayer1, new Player(2), new Player(3), new Player(4) },
-                startingPlayerId);
+            new Game([redPlayer, PlayerTestData.BluePlayer, PlayerTestData.GreenPlayer, PlayerTestData.YellowPlayer],
+                redPlayer.Id);
 
         //Act
         var id = _gameRepository.Add(testGame);

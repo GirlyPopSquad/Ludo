@@ -22,14 +22,22 @@ public class BoardServiceTest
     public void InitStandardBoard_CreatesAStandardBoardAsExpected()
     {
         //arrange
-        var gameId = -1;
-        
+        const int gameId = -1;
+
+        _boardRepositoryMock
+            .Setup(br => br.Add(It.Is<Board>(br =>
+                br.GameId == gameId &&
+                br.Rows == 15 &&
+                br.Cols == 15)
+            ))
+            .Returns(1);
+
         //act
         var result = _service.InitStandardBoard(gameId);
 
         //assert
         result.Should().Be(1);
-        
+
         _boardRepositoryMock.Verify(x => x.Add(It.Is<Board>(b =>
             b.GameId == -1
             && b.Rows == 15
