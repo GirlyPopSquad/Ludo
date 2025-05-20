@@ -1,47 +1,50 @@
 ﻿using LudoAPI.Models;
 
-namespace LudoAPI.Repositories
+namespace LudoAPI.Repositories;
+
+public class LobbyRepository : ILobbyRepository
 {
-    public class LobbyRepository : ILobbyRepository
+    private readonly Dictionary<int, Lobby> _lobbies = new();
+
+    public Lobby AddNewLobby(List<Player> lobbyPlayers)
     {
-        //todo: switch to dictionary
-        private readonly Dictionary<int, Lobby> _lobbies = new();
+        var lobbyId = GetNextId();
+        Lobby newLobby = new(lobbyId, lobbyPlayers);
+        _lobbies.Add(lobbyId, newLobby);
+        return newLobby;
+    }
 
-        public Lobby AddNewLobby(List<Player> lobbyPlayers)
+    private int GetNextId()
+    {
+        if (_lobbies.Count == 0)
         {
-            var lobbyId = GetNextId();
-            Lobby newLobby = new(lobbyId, lobbyPlayers);
-            _lobbies.Add(lobbyId, newLobby);
-            return newLobby;
+            return 1;
         }
 
-        private int GetNextId()
+        return _lobbies.Keys.Max() + 1;
+    }
+
+    public Lobby Get(int id)
+    {
+        return _lobbies[id];
+    }
+
+    public void UpdateLobby(Lobby lobby)
+    {
+        var lobbyId = lobby.Id;
+
+        if (_lobbies.ContainsKey(lobbyId))
         {
-            if (_lobbies.Count == 0)
-            {
-                return 1;
-            }
-
-            return _lobbies.Keys.Max() + 1;
+            _lobbies[lobbyId] = lobby;
         }
-
-        public Lobby Get(int id)
+        else
         {
-            return _lobbies[id];
+            throw new KeyNotFoundException($"Game with ID {lobbyId} not found.");
         }
+    }
 
-        public void UpdateLobby(Lobby lobby)
-        {
-            var lobbyId = lobby.Id;
-
-            if (_lobbies.ContainsKey(lobbyId))
-            {
-                _lobbies[lobbyId] = lobby;
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Game with ID {lobbyId} not found.");
-            }
-        }
+    public void Remove(int lobbyId)
+    {
+        _lobbies.Remove(lobbyId);
     }
 }

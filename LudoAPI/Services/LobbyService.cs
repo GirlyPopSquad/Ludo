@@ -36,4 +36,9 @@ public class LobbyService : ILobbyService
     {
         _lobbyRepo.UpdateLobby(lobby);
     }
+
+    public void Delete(int lobbyId)
+    {
+        _lobbyRepo.Remove(lobbyId);
+    }
 }

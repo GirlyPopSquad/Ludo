@@ -7,4 +7,5 @@ public interface ILobbyService
     Lobby CreateLobby();
     Lobby GetLobbyById(int id);
     void UpdateLobby(Lobby lobby);
+    void Delete(int lobbyId);
 }

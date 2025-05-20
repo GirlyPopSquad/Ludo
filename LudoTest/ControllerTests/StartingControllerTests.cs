@@ -63,8 +63,8 @@ public class StartingControllerTests
         var result = _controller.GetReRollers(lobbyId);
 
         // Assert
-        result.Result.Should().BeOfType<BadRequestObjectResult>()
-            .Which.Value.Should().Be("Could not find rerollers");
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().Be(reRollers);
     }
 
     [Fact]

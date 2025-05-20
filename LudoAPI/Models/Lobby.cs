@@ -4,7 +4,7 @@ public class Lobby
 {
     public int Id { get; }
     
-    public List<Player> Players { get; set; } 
+    public List<Player> Players { get; } 
 
     public List<Roll> Rolls { get; set; } = [];
     

@@ -23,7 +23,7 @@ public class StartingService : IStartingService
         {
             throw new Exception("This player hasn't rolled yet, and therefore cant reroll");
         }
-            
+
         var newRollValue = _diceService.RollDice();
         oldRoll.Value = newRollValue;
 
@@ -46,12 +46,12 @@ public class StartingService : IStartingService
         var rerollers = lobby.Players
             .IntersectBy(rerollersIds, player => player.Id)
             .ToList();
-            
+
         //remove non-rerollers rolls
         lobby.Rolls = startingRolls
             .IntersectBy(rerollersIds, roll => roll.PlayerId)
             .ToList();
-            
+
         _lobbyService.UpdateLobby(lobby);
 
         return rerollers;
@@ -66,7 +66,7 @@ public class StartingService : IStartingService
     public Lobby DoNextStartingRoll(int lobbyId)
     {
         var lobby = _lobbyService.GetLobbyById(lobbyId);
-            
+
         int playerCount = lobby.Players.Count;
 
         int rollCount = lobby.Rolls.Count;
@@ -82,7 +82,6 @@ public class StartingService : IStartingService
         var newRoll = new Roll(player.Id, value);
         lobby.Rolls.Add(newRoll);
 
-        //todo: add this to test
         _lobbyService.UpdateLobby(lobby);
 
         return lobby;

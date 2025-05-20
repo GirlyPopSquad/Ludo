@@ -4,7 +4,6 @@ namespace LudoAPI.Services;
 
 public interface IGameService
 {
-    int CreateFromLobby(int lobbyId);
     void NextTurn(int gameId);
     int GetCurrentPlayerId(int gameId);
     bool GetIsTimeToRoll(int gameId);
@@ -12,4 +11,5 @@ public interface IGameService
     void HandlePlayerFinished(int gameId, Color pieceColor);
     bool HasPlayerFinished(int gameId, int playerId);
     bool HasGameEnded(int gameId);
+    int CreateGame(Game game);
 }

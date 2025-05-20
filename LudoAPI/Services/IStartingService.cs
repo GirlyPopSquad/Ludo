@@ -1,12 +1,11 @@
 ﻿using LudoAPI.Models;
 
-namespace LudoAPI.Services
+namespace LudoAPI.Services;
+
+public interface IStartingService
 {
-    public interface IStartingService
-    {
-        List<Player> GetReRollers(int lobbyId);
-        bool ShouldReRoll(List<Roll> startingRolls);
-        Lobby DoNextStartingRoll(int lobbyId);
-        Lobby HandleReroll(int lobbyId, int playerId);
-    }
+    List<Player> GetReRollers(int lobbyId);
+    bool ShouldReRoll(List<Roll> startingRolls);
+    Lobby DoNextStartingRoll(int lobbyId);
+    Lobby HandleReroll(int lobbyId, int playerId);
 }

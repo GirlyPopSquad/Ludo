@@ -8,16 +8,19 @@ namespace LudoAPI.Controllers;
 public class GameController: ControllerBase
 {
     private readonly IGameService _gameService;
+    private readonly IGameStartingService _gameStartingService;
 
-    public GameController(IGameService gameService)
+    public GameController(IGameService gameService, IGameStartingService gameStartingService)
     {
         _gameService = gameService;
+        _gameStartingService = gameStartingService;
     }
-
+    
     [HttpPost("create/{lobbyId}")]
     public ActionResult<int> CreateGame(int lobbyId)
     {
-        var gameId = _gameService.CreateFromLobby(lobbyId);
+        var gameId = _gameStartingService.SetupGame(lobbyId);
+        
         return Ok(gameId);
     }
 

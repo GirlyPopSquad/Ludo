@@ -12,7 +12,7 @@ public class StartingServiceTests
     private readonly Mock<IDiceService> _diceServiceMock;
     private readonly StartingService _startingService;
     private readonly Mock<ILobbyService> _lobbyServiceMock;
-        
+
     private static readonly Player BluePlayer = PlayerTestData.BluePlayer;
     private static readonly Player RedPlayer = PlayerTestData.RedPlayer;
     private static readonly Player GreenPlayer = PlayerTestData.GreenPlayer;
@@ -79,8 +79,17 @@ public class StartingServiceTests
     [ClassData(typeof(ReRollersData))]
     public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<Player> expected)
     {
+        //Arrange
+        var players = rolls.Select(r => new Player((Color)r.PlayerId)).ToList();
+        var lobby = new Lobby(1, players)
+        {
+            Rolls = rolls
+        };
+
+        _lobbyServiceMock.Setup(lM => lM.GetLobbyById(lobby.Id)).Returns(lobby);
+
         //Act
-        var actual = _startingService.GetReRollers(rolls);
+        var actual = _startingService.GetReRollers(lobby.Id);
 
         //Assert
         actual.Should().BeEquivalentTo(expected);
@@ -92,28 +101,33 @@ public class StartingServiceTests
         //Arrange
         _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
 
-        Lobby lobby = new Lobby(1, [
+        var lobbyId = 1;
+
+        Lobby lobby = new Lobby(lobbyId, [
             BluePlayer,
             RedPlayer,
             GreenPlayer,
             YellowPlayer
         ]);
 
-        Lobby expectedLobby = new Lobby(1, [
+        Lobby expectedLobby = new Lobby(lobbyId, [
             BluePlayer,
             RedPlayer,
             GreenPlayer,
             YellowPlayer
         ]);
+        _lobbyServiceMock.Setup(service => service.GetLobbyById(lobbyId))
+            .Returns(lobby);
 
         var expectedRoll = new Roll(BluePlayer.Id, 1);
         expectedLobby.Rolls.Add(expectedRoll);
 
         //Act
-        var result = _startingService.DoNextStartingRoll(lobby);
+        var result = _startingService.DoNextStartingRoll(lobby.Id);
 
         //Assert
         result.Should().BeEquivalentTo(expectedLobby);
+        _lobbyServiceMock.Verify(lm => lm.UpdateLobby(It.IsAny<Lobby>()), Times.Once);
     }
 
     [Fact]
@@ -131,7 +145,7 @@ public class StartingServiceTests
             GreenPlayer,
             YellowPlayer
         };
-            
+
         var initialLobby = new Lobby(lobbyId, lobbyPlayers);
 
         var initialRolls = new List<Roll>
@@ -141,11 +155,11 @@ public class StartingServiceTests
             new(lobbyPlayers[2].Id, 6),
             new(lobbyPlayers[3].Id, 5),
         };
-            
+
         initialLobby.Rolls = initialRolls;
 
         const int rerollValue = 4;
-        var dicereroll = new Roll(testplayer, rerollValue);
+        var dicereroll = new Roll(testplayer.Id, rerollValue);
 
         var updatedRolls = new List<Roll>
         {
@@ -154,20 +168,20 @@ public class StartingServiceTests
             new(lobbyPlayers[2].Id, 6),
             new(lobbyPlayers[3].Id, 5),
         };
-            
+
         var updatedLobby = initialLobby;
         updatedLobby.Rolls = updatedRolls;
-            
+
         _lobbyServiceMock.Setup(ls => ls.GetLobbyById(lobbyId)).Returns(initialLobby);
         _diceServiceMock.Setup(ds => ds.RollDice()).Returns(rerollValue);
-            
+
         //Act
         var result = _startingService.HandleReroll(lobbyId, testplayer.Id);
 
         //Assert
         _lobbyServiceMock.Verify(ls => ls.GetLobbyById(lobbyId), Times.Once);
         _lobbyServiceMock.Verify(ls => ls.UpdateLobby(It.IsAny<Lobby>()), Times.Once);
-            
+
         result.Should().BeEquivalentTo(updatedLobby);
     }
 }

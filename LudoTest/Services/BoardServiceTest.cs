@@ -33,7 +33,7 @@ public class BoardServiceTest
             .Returns(1);
 
         //act
-        var result = _service.InitStandardBoard(gameId);
+        var result = _service.CreateStandardBoard(gameId);
 
         //assert
         result.Should().Be(1);

@@ -50,9 +50,9 @@ public class BoardService : IBoardService
         return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<EndTile>().Where(endTile => endTile.Color == pieceColor).ToArray();
     }
 
-    public List<HomeTile> GetHomeTiles(int gameId)
+    public HomeTile[] GetHomeTiles(int gameId)
     {
-        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToList();
+        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToArray();
     }
 
     /// <summary>
@@ -62,10 +62,8 @@ public class BoardService : IBoardService
     /// <returns>
     /// The ID of the newly created board.
     /// </returns>
-    public int InitStandardBoard(int gameId)
+    public int CreateStandardBoard(int gameId)
     {
-        //todo check if gameId is valid, before proceeding   
-
         var boardMap = BoardMapLibrary.StandardBoard;
         var rows = boardMap.GetLength(0);
         var cols = boardMap.GetLength(1);
