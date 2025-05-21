@@ -85,11 +85,13 @@ public class MovablePieceService : IMovablePieceService
 
             if (rollValue > 1)
             {
+                var goingForward = true;
                 //handle intermediate coordinates
                 for (var i = 1; i < rollValue; i++)
                 {
                     var canPassTroughCoordinate =
                         _ruleService.CanPiecePassCoordinate(gameId, piece, nextCoordinate);
+                    
                     if (!canPassTroughCoordinate)
                     {
                         isPieceMovable = false;
@@ -97,7 +99,29 @@ public class MovablePieceService : IMovablePieceService
                     }
 
                     var tempTile = _boardService.GetTileFromCoordinate(gameId, nextCoordinate);
-                    nextCoordinate = tempTile.NextCoordinate(piece);
+
+                    if (goingForward)
+                    {
+                        nextCoordinate = tempTile.NextCoordinate(piece);
+                    }
+                    else
+                    {
+                        if (tempTile is EndPathTile endpathtile)
+                        {
+                            nextCoordinate = endpathtile.FormerCoordinate();
+                        }
+                        else
+                        {
+                            throw new Exception("You cant move backwards ont this tile");
+
+                        }
+                    }
+                    
+                    
+                    if (tempTile is EndTile)
+                    {
+                        goingForward = false;
+                    }
                 }
             }
 
@@ -137,10 +161,10 @@ public class MovablePieceService : IMovablePieceService
         }
 
         var piece = _pieceService.GetPiece(gameId, pieceNumber);
-
-        var predictedCoordinate = chosenPiece.PotentialCoordinate;
-        var finalCoordinate = predictedCoordinate;
-        var willThisPieceBeKickedHome = _ruleService.WillThisPieceBeKickedHome(gameId, predictedCoordinate);
+        
+        var finalCoordinate = chosenPiece.PotentialCoordinate;
+        
+        var willThisPieceBeKickedHome = _ruleService.WillThisPieceBeKickedHome(gameId, chosenPiece);
         if (willThisPieceBeKickedHome)
         {
             finalCoordinate = FindAvailableHomeCoordinate(gameId, piece);
@@ -153,17 +177,15 @@ public class MovablePieceService : IMovablePieceService
             KickPieceHome(gameId, pieceToBeKicked);
         }
 
-        //todo handle endcheck
-        piece.Coordinate = finalCoordinate;
-
         //Check for win
         var isPlayersLastRound = _ruleService.WillThisBePlayersLastRound(gameId, chosenPiece);
-
+        
         if (isPlayersLastRound)
         {
             _gameService.HandlePlayerFinished(gameId, piece.Color);
         }
 
+        piece.Coordinate = finalCoordinate;
         _pieceService.UpdatePiece(gameId, piece);
 
         var canRollAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);

@@ -55,11 +55,6 @@ public class RuleService : IRuleService
 
     public bool CanPiecePassCoordinate(int gameId, Piece piece, Coordinate coordinate)
     {
-        var tile = _boardService.GetTileFromCoordinate(gameId, coordinate);
-
-        //if the tile is an EndTile, this piece cant pass
-        if (tile is EndTile) return false;
-
         var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, coordinate);
 
         switch (piecesOnCoordinate.Length)
@@ -77,11 +72,14 @@ public class RuleService : IRuleService
         return pieceOfSameColor == null;
     }
 
-    public bool WillThisPieceBeKickedHome(int gameId, Coordinate potentialCoordinate)
+    public bool WillThisPieceBeKickedHome(int gameId, MovablePiece movablePiece)
     {
-        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, potentialCoordinate);
+        var piece = _pieceService.GetPiece(gameId, movablePiece.PieceNumber);
+        
+        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, movablePiece.PotentialCoordinate);
+        var piecesOfDifferentColor = piecesAtCoordinate.Where(p=> p.Color != piece.Color);
 
-        return piecesAtCoordinate.Length == 2;
+        return piecesOfDifferentColor.Count() == 2;
     }
 
     public Piece[] GetPiecesThatWillBeKickedHome(int gameId, MovablePiece chosenPiece)
@@ -111,12 +109,12 @@ public class RuleService : IRuleService
 
         var playersEndTileCoordinates = _boardService.GetEndTilesFromColor(gameId, piece.Color).Select(t=> t.Coordinate).ToArray();
         var playersOtherPieces = _pieceService.GetPieces(gameId, (int)piece.Color)
-            .Where(p => p.PieceNumber != piece.PieceNumber).ToArray();
-        
-        var playersPiecesAtEnd = playersOtherPieces.IntersectBy(playersEndTileCoordinates, p => p.Coordinate);
+            .Where(p => p.PieceNumber != chosenPiece.PieceNumber).ToArray();
+
+        var playersPiecesAtEnd = playersOtherPieces.Where(p => playersEndTileCoordinates.Contains(p.Coordinate)).ToArray();
 
         //check if this is the last piece to make it to the end
-        if (playersOtherPieces.Length == playersPiecesAtEnd.Count())
+        if (playersOtherPieces.Length == playersPiecesAtEnd.Length)
         {
             return true;
         }
