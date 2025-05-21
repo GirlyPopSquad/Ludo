@@ -7,5 +7,5 @@ public interface ILobbyService
     Lobby CreateLobby();
     Lobby GetLobbyById(int id);
     void UpdateLobby(Lobby lobby);
-    void RemoveOldRolls(int id, List<Player> rerollers);
+    void Delete(int lobbyId);
 }

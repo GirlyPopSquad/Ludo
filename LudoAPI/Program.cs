@@ -26,6 +26,9 @@ namespace LudoAPI
             
             builder.Services.AddScoped<IStartingService, StartingService>();
 
+            builder.Services.AddScoped<IGameStartingService, GameStartingService>();
+            builder.Services.AddScoped<IPieceCreationService, PieceCreationService>();
+
             builder.Services.AddSingleton<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IGameService, GameService>();
             
@@ -37,7 +40,8 @@ namespace LudoAPI
             
             builder.Services.AddScoped<IMovablePieceService, MovablePieceService>();
             builder.Services.AddSingleton<IMovablePieceRepository, MovablePieceRepository>();
-            
+
+            builder.Services.AddScoped<IStartingRuleService, StartingRuleService>();
             builder.Services.AddScoped<IRuleService, RuleService>();
 
             var app = builder.Build();

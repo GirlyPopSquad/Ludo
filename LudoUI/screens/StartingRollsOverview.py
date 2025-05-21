@@ -1,5 +1,6 @@
 import pygame
 
+import clients.GameClient as gameClient
 from Constants import WIDTH, WHITE, HOT_PINK, DEEP_PINK
 from clients.LobbyClient import get_lobby
 from clients.StartingRollClient import get_should_reroll
@@ -9,7 +10,6 @@ from draw.ludo_piece import draw_ludo_piece
 from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_id
 from stateManagers.IsPygameRunning import set_is_pygame_running, get_is_pygame_running
 from stateManagers.LobbyStateManager import LobbyState, get_lobby_id, get_lobby_state, set_lobby_state
-import clients.GameClient as gameClient
 
 
 def starting_rolls_overview(screen, font):
@@ -68,7 +68,6 @@ def starting_rolls_overview(screen, font):
 def setup_start_game_button():
     return init_standard_button("Start Game", HOT_PINK, DEEP_PINK, on_start_game)
 
-# TODO: implement
 def on_start_game():
 
     lobby_id = get_lobby_id()

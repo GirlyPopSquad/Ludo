@@ -2,6 +2,7 @@ from enum import Enum
 
 from Constants import BLUE, YELLOW, RED, GREEN
 
+
 class PlayerColor(Enum):
     RED = 1
     GREEN = 2
@@ -16,7 +17,6 @@ colorcode = {
 }
 
 tkinter_colorcode = {
-    #todo: these are from copilot, should be checked
     PlayerColor.BLUE: "#50A2FF",
     PlayerColor.GREEN: "#00C800",
     PlayerColor.RED: "#C80000",
@@ -26,8 +26,8 @@ tkinter_colorcode = {
 def get_player_color_from_int(i):
     return PlayerColor(i)
 
-def get_piece_colorcode(piece_number):
-    return colorcode[PlayerColor(piece_number)]
+def get_piece_colorcode(player_id):
+    return colorcode[PlayerColor(player_id)]
 
 def get_tkinter_colorcode(piece_number):
     return tkinter_colorcode[PlayerColor(piece_number)]

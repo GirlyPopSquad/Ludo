@@ -7,5 +7,5 @@ public interface ILobbyRepository
     Lobby AddNewLobby(List<Player> lobbyPlayers);
     Lobby Get(int id);
     void UpdateLobby(Lobby lobby);
-    void RemoveOldRolls(int lobbyId, List<Player> rerollers);
+    void Remove(int lobbyId);
 }

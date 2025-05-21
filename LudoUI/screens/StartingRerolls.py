@@ -1,12 +1,11 @@
 import pygame
 
 from Constants import WHITE, WIDTH, DEEP_PINK, HOT_PINK
-from clients.StartingRollClient import get_rerollers, handle_reroll, remove_old_rolls
+from clients.StartingRollClient import get_rerollers, handle_reroll
 from draw.button import init_standard_button
-from clients.LobbyClient import get_lobby
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
-from stateManagers.GameStateManager import quit_game, get_game_state, GameState, set_game_state
+from stateManagers.GameStateManager import quit_game, get_game_state, GameState
 from stateManagers.LobbyStateManager import LobbyState, get_lobby_id, get_lobby_state, set_lobby_state
 
 
@@ -15,10 +14,8 @@ def starting_rerolls(screen, font):
     screen.fill(WHITE)
 
     lobby_id = get_lobby_id()
-    lobby = get_lobby(lobby_id)
-    reroll_players = get_rerollers(lobby.rolls)
-    remove_old_rolls(lobby.lobby_id, reroll_players)    
-    
+    reroll_players = get_rerollers(lobby_id)
+
     reroll_frame(screen, font, 0, reroll_players)
     
     set_lobby_state(LobbyState.ROLLS_OVERVIEW)
@@ -29,7 +26,7 @@ def reroll_frame(screen, font, index, reroll_players):
     player = reroll_players[index]
 
     def on_reroll():
-        reroll_value = handle_reroll(player)
+        reroll_value = handle_reroll(player.id)
         reroll_frame_value(screen, font, index, reroll_players, reroll_value)
 
     draw_ludo_piece(screen, WIDTH // 5, 180, player.id, font)

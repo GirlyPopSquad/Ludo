@@ -50,18 +50,23 @@ public class BoardService : IBoardService
         return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<EndTile>().Where(endTile => endTile.Color == pieceColor).ToArray();
     }
 
-    public List<HomeTile> GetHomeTiles(int gameId)
+    public HomeTile[] GetHomeTiles(int gameId)
     {
-        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToList();
+        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToArray();
     }
 
-    public int InitStandardBoard(int gameId)
+    /// <summary>
+    /// Initializes a standard Ludo board for a given game ID.
+    /// </summary>
+    /// <param name="gameId">The ID of the game for which the board is being initialized.</param>
+    /// <returns>
+    /// The ID of the newly created board.
+    /// </returns>
+    public int CreateStandardBoard(int gameId)
     {
-        //todo check if gameId is valid, before proceeding   
-
         var boardMap = BoardMapLibrary.StandardBoard;
-        int rows = boardMap.GetLength(0);
-        int cols = boardMap.GetLength(1);
+        var rows = boardMap.GetLength(0);
+        var cols = boardMap.GetLength(1);
 
         var tiles = MakeTilesFromMap(boardMap);
 
@@ -71,7 +76,7 @@ public class BoardService : IBoardService
 
     public Dictionary<string, Tile> MakeTilesFromMap(string[,] boardMap)
     {
-        Dictionary<string, Tile> tiles = IdentifyTiles(boardMap);
+        var tiles = IdentifyTiles(boardMap);
 
         var startTiles = tiles.Values.OfType<StartTile>().ToList();
         var homeTiles = tiles.Values.OfType<HomeTile>().ToArray();

@@ -3,9 +3,11 @@
 public class Player
 {
     public int Id {  get; }
+    public Color Color {  get; }
 
-    public Player(int id)
+    public Player(Color color)
     {
-        Id = id;
+        Id = (int) color;
+        Color = color;
     }
 }
