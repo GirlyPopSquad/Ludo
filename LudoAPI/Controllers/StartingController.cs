@@ -14,6 +14,8 @@ namespace LudoAPI.Controllers
             _startingService = startingService;
         }
 
+        
+        //todo: could take lobbyId as only param (is true for most of these)
         [HttpPost("StartingRoll")]
         public ActionResult<Lobby> GetStartingRoll([FromBody] Lobby lobby)
         {
@@ -21,7 +23,7 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("GetRerollers")]
-        public ActionResult<List<LobbyPlayer>> GetReRollers([FromBody] List<Roll> startingRolls)
+        public ActionResult<List<Player>> GetReRollers([FromBody] List<Roll> startingRolls)
         {
             var rerollers = _startingService.GetReRollers(startingRolls);
             if (rerollers.Count == 0 || rerollers == null)
@@ -33,7 +35,7 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("RemoveOldRolls/{lobbyId}")]
-        public ActionResult RemoveOldRolls(int lobbyId, [FromBody] List<LobbyPlayer> rerollers)
+        public ActionResult RemoveOldRolls(int lobbyId, [FromBody] List<Player> rerollers)
         {
             try
             {
@@ -61,7 +63,7 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("HandleReroll/{lobbyId}")]
-        public ActionResult<Lobby> HandleReroll(int lobbyId, [FromBody] LobbyPlayer player)
+        public ActionResult<Lobby> HandleReroll(int lobbyId, [FromBody] Player player)
         {
             return _startingService.HandleReroll(lobbyId, player);
         }

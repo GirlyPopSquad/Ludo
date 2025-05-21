@@ -14,12 +14,12 @@ public class LobbyService : ILobbyService
 
     public Lobby CreateLobby()
     {
-        var lobbyPlayers = new List<LobbyPlayer>()
+        var lobbyPlayers = new List<Player>()
         {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4),
+            new Player(1),
+            new Player(2),
+            new Player(3),
+            new Player(4),
         };
 
         Lobby lobby = _lobbyRepo.AddNewLobby(lobbyPlayers);
@@ -32,7 +32,7 @@ public class LobbyService : ILobbyService
         return _lobbyRepo.Get(id);
     }
 
-    public void RemoveOldRolls(int id, List<LobbyPlayer> rerollers)
+    public void RemoveOldRolls(int id, List<Player> rerollers)
     {
         _lobbyRepo.RemoveOldRolls(id, rerollers);
     }

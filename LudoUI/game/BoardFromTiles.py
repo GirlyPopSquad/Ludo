@@ -3,9 +3,11 @@ from tkinter import *
 import clients.GameClient as gameClient
 from PlayerColor import get_tkinter_colorcode
 from clients.BoardClient import get_board_from_game_id
+from clients.GameplayClient import get_movable_pieces, move_piece
 from clients.PieceClient import get_pieces_from_game
-from clients.RollClient import Roll
+from clients.RollClient import do_next_roll
 from models.ArrowTile import ArrowTile, ArrowDirection
+from models.Piece import Piece
 from models.Tile import Tile
 from stateManagers.GameStateManager import get_game_id
 
@@ -15,6 +17,7 @@ class BoardFromTiles:
 
     board = get_board_from_game_id(game_id)
     pieces = get_pieces_from_game(game_id)
+
 
     # Dictionary to store piece ID, when they are created with tkinter, so that they may be removed again
     pieces_dict = {}
@@ -37,6 +40,12 @@ class BoardFromTiles:
 
     canvas_width = padding_left + (grid_size * grid_width) + padding_right
     canvas_height = padding_top + (grid_size * grid_height) + padding_bottom
+
+    # Dice box coords
+    dice_x0 = 20
+    dice_y0 = 50
+    dice_x1 = 80
+    dice_y1 = 110
 
     def __init__(self, root):
 
@@ -73,7 +82,6 @@ class BoardFromTiles:
             self.pieces_dict.update({piece.piece_number: piece_id})
 
     def place_piece(self, coords, color):
-
         # the amount the piece is offset from the tile
         piece_margin = 7
 
@@ -84,9 +92,22 @@ class BoardFromTiles:
 
         return self.canvas.create_oval(
             x0, y0,
-            x1, y1,  # Adjusting for a margin (5px offset)
-            fill=get_tkinter_colorcode(int(color)), outline="black"
+            x1, y1,
+            fill=get_tkinter_colorcode(color), outline="black",
         )
+    
+    def move_piece(self, piece:Piece):
+        # Remove the old piece if it exists
+        piece_id = self.pieces_dict.get(piece.piece_number)
+        if piece_id:
+            self.canvas.delete(piece_id)
+
+        # Create the new piece at new_coords
+        piece_id = self.place_piece(piece.coordinate, piece.color)
+
+        # Update the dictionary with the new ID
+        self.pieces_dict[piece.piece_number] = piece_id
+
 
     def draw_tile(self, coords, color):
         x0 = self.board_x0 + (self.grid_size * coords.x)
@@ -150,11 +171,6 @@ class BoardFromTiles:
         self.canvas.create_polygon(arrow_points, fill=color, outline="black", width=2)
 
     def add_clickable_dice(self):
-        # Dice box coords
-        self.dice_x0 = 20
-        self.dice_y0 = 50
-        self.dice_x1 = 80
-        self.dice_y1 = 110
 
         # Draw the dice rectangle
         self.canvas.create_rectangle(self.dice_x0, self.dice_y0, self.dice_x1, self.dice_y1, fill="white",
@@ -162,21 +178,30 @@ class BoardFromTiles:
 
         # Bind click to the box
         self.canvas.tag_bind("dice_box", "<Button-1>", self.roll_dice)
+        
+        starting_player = gameClient.get_current_playerid(self.game_id)
 
-        self.draw_player_identifier()
+        self.draw_player_identifier(starting_player)
 
         # Initial roll
         self.draw_dice_eyes(1)
 
     def roll_dice(self, event=None):
-        roll = Roll()
-        self.draw_dice_eyes(roll)
-        gameClient.next_turn(self.game_id)  # Needs to be removed, not the correct place it makes next turn
-        self.draw_player_identifier()
+        roll = do_next_roll(self.game_id)
 
-    def draw_player_identifier(self):
-        playerId = gameClient.get_current_playerid(self.game_id)
+        #todo: this doesnt happen
+        self.draw_dice_eyes(roll.value)
 
+        movable_pieces = get_movable_pieces(self.game_id)
+
+        if len(movable_pieces) > 0:
+            self.highlight_movable_pieces(movable_pieces)
+
+        player_id = gameClient.get_current_playerid(self.game_id)
+
+        self.draw_player_identifier(player_id)
+
+    def draw_player_identifier(self, player_id):
         self.canvas.delete("player_indicator")
 
         circle_radius = 10
@@ -186,7 +211,7 @@ class BoardFromTiles:
         self.canvas.create_oval(
             circle_center_x - circle_radius, circle_center_y - circle_radius,
             circle_center_x + circle_radius, circle_center_y + circle_radius,
-            fill=get_tkinter_colorcode(playerId), outline="black",
+            fill=get_tkinter_colorcode(player_id), outline="black",
             tags="player_indicator"
         )
 
@@ -228,6 +253,34 @@ class BoardFromTiles:
             x, y = positions[pos]
             dot = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill="black")
             self.dice_dots.append(dot)
+    
+    def highlight_movable_pieces(self, movable_pieces):
+        for piece in movable_pieces:
+            self.highlight_piece(piece)
+            
+    def highlight_piece(self, piece):
+        coords = piece.coordinate
+        margin = 3  # Less margin so it looks like a ring around the piece
+
+        x0 = self.board_x0 + (self.grid_size * coords.x) + margin
+        y0 = self.board_y0 + (self.grid_size * coords.y) + margin
+        x1 = x0 + self.grid_size - 2 * margin
+        y1 = y0 + self.grid_size - 2 * margin
+
+        highlight_id = self.canvas.create_oval(
+            x0, y0, x1, y1,
+            outline="black", width=4, tags=["highlight", "piece_selector:" + str(piece.piece_number)]
+        )
+        self.canvas.tag_bind(highlight_id, "<Button-1>", lambda event: self.choose_piece(piece.piece_number))
+
+    def choose_piece(self, piece_number):
+        updated_piece = move_piece(self.game_id, piece_number)
+        self.move_piece(updated_piece)
+        self.clear_highlights()
+
+    def clear_highlights(self):
+        self.canvas.delete("highlight")
+
 
 
 def open_ludoboard_window():

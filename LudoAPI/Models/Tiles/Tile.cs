@@ -27,12 +27,12 @@ public class Tile
     public Tile(Coordinate coordinate, Move move)
     {
         Coordinate = coordinate;
-        this.Move = move;
+        Move = move;
     }
 
     public Tile(Coordinate coordinate, Color color, Move move)
     {
-        this.Move = move;
+        Move = move;
         Color = color;
         Coordinate = coordinate;
     }
@@ -40,9 +40,9 @@ public class Tile
 
     public virtual Coordinate NextCoordinate(Piece piece)
     {
-        if (Move == null) return piece.Coordinate;
+        if (Move == null) return Coordinate;
         
-        var nextCoordinate = piece.Coordinate.CalcNextCoordinateFromMove(Move);
+        var nextCoordinate = Coordinate.CalcNextCoordinateFromMove(Move);
         
         return nextCoordinate;
     }

@@ -1,10 +1,10 @@
-﻿using LudoAPI.Models;
-
-namespace LudoAPI.Services;
+﻿namespace LudoAPI.Services;
 
 public interface IGameService
 {
     int CreateFromLobby(int lobbyId);
-    int NextTurn(int gameId);
+    void NextTurn(int gameId);
     int GetCurrentPlayerId(int gameId);
+    bool GetIsTimeToRoll(int gameId);
+    void UpdateIsTimeToRoll(int gameId, bool isTimeToRoll);
 }

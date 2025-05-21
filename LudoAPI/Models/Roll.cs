@@ -1,15 +1,24 @@
-﻿namespace LudoAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace LudoAPI.Models
 {
     public class Roll
     {
-        public LobbyPlayer Player { get; set; }
+        public int PlayerId { get; set; }
 
         public int Value { get; set; }
 
-        public Roll(LobbyPlayer player, int value)
+        public Roll(Player player, int value)
         {
-            this.Player = player;
-            this.Value = value;
+            PlayerId = player.Id;
+            Value = value;
+        }
+
+        [JsonConstructor]
+        public Roll(int playerId, int value)
+        {
+            PlayerId = playerId;
+            Value = value;
         }
     }
 }

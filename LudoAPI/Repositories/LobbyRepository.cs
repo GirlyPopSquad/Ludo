@@ -6,7 +6,7 @@ namespace LudoAPI.Repositories
     {
         public List<Lobby> Lobbies { get; } = new List<Lobby>();
 
-        public Lobby AddNewLobby(List<LobbyPlayer> lobbyPlayers)
+        public Lobby AddNewLobby(List<Player> lobbyPlayers)
         {
             Lobby newLobby = new(GetNextId(), lobbyPlayers);
             Lobbies.Add(newLobby);
@@ -23,7 +23,7 @@ namespace LudoAPI.Repositories
             return Lobbies[Lobbies.Count - 1].Id + 1;
         }
 
-        public void RemoveOldRolls(int lobbyId, List<LobbyPlayer> rerollers)
+        public void RemoveOldRolls(int lobbyId, List<Player> rerollers)
         {
             var lobby = Lobbies.First(lobby => lobby.Id == lobbyId);
             var rollsToKeep = new List<Roll>(); 
@@ -31,7 +31,7 @@ namespace LudoAPI.Repositories
             {
                 foreach(var reroller in rerollers)
                 {
-                    if (roll.Player.Id == reroller.Id)
+                    if (roll.PlayerId == reroller.Id)
                     {
                         rollsToKeep.Add(roll);
                     }

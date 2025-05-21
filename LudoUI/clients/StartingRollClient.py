@@ -71,6 +71,6 @@ def handle_reroll(player: LobbyPlayer):
     rolls = updated_lobby.rolls
 
     for roll in rolls:
-        if roll.player.id == player_id:
+        if roll.player_id == player_id:
             return roll.value
     return None

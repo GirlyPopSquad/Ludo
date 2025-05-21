@@ -5,20 +5,36 @@ namespace LudoAPI.Services;
 
 public class PieceService : IPieceService
 {
-    private readonly IPieceRepository _repository;
+    private readonly IPieceRepository _pieceRepository;
 
-    public PieceService(IPieceRepository repository)
+    public PieceService(IPieceRepository pieceRepository)
     {
-        _repository = repository;
+        _pieceRepository = pieceRepository;
     }
 
     public void SavePieces(int gameId, List<Piece> pieces)
     {
-        _repository.SavePieces(gameId, pieces);
+        _pieceRepository.SavePieces(gameId, pieces);
     }
 
     public List<Piece> GetPieces(int gameId)
     {
-        return _repository.GetPiecesFromGameId(gameId);
+        return _pieceRepository.GetPiecesFromGameId(gameId);
+    }
+
+    public List<Piece> GetPieces(int gameId, int playerId)
+    {
+        return _pieceRepository.GetPiecesFromGameId(gameId)
+            .Where(piece => piece.Color == (Color)playerId).ToList();
+    }
+
+    public void UpdatePiece(int gameId, Piece piece)
+    {
+        _pieceRepository.UpdatePiece(gameId, piece);
+    }
+
+    public Piece? GetPiece(int gameId, int pieceNumber)
+    {
+        return _pieceRepository.GetPiece(gameId, pieceNumber);
     }
 }

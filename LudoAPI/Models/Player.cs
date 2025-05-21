@@ -1,10 +1,10 @@
 ﻿namespace LudoAPI.Models;
 
-public class GamePlayer
+public class Player
 {
     public int Id {  get; }
 
-    public GamePlayer(int id)
+    public Player(int id)
     {
         Id = id;
     }

@@ -23,18 +23,18 @@ def starting_rolls_overview(screen, font):
 
     #todo: this should come from the backend
     highest_roll = max(looby.rolls, key=lambda r: r.value)
-    winner_id = highest_roll.player.id
+    winner_id = highest_roll.player_id
 
     for i in range(1, len(looby.rolls) + 1):
         piece_position = WIDTH // 5 * i
         dice_position = WIDTH // 5 * i
         roll = looby.rolls[i - 1]
 
-        if(has_to_reroll):
-            draw_ludo_piece(screen, piece_position, 180, roll.player.id, font)
+        if has_to_reroll:
+            draw_ludo_piece(screen, piece_position, 180, roll.player_id, font)
         else:
-            is_winner = roll.player.id == winner_id
-            draw_ludo_piece(screen, piece_position, 180, roll.player.id, font, is_winner)
+            is_winner = roll.player_id == winner_id
+            draw_ludo_piece(screen, piece_position, 180, roll.player_id, font, is_winner)
         
         draw_dice(screen, 40, dice_position, 180, roll.value, font)
 
