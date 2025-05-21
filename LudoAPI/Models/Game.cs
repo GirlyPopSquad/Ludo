@@ -2,18 +2,22 @@
 
 public class Game
 {
-    public int Id {  get; }
-    //todo could be private if not for test?
-    public List<LobbyPlayer> players { get; }
-    //Is initially decided by who rolls the highest number on the dice
-    public int? currentPlayerId {get; set;}
+    public int Id { get; }
+    public List<Player> Players { get; }
+    public int CurrentPlayerId { get; set; }
+    public bool TimeToRoll { get; set; } = true;
+    public List<int> FinishedPlayerIds { get; } = [];
 
-    //todo board/tiles
-    
-    public Game(List<LobbyPlayer> players, int currentPlayerId)
+    public Game(List<Player> players, int currentPlayerId)
     {
-        this.players = players;
-        this.currentPlayerId = currentPlayerId;
+        Players = players;
+        CurrentPlayerId = currentPlayerId;
+    }
+
+    public Game(int id, Game game)
+    {
+        Id = id;
+        Players = game.Players;
+        CurrentPlayerId = game.CurrentPlayerId;
     }
 }
-    

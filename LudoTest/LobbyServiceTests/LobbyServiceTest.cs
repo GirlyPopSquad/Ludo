@@ -2,6 +2,7 @@
 using LudoAPI.Models;
 using LudoAPI.Repositories;
 using LudoAPI.Services;
+using LudoTest.Shared;
 using Moq;
 
 namespace LudoTest.LobbyServiceTests;
@@ -9,24 +10,18 @@ namespace LudoTest.LobbyServiceTests;
 public class LobbyServiceTest
 {
     
-    private readonly Mock<ILobbyRepository> _repository = new Mock<ILobbyRepository>();
+    private readonly Mock<ILobbyRepository> _repository = new();
     
     [Fact]
     public void CreateLobby()
     {
         //Arrange
-        var lobbyPlayers = new List<LobbyPlayer>()
-        {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4),
-        };
+        var lobbyPlayers = PlayerTestData.Get4Players();
         
         var expectedLobby = new Lobby(1, lobbyPlayers);
         
         //this disregards the content of the input list, as long as it is a List of LobbyPlayers 
-        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<LobbyPlayer>>())).Returns(expectedLobby);
+        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<Player>>())).Returns(expectedLobby);
         var lobbyService = new LobbyService(_repository.Object);
         
         //Act
@@ -40,13 +35,7 @@ public class LobbyServiceTest
     public void GetLobbyById()
     {
         //Arrange
-        var expectedLobby = new Lobby(1, new List<LobbyPlayer>()
-        {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4),
-        });
+        var expectedLobby = new Lobby(1, PlayerTestData.Get4Players());
         
         _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
         
@@ -63,13 +52,7 @@ public class LobbyServiceTest
     public void UpdateLobby()
     {
         //Arrange
-        var testLobby = new Lobby(1, new List<LobbyPlayer>
-        {
-            new LobbyPlayer(1),
-            new LobbyPlayer(2),
-            new LobbyPlayer(3),
-            new LobbyPlayer(4)
-        });
+        var testLobby = new Lobby(1, PlayerTestData.Get4Players());
         
         _repository.Setup(repo => repo.UpdateLobby(testLobby));
         

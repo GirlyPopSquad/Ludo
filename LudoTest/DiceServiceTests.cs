@@ -18,22 +18,5 @@ namespace LudoTest
             //Assert
             result.Should().BeOneOf(acceptableNumbers);
         }
-
-
-        [Theory]
-        [InlineData(6, true)]
-        [InlineData(5, false)]
-        public void DiceService_IsItA6_ShouldReturnExpectedResult(int input, bool expected)
-        {
-            // Arrange
-            DiceService service = new DiceService();
-
-            // Act
-            bool result = service.IsItA6(input);
-
-            // Assert
-            result.Should().Be(expected);
-        }
-
     }
 }

@@ -2,12 +2,11 @@ import pygame
 
 from Constants import WHITE, WIDTH, BLACK, HEIGHT, DEEP_PINK
 from PlayerColor import get_piece_colorcode
-from clients.StartingRollClient import next_starting_roll
 from clients.LobbyClient import get_lobby
+from clients.StartingRollClient import next_starting_roll
 from draw.button import init_standard_button
 from draw.dice import draw_dice
 from draw.ludo_piece import draw_ludo_piece
-from screens.StartingRollsOverview import starting_rolls_overview
 from stateManagers.GameStateManager import GameState, get_game_state, quit_game
 from stateManagers.LobbyStateManager import LobbyState, get_lobby_id, get_lobby_state, set_lobby, set_lobby_state
 

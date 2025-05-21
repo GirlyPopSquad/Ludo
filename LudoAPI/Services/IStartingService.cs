@@ -1,14 +1,11 @@
 ﻿using LudoAPI.Models;
 
-namespace LudoAPI.Services
+namespace LudoAPI.Services;
+
+public interface IStartingService
 {
-    public interface IStartingService
-    {
-        Lobby HandleRerolls(Lobby lobby);
-        List<LobbyPlayer> GetReRollers(List<Roll> startingRolls);
-        bool ShouldReRoll(List<Roll> startingRolls);
-        Lobby StartingRoll(Lobby lobby);
-        Lobby HandleReroll(int lobbyId, LobbyPlayer player);
-        void RemoveOldRolls(int id, List<LobbyPlayer> rerollers);
-    }
+    List<Player> GetReRollers(int lobbyId);
+    bool ShouldReRoll(List<Roll> startingRolls);
+    Lobby DoNextStartingRoll(int lobbyId);
+    Lobby HandleReroll(int lobbyId, int playerId);
 }

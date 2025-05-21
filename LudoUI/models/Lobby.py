@@ -14,13 +14,6 @@ class Lobby:
         rolls = [Roll.from_json(roll) for roll in json_data['rolls']]
         return cls(lobby_id=json_data['id'], players=players, rolls=rolls)
 
-    def to_dict(self):
-        return {
-            'id': self.lobby_id,
-            'players': [player.to_dict() for player in self.players],
-            'rolls': [roll.to_dict() for roll in self.rolls]
-        }
-
     def __repr__(self):
         return f"Lobby(lobby_id={self.lobby_id}, players={self.players}, rolls={self.rolls})"
 

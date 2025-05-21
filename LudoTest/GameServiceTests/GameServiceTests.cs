@@ -1,34 +1,36 @@
 ﻿using System.Collections;
 using FluentAssertions;
 using LudoAPI.Models;
+using LudoAPI.Repositories;
 using LudoAPI.Services;
-using Reqnroll;
+using Moq;
 
 namespace LudoTest.GameServiceTests
 {
-    [Binding]
     public class GameServiceTests
     {
-        [Given(@"That no player exists")]
-        [When(@"I start a new game")]
-        [Then(@"The game should have no current player and four players from the lobby")]
+        
+        //todo: bring tests back when theres a plan for how we'll do lobby to game
+        /*
+
         [Theory]
         [ClassData(typeof(LobbyTestData))]
         public void StartNewGame(Lobby lobby)
         {
-            // Arrange
+            //Arrange
             GameService service = new GameService();
 
-            // Act
+            //Act
             var newGame = service.Start(lobby);
 
-            // Assert
-            newGame.currentPlayerId.Should().BeNull();
-            newGame.players.Count.Should().Be(4);
-            newGame.players.Should().BeEquivalentTo(lobby.Players);
+            //Assert
+
+            //A starting player hasn't yet been decided
+            newGame.CurrentPlayerId.Should().BeNull();
+            newGame.Players.Count.Should().Be(4);
+            newGame.Players.Should().BeEquivalentTo(lobby.Players);
         }
     }
-
     
     public class LobbyTestData : IEnumerable<object[]>
     {
@@ -48,5 +50,8 @@ namespace LudoTest.GameServiceTests
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    */
+    
     }
+    
 }

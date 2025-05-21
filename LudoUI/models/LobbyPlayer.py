@@ -1,5 +1,5 @@
 class LobbyPlayer:
-    def __init__(self, id):
+    def __init__(self, id:int):
         self.id = id
 
     @classmethod

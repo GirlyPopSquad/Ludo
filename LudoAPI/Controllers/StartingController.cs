@@ -14,36 +14,18 @@ namespace LudoAPI.Controllers
             _startingService = startingService;
         }
 
-        [HttpPost("StartingRoll")]
-        public ActionResult<Lobby> GetStartingRoll([FromBody] Lobby lobby)
+        [HttpPost("StartingRoll/{lobbyId}")]
+        public ActionResult<Lobby> NextStartingRoll(int lobbyId)
         {
-            return _startingService.StartingRoll(lobby);
+            return _startingService.DoNextStartingRoll(lobbyId);
         }
-
-        [HttpPost("GetRerollers")]
-        public ActionResult<List<LobbyPlayer>> GetReRollers([FromBody] List<Roll> startingRolls)
+        
+        [HttpGet("GetRerollers/{lobbyId}")]
+        public ActionResult<List<Player>> GetReRollers(int lobbyId)
         {
-            var rerollers = _startingService.GetReRollers(startingRolls);
-            if (rerollers.Count == 0 || rerollers == null)
-            {
-                return BadRequest("Could not find rerollers");
-            }
+            var rerollers = _startingService.GetReRollers(lobbyId);
 
             return Ok(rerollers);
-        }
-
-        [HttpPost("RemoveOldRolls/{lobbyId}")]
-        public ActionResult RemoveOldRolls(int lobbyId, [FromBody] List<LobbyPlayer> rerollers)
-        {
-            try
-            {
-                _startingService.RemoveOldRolls(lobbyId, rerollers);
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest("Could not remove old rolls: " + ex.Message);
-            }
         }
 
         [HttpPost("GetShouldReroll")]
@@ -61,9 +43,9 @@ namespace LudoAPI.Controllers
         }
 
         [HttpPost("HandleReroll/{lobbyId}")]
-        public ActionResult<Lobby> HandleReroll(int lobbyId, [FromBody] LobbyPlayer player)
+        public ActionResult<Lobby> HandleReroll(int lobbyId, [FromBody] int playerId)
         {
-            return _startingService.HandleReroll(lobbyId, player);
+            return _startingService.HandleReroll(lobbyId, playerId);
         }
     }
 }

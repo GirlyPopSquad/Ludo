@@ -4,18 +4,31 @@ from Constants import BLUE, YELLOW, RED, GREEN
 
 
 class PlayerColor(Enum):
-    BLUE = 1
+    RED = 1
     GREEN = 2
-    RED = 3
-    YELLOW = 4
+    YELLOW = 3
+    BLUE = 4
 
+colorcode = {
+    PlayerColor.BLUE: BLUE,
+    PlayerColor.GREEN: GREEN,
+    PlayerColor.RED: RED,
+    PlayerColor.YELLOW: YELLOW
+}
 
-colorcode = {}
-colorcode[PlayerColor.BLUE] = BLUE
-colorcode[PlayerColor.GREEN] = GREEN
-colorcode[PlayerColor.RED] = RED
-colorcode[PlayerColor.YELLOW] = YELLOW
+tkinter_colorcode = {
+    PlayerColor.BLUE: "#50A2FF",
+    PlayerColor.GREEN: "#00C800",
+    PlayerColor.RED: "#C80000",
+    PlayerColor.YELLOW: "#FFFF00"
+}
 
+def get_player_color_from_int(i):
+    return PlayerColor(i)
 
-def get_piece_colorcode(piece_number):
-    return colorcode[PlayerColor(piece_number)]
+def get_piece_colorcode(player_id):
+    return colorcode[PlayerColor(player_id)]
+
+def get_tkinter_colorcode(piece_number):
+    return tkinter_colorcode[PlayerColor(piece_number)]
+

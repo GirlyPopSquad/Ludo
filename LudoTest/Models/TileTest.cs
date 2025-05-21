@@ -1,4 +1,6 @@
-﻿using LudoAPI.Models;
+using FluentAssertions;
+using LudoAPI.Models;
+using LudoAPI.Models.Tiles;
 
 namespace LudoTest.Models;
 
@@ -10,15 +12,16 @@ public class TileTest
     {
         //Arrange
         var move = new Move(1,0);
-        var tile = new Tile(move);
+        var tile = new Tile(new Coordinate(0,0), move);
         var blueColor = Color.Blue;
-        var piece = new Piece(blueColor);
+        var piece = new Piece(1, blueColor, tile.Coordinate);
+        var expected = piece.Coordinate.CalcNextCoordinateFromMove(move);
         
         //Act
-        var actual = tile.nextMove(piece);
+        var actual = tile.NextCoordinate(piece);
         
         //Assert
-        Assert.Equal(actual, move);
+        actual.Should().BeEquivalentTo(expected);
         
     }
 }

@@ -4,8 +4,8 @@ namespace LudoAPI.Repositories;
 
 public interface ILobbyRepository
 {
-    Lobby AddNewLobby(List<LobbyPlayer> lobbyPlayers);
+    Lobby AddNewLobby(List<Player> lobbyPlayers);
     Lobby Get(int id);
     void UpdateLobby(Lobby lobby);
-    void RemoveOldRolls(int lobbyId, List<LobbyPlayer> rerollers);
+    void Remove(int lobbyId);
 }

@@ -2,12 +2,12 @@
 
 public class Move
 {
-    private int xChange;
-    private int yChange;
+    public int XChange { get; }
+    public int YChange { get; }
 
     public Move(int xChange, int yChange)
     {
-        this.xChange = xChange;
-        this.yChange = yChange;
+        XChange = xChange;
+        YChange = yChange;
     }
 }

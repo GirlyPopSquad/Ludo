@@ -1,9 +1,9 @@
 import pygame
 
 from Constants import WHITE, WIDTH, BLACK
-from stateManagers.GameStateManager import set_game_state, quit_game, GameState
 from draw.button import init_play_button, init_quit_button
 from draw.ludo_piece import draw_ludo_piece
+from stateManagers.GameStateManager import set_game_state, quit_game, GameState
 
 
 def start_menu(screen, font):

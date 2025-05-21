@@ -1,62 +1,50 @@
 ﻿using LudoAPI.Models;
 
-namespace LudoAPI.Repositories
+namespace LudoAPI.Repositories;
+
+public class LobbyRepository : ILobbyRepository
 {
-    public class LobbyRepository : ILobbyRepository
+    private readonly Dictionary<int, Lobby> _lobbies = new();
+
+    public Lobby AddNewLobby(List<Player> lobbyPlayers)
     {
-        public List<Lobby> Lobbies { get; } = new List<Lobby>();
+        var lobbyId = GetNextId();
+        Lobby newLobby = new(lobbyId, lobbyPlayers);
+        _lobbies.Add(lobbyId, newLobby);
+        return newLobby;
+    }
 
-        public Lobby AddNewLobby(List<LobbyPlayer> lobbyPlayers)
+    private int GetNextId()
+    {
+        if (_lobbies.Count == 0)
         {
-            Lobby newLobby = new(GetNextId(), lobbyPlayers);
-            Lobbies.Add(newLobby);
-            return newLobby;
+            return 1;
         }
 
-        private int GetNextId()
-        {
-            if (Lobbies.Count == 0)
-            {
-                return 1;
-            }
+        return _lobbies.Keys.Max() + 1;
+    }
 
-            return Lobbies[Lobbies.Count - 1].Id + 1;
-        }
+    public Lobby Get(int id)
+    {
+        return _lobbies[id];
+    }
 
-        public void RemoveOldRolls(int lobbyId, List<LobbyPlayer> rerollers)
-        {
-            var lobby = Lobbies.First(lobby => lobby.Id == lobbyId);
-            var rollsToKeep = new List<Roll>(); 
-            foreach(var roll in lobby.Rolls)
-            {
-                foreach(var reroller in rerollers)
-                {
-                    if (roll.Player.Id == reroller.Id)
-                    {
-                        rollsToKeep.Add(roll);
-                    }
-                }   
-            }
-            lobby.Rolls = rollsToKeep;
-        }
+    public void UpdateLobby(Lobby lobby)
+    {
+        var lobbyId = lobby.Id;
 
-        public Lobby Get(int id)
+        if (_lobbies.ContainsKey(lobbyId))
         {
-            return Lobbies.First(lobby => lobby.Id == id);
+            _lobbies[lobbyId] = lobby;
         }
+        else
+        {
+            throw new KeyNotFoundException($"Game with ID {lobbyId} not found.");
+        }
+    }
 
-        public void UpdateLobby(Lobby lobby)
-        {
-            var existingLobby = Lobbies.FirstOrDefault(l => l.Id == lobby.Id);
-            if (existingLobby != null)
-            {
-                existingLobby.Players = lobby.Players;
-                existingLobby.Rolls = lobby.Rolls;
-            }
-            else
-            {
-                throw new Exception("Lobby not found");
-            }
-        }
+    public void Remove(int lobbyId)
+    {
+        _lobbies.Remove(lobbyId);
     }
 }
