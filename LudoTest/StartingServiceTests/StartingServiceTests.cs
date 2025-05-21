@@ -27,7 +27,7 @@ public class StartingServiceTests
 
     [Theory]
     [MemberData(nameof(GetRollsDataAllPlayersRolledOnce))]
-    public void StartingService_ShouldReRoll_ReturnsExpectedResult(List<Roll> rolls, bool expected)
+    public void ShouldReRoll_ReturnsExpectedResult(List<Roll> rolls, bool expected)
     {
         // Act
         var shouldTheyReroll = _startingService.ShouldReRoll(rolls);
@@ -75,28 +75,8 @@ public class StartingServiceTests
         ];
     }
 
-    [Theory]
-    [ClassData(typeof(ReRollersData))]
-    public void StartingService_GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<Player> expected)
-    {
-        //Arrange
-        var players = rolls.Select(r => new Player((Color)r.PlayerId)).ToList();
-        var lobby = new Lobby(1, players)
-        {
-            Rolls = rolls
-        };
-
-        _lobbyServiceMock.Setup(lM => lM.GetLobbyById(lobby.Id)).Returns(lobby);
-
-        //Act
-        var actual = _startingService.GetReRollers(lobby.Id);
-
-        //Assert
-        actual.Should().BeEquivalentTo(expected);
-    }
-
     [Fact]
-    public void StartingRollTest_StartingRoll_ShouldReturnOneStartingRoll()
+    public void StartingRoll_ShouldReturnOneStartingRoll()
     {
         //Arrange
         _diceServiceMock.Setup(service => service.RollDice()).Returns(1);
@@ -131,7 +111,7 @@ public class StartingServiceTests
     }
 
     [Fact]
-    public void StartingService_HandleReroll()
+    public void HandleReroll_MakesExpectedReroll()
     {
         //Arrange
         const int lobbyId = 1;
@@ -183,6 +163,31 @@ public class StartingServiceTests
         _lobbyServiceMock.Verify(ls => ls.UpdateLobby(It.IsAny<Lobby>()), Times.Once);
 
         result.Should().BeEquivalentTo(updatedLobby);
+    }
+    
+    [Theory]
+    [ClassData(typeof(ReRollersData))]
+    public void GetRerollers_ShouldReturnTheRerollers(List<Roll> rolls, List<Player> expected)
+    {
+        //Arrange
+        var players = rolls
+            .Select(r => new Player((Color)r.PlayerId))
+            .ToList();
+        
+        var lobby = new Lobby(1, players)
+        {
+            Rolls = rolls
+        };
+
+        _lobbyServiceMock
+            .Setup(lobbyService => lobbyService.GetLobbyById(lobby.Id))
+            .Returns(lobby);
+
+        //Act
+        var actual = _startingService.GetReRollers(lobby.Id);
+
+        //Assert
+        actual.Should().BeEquivalentTo(expected);
     }
 }
 
