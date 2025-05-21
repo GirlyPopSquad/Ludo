@@ -22,11 +22,10 @@ public class RuleService : IRuleService
 
     public bool PlayerIsAllowedAnotherRoll(int gameId)
     {
-        
         var roll = _rollService.GetLastestRoll(gameId);
         //if player rolled a 6, they can roll again
         if (roll.Value == 6) return true;
-        
+
         var last3Rolls = _rollService.GetLatestRolls(gameId, 3);
 
         //is player has all pieces at home, and has rolled less than 3 times in a row, they can roll again
@@ -40,9 +39,43 @@ public class RuleService : IRuleService
         if (!isAllPiecesHome) return false;
 
         var hasRolledLessThan3TimesInARow = last3Rolls.Count(r => r.PlayerId == roll.PlayerId) < 3;
-        if (hasRolledLessThan3TimesInARow) return true;
+        return hasRolledLessThan3TimesInARow;
+    }
 
+    public bool CanPiecePassTroughCoordinate(int gameId, Piece piece, Coordinate nextCoordinate)
+    {
+        var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, nextCoordinate);
 
-        return false;
+        switch (piecesOnCoordinate.Length)
+        {
+            case 0:
+                return true;
+            case >= 2:
+                return false;
+        }
+
+        var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p => p.Color == piece.Color);
+        return pieceOfSameColor == null;
+    }
+
+    public bool WillThisPieceBeKickedHome(int gameId, Coordinate potentialCoordinate)
+    {
+        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, potentialCoordinate);
+
+        return piecesAtCoordinate.Length == 2;
+    }
+
+    public Piece[] GetPiecesThatWillBeKickedHome(int gameId, MovablePiece chosenPiece)
+    {
+        var piecesAtCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, chosenPiece.PotentialCoordinate);
+
+        if (piecesAtCoordinate.Length is 2 or 0)
+        {
+            return [];
+        }
+
+        var piece = _pieceService.GetPiece(gameId, chosenPiece.PieceNumber);
+
+        return piecesAtCoordinate.Where(p => p.Color != piece.Color).ToArray();
     }
 }
