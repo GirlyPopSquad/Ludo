@@ -27,25 +27,24 @@ public class PieceCreationServiceTest
             Color.Red,
         };
 
-        var hometiles = coordinates
+        var homeTiles = coordinates
             .Select((t, i) => new HomeTile(t, colors[i]))
             .ToArray();
-        
+
         var pieceNumber = 1;
         var expected = coordinates.Select((t, i) =>
         {
             var piece = new Piece(pieceNumber, colors[i], t);
             pieceNumber++;
             return piece;
-        });
+        }).ToList();
 
         var pieceCreationService = new PieceCreationService();
-        
+
         //Arrange
-        var result = pieceCreationService.CreatePlayerPieces(hometiles);
-        
+        var result = pieceCreationService.CreatePlayerPieces(homeTiles);
+
         //Assert
         result.Should().BeEquivalentTo(expected);
-        
     }
 }
