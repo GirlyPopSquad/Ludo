@@ -8,7 +8,7 @@ namespace LudoTest.Services;
 public class PieceCreationServiceTest
 {
     [Fact]
-    public void CreatePlayerPieces_Creates1ExpectedPiecePrHomeTile()
+    public void CreatePlayerPieces_CreatesExpectedPiecesHomeTiles()
     {
         //Act
         var coordinates = new List<Coordinate>
