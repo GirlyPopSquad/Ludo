@@ -43,7 +43,7 @@ namespace LudoSpec.StepDefinitions
         [Then("the starting rolls are initiated")]
         public void ThenTheStartingRollsAreInitiated()
         {
-            _startingService.StartingRoll(_lobby);
+            _startingService.DoNextStartingRoll(_lobby.Id);
         }
 
         [When("the first player rolls")]
@@ -55,7 +55,7 @@ namespace LudoSpec.StepDefinitions
         [When("the second player rolls")]
         public void WhenTheSecondPlayerRolls()
         {
-            _startingService.StartingRoll(_lobby);
+            _startingService.DoNextStartingRoll(_lobby.Id);
 
             _lobby.Rolls[1].Should().NotBeNull();
         }
@@ -63,7 +63,7 @@ namespace LudoSpec.StepDefinitions
         [When("the third player rolls")]
         public void WhenTheThirdPlayerRolls()
         {
-            _startingService.StartingRoll(_lobby);
+            _startingService.DoNextStartingRoll(_lobby.Id);
 
             _lobby.Rolls[2].Should().NotBeNull();
         }
@@ -71,7 +71,7 @@ namespace LudoSpec.StepDefinitions
         [When("the fourth player rolls")]
         public void WhenTheFourthPlayerRolls()
         {
-            _startingService.StartingRoll(_lobby);
+            _startingService.DoNextStartingRoll(_lobby.Id);
 
             _lobby.Rolls[3].Should().NotBeNull();
         }
