@@ -45,6 +45,11 @@ public class BoardService : IBoardService
         return GetHomeTiles(gameId).Where(homeTile => homeTile.Color == pieceColor).ToArray();
     }
 
+    public EndTile[] GetEndTilesFromColor(int gameId, Color pieceColor)
+    {
+        return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<EndTile>().Where(endTile => endTile.Color == pieceColor).ToArray();
+    }
+
     public List<HomeTile> GetHomeTiles(int gameId)
     {
         return _boardRepository.GetByGameId(gameId).Tiles.Values.OfType<HomeTile>().ToList();

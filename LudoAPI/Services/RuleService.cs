@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Models.Tiles;
 
 namespace LudoAPI.Services;
 
@@ -7,12 +8,15 @@ public class RuleService : IRuleService
     private readonly IRollService _rollService;
     private readonly IBoardService _boardService;
     private readonly IPieceService _pieceService;
+    private readonly IGameService _gameService;
+    
 
-    public RuleService(IRollService rollService, IPieceService pieceService, IBoardService boardService)
+    public RuleService(IRollService rollService, IPieceService pieceService, IBoardService boardService, IGameService gameService)
     {
         _rollService = rollService;
         _pieceService = pieceService;
         _boardService = boardService;
+        _gameService = gameService;
     }
 
     public bool DoesRollAllowLeavingHome(Roll roll)
@@ -23,6 +27,13 @@ public class RuleService : IRuleService
     public bool PlayerIsAllowedAnotherRoll(int gameId)
     {
         var roll = _rollService.GetLastestRoll(gameId);
+
+        var hasPlayerFinished = _gameService.HasPlayerFinished(gameId, roll.PlayerId);
+        if (hasPlayerFinished)
+        {
+            return false;
+        }
+        
         //if player rolled a 6, they can roll again
         if (roll.Value == 6) return true;
 
@@ -42,19 +53,27 @@ public class RuleService : IRuleService
         return hasRolledLessThan3TimesInARow;
     }
 
-    public bool CanPiecePassTroughCoordinate(int gameId, Piece piece, Coordinate nextCoordinate)
+    public bool CanPiecePassCoordinate(int gameId, Piece piece, Coordinate coordinate)
     {
-        var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, nextCoordinate);
+        var tile = _boardService.GetTileFromCoordinate(gameId, coordinate);
+
+        //if the tile is an EndTile, this piece cant pass
+        if (tile is EndTile) return false;
+
+        var piecesOnCoordinate = _pieceService.GetPiecesFromCoordinate(gameId, coordinate);
 
         switch (piecesOnCoordinate.Length)
         {
+            //if no other pieces on coordinate, this piece can pass
             case 0:
                 return true;
+            //if two or more other pieces are on the coordinate, this piece cant pass
             case >= 2:
                 return false;
         }
 
         var pieceOfSameColor = piecesOnCoordinate.FirstOrDefault(p => p.Color == piece.Color);
+        //if a piece of the same color is on the coordinate, then this piece cant pass.
         return pieceOfSameColor == null;
     }
 
@@ -77,5 +96,31 @@ public class RuleService : IRuleService
         var piece = _pieceService.GetPiece(gameId, chosenPiece.PieceNumber);
 
         return piecesAtCoordinate.Where(p => p.Color != piece.Color).ToArray();
+    }
+
+    public bool WillThisBePlayersLastRound(int gameId, MovablePiece chosenPiece)
+    {
+        var nextTile = _boardService.GetTileFromCoordinate(gameId, chosenPiece.PotentialCoordinate);
+
+        if (nextTile is not EndTile)
+        {
+            return false;
+        }
+        
+        var piece = _pieceService.GetPiece(gameId, chosenPiece.PieceNumber);
+
+        var playersEndTileCoordinates = _boardService.GetEndTilesFromColor(gameId, piece.Color).Select(t=> t.Coordinate).ToArray();
+        var playersOtherPieces = _pieceService.GetPieces(gameId, (int)piece.Color)
+            .Where(p => p.PieceNumber != piece.PieceNumber).ToArray();
+        
+        var playersPiecesAtEnd = playersOtherPieces.IntersectBy(playersEndTileCoordinates, p => p.Coordinate);
+
+        //check if this is the last piece to make it to the end
+        if (playersOtherPieces.Length == playersPiecesAtEnd.Count())
+        {
+            return true;
+        }
+        
+        return false;
     }
 }

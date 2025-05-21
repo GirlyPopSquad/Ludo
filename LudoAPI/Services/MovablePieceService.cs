@@ -1,4 +1,5 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Models.Tiles;
 using LudoAPI.Repositories;
 
 namespace LudoAPI.Services;
@@ -88,7 +89,7 @@ public class MovablePieceService : IMovablePieceService
                 for (var i = 1; i < rollValue; i++)
                 {
                     var canPassTroughCoordinate =
-                        _ruleService.CanPiecePassTroughCoordinate(gameId, piece, nextCoordinate);
+                        _ruleService.CanPiecePassCoordinate(gameId, piece, nextCoordinate);
                     if (!canPassTroughCoordinate)
                     {
                         isPieceMovable = false;
@@ -152,11 +153,21 @@ public class MovablePieceService : IMovablePieceService
             KickPieceHome(gameId, pieceToBeKicked);
         }
 
+        //todo handle endcheck
         piece.Coordinate = finalCoordinate;
+
+        //Check for win
+        var isPlayersLastRound = _ruleService.WillThisBePlayersLastRound(gameId, chosenPiece);
+
+        if (isPlayersLastRound)
+        {
+            _gameService.HandlePlayerFinished(gameId, piece.Color);
+        }
+
         _pieceService.UpdatePiece(gameId, piece);
 
-        var canRoleAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
-        if (!canRoleAgain)
+        var canRollAgain = _ruleService.PlayerIsAllowedAnotherRoll(gameId);
+        if (!canRollAgain)
         {
             _gameService.NextTurn(gameId);
         }
@@ -182,7 +193,7 @@ public class MovablePieceService : IMovablePieceService
             //piece is already home and will stay there.
             return piece.Coordinate;
         }
-        
+
         var coordinatesOfPlayersPieces = _pieceService.GetPiecesFromColor(gameId, piece.Color)
             .Select(p => p.Coordinate);
 
