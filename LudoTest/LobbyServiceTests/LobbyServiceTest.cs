@@ -9,9 +9,9 @@ namespace LudoTest.LobbyServiceTests;
 
 public class LobbyServiceTest
 {
-    
     private readonly Mock<ILobbyRepository> _repository = new();
-    
+    private readonly Mock<IPlayerGenerator> _playerGenerator = new();
+
     [Fact]
     public void CreateLobby()
     {
@@ -20,9 +20,18 @@ public class LobbyServiceTest
         
         var expectedLobby = new Lobby(1, lobbyPlayers);
         
-        //this disregards the content of the input list, as long as it is a List of LobbyPlayers 
         _repository.Setup(r => r.AddNewLobby(It.IsAny<List<Player>>())).Returns(expectedLobby);
-        var lobbyService = new LobbyService(_repository.Object);
+        _playerGenerator
+           .Setup(p => p.GeneratePlayers())
+           .Returns(new List<Player>
+           {
+                new ((Color)1),
+                new ((Color)2),
+                new ((Color)3),
+                new ((Color)4),
+           });
+
+        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
         
         //Act
         var actualLobby = lobbyService.CreateLobby();
@@ -39,7 +48,7 @@ public class LobbyServiceTest
         
         _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
         
-        var lobbyService = new LobbyService(_repository.Object);
+        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
         
         //Act
         var actualLobby = lobbyService.GetLobbyById(1);
@@ -56,7 +65,7 @@ public class LobbyServiceTest
         
         _repository.Setup(repo => repo.UpdateLobby(testLobby));
         
-        var lobbyService = new LobbyService(_repository.Object);
+        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
         //Act
         lobbyService.UpdateLobby(testLobby);
         

@@ -16,6 +16,9 @@ namespace LudoAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSingleton(typeof(IIdGeneratorService<>), typeof(IdGeneratorService<>));
+            builder.Services.AddSingleton<IPlayerGenerator, DefaultFourPlayerGeneratorService>();
+
             builder.Services.AddScoped<IDiceService, DiceService>();
             
             builder.Services.AddSingleton<ILobbyRepository, LobbyRepository>();

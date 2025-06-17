@@ -1,27 +1,25 @@
 ﻿using LudoAPI.Models;
+using LudoAPI.Services;
+using System.Reflection.Emit;
 
 namespace LudoAPI.Repositories;
 
 public class LobbyRepository : ILobbyRepository
 {
     private readonly Dictionary<int, Lobby> _lobbies = new();
+    private readonly IIdGeneratorService<Lobby> _idGenerator;
+
+    public LobbyRepository(IIdGeneratorService<Lobby> idGenerator)
+    {
+        _idGenerator = idGenerator;
+    }
 
     public Lobby AddNewLobby(List<Player> lobbyPlayers)
     {
-        var lobbyId = GetNextId();
+        var lobbyId = _idGenerator.GetNewId(_lobbies);
         Lobby newLobby = new(lobbyId, lobbyPlayers);
         _lobbies.Add(lobbyId, newLobby);
         return newLobby;
-    }
-
-    private int GetNextId()
-    {
-        if (_lobbies.Count == 0)
-        {
-            return 1;
-        }
-
-        return _lobbies.Keys.Max() + 1;
     }
 
     public Lobby Get(int id)
@@ -31,15 +29,13 @@ public class LobbyRepository : ILobbyRepository
 
     public void UpdateLobby(Lobby lobby)
     {
-        var lobbyId = lobby.Id;
-
-        if (_lobbies.ContainsKey(lobbyId))
+        if (_lobbies.ContainsKey(lobby.Id))
         {
-            _lobbies[lobbyId] = lobby;
+            _lobbies[lobby.Id] = lobby;
         }
         else
         {
-            throw new KeyNotFoundException($"Game with ID {lobbyId} not found.");
+            throw new KeyNotFoundException($"Game with ID {lobby.Id} not found.");
         }
     }
 

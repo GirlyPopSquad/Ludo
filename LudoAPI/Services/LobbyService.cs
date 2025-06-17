@@ -6,23 +6,18 @@ namespace LudoAPI.Services;
 public class LobbyService : ILobbyService
 {
     private readonly ILobbyRepository _lobbyRepo;
+    private readonly IPlayerGenerator _playerGenerator;
 
-    public LobbyService(ILobbyRepository lobbyRepo)
+    public LobbyService(ILobbyRepository lobbyRepo, IPlayerGenerator playerGenerator)
     {
         _lobbyRepo = lobbyRepo;
+        _playerGenerator = playerGenerator;
     }
 
     public Lobby CreateLobby()
     {
-        var lobbyPlayers = new List<Player>
-        {
-            new((Color)1),
-            new((Color)2),
-            new((Color)3),
-            new((Color)4),
-        };
-
-        var lobby = _lobbyRepo.AddNewLobby(lobbyPlayers);
+        var players = _playerGenerator.GeneratePlayers();
+        var lobby = _lobbyRepo.AddNewLobby(players);
 
         return lobby;
     }

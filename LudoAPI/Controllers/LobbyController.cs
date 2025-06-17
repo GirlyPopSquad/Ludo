@@ -31,7 +31,7 @@ namespace LudoAPI.Controllers
             var lobby = _lobbyService.GetLobbyById(id);
             if (lobby == null)
             {
-                return BadRequest("Lobby could not be created");
+                return BadRequest("Lobby could not be found");
             }
             return Ok(lobby);
         }

@@ -4,9 +4,7 @@ public class ArrowTile : Tile
 {
     private Move arrowMove;
 
-    //used in UI
     public ArrowDirection ArrowDirection { get; }
-
 
     public ArrowTile(Coordinate coordinate, Color color, Move move, Move arrowMove) : base(coordinate, color, move)
     {
@@ -18,7 +16,6 @@ public class ArrowTile : Tile
     {
         var yChange = arrowMove.YChange;
 
-        // todo make prettier
         switch (arrowMove.XChange)
         {
             case -1:
