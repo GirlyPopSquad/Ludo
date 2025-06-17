@@ -19,7 +19,7 @@ namespace LudoTest.ControllerTests
         }
 
         [Fact]
-        public void CreateLobby_ShouldReturnNewLobby()
+        public void CreateLobby_ShouldCreateLobbyAndReturnNewLobby_WhenSuccessful()
         {
             //Arrange
             var expectedLobby = new Lobby(1, new List<Player>());

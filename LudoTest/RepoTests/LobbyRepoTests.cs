@@ -2,16 +2,23 @@
 using LudoAPI.Repositories;
 using FluentAssertions;
 using LudoTest.Shared;
+using LudoAPI.Services;
 
 namespace LudoTest.RepoTests
 {
     public class LobbyRepoTests
     {
+        private readonly IIdGeneratorService<Lobby> _idGeneratorService;
+        public LobbyRepoTests()
+        {
+            _idGeneratorService = new IdGeneratorService<Lobby>();
+        }
+
         [Fact]
         public void Add_ShouldAddLobbyToList()
         {
             // Arrange
-            var repository = new LobbyRepository();
+            var repository = new LobbyRepository(_idGeneratorService);
             var players = PlayerTestData.Get4Players();
             var expectedLobby = new Lobby(1, players);
 
@@ -26,7 +33,7 @@ namespace LudoTest.RepoTests
         public void Get_ShouldReturnLobbyById()
         {
             // Arrange
-            var repository = new LobbyRepository();
+            var repository = new LobbyRepository(_idGeneratorService);
             var players = PlayerTestData.Get4Players();
             var lobby = new Lobby(2, players);
 
@@ -45,7 +52,7 @@ namespace LudoTest.RepoTests
         public void Update_ShouldUpdateLobby()
         {
             // Arrange
-            var repository = new LobbyRepository();
+            var repository = new LobbyRepository(_idGeneratorService);
             var players = PlayerTestData.Get4Players();
             var lobby = repository.AddNewLobby(players);
 

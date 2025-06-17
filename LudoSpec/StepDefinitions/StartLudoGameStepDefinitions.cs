@@ -16,13 +16,16 @@ namespace LudoSpec.StepDefinitions
         private Lobby _lobby = null;
         private IDiceService _diceService;
         private LobbyRepository _lobbyRepo;
+        private IPlayerGenerator _playerGenerator;
+        private IIdGeneratorService<Lobby> _idGenerator;
 
         public StartLudoGameStepDefinitions()
         {
-
-            _lobbyRepo = new LobbyRepository();
+            _idGenerator = new IdGeneratorService<Lobby>();
+            _playerGenerator = new DefaultFourPlayerGeneratorService();
+            _lobbyRepo = new LobbyRepository(_idGenerator);
             _diceService = new DiceService();
-            _lobbyService = new LobbyService(_lobbyRepo);
+            _lobbyService = new LobbyService(_lobbyRepo, _playerGenerator);
             _startingService = new StartingService(_diceService, _lobbyService);
         }
 
