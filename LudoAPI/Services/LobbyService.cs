@@ -9,7 +9,9 @@ public class LobbyService : ILobbyService
     private readonly IPlayerGenerator _playerGenerator;
     private readonly IIdGeneratorService<Lobby> _idGenerator;
 
-    public LobbyService(ILobbyRepository lobbyRepo, IPlayerGenerator playerGenerator, IIdGeneratorService<Lobby> idGenerator)
+    public LobbyService(ILobbyRepository lobbyRepo, 
+                        IPlayerGenerator playerGenerator, 
+                        IIdGeneratorService<Lobby> idGenerator)
     {
         _idGenerator = idGenerator;
         _lobbyRepo = lobbyRepo;

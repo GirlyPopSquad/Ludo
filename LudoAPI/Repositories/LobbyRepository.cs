@@ -10,7 +10,7 @@ public class LobbyRepository : ILobbyRepository
 
     public void Save(Lobby lobby)
     {
-        throw new NotImplementedException();
+        _lobbies[lobby.Id] = lobby;
     }
 
     public Lobby Get(int id)
