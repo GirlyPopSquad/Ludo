@@ -8,38 +8,32 @@ namespace LudoTest.RepoTests
 {
     public class LobbyRepoTests
     {
-        private readonly IIdGeneratorService<Lobby> _idGeneratorService;
-        public LobbyRepoTests()
-        {
-            _idGeneratorService = new IdGeneratorService<Lobby>();
-        }
-
         [Fact]
-        public void Add_ShouldAddLobbyToList()
+        public void Save_AddsLobbyToDictionary_IfSuccess()
         {
             // Arrange
-            var repository = new LobbyRepository(_idGeneratorService);
+            var repository = new LobbyRepository();
             var players = PlayerTestData.Get4Players();
             var expectedLobby = new Lobby(1, players);
 
             // Act
-            var actualLobby = repository.AddNewLobby(players);
+            repository.Save(expectedLobby);
 
             // Assert
-            actualLobby.Should().BeEquivalentTo(expectedLobby);
+            repository.GetLobbies().Should().ContainKey(expectedLobby.Id);
         }
 
         [Fact]
         public void Get_ShouldReturnLobbyById()
         {
             // Arrange
-            var repository = new LobbyRepository(_idGeneratorService);
+            var repository = new LobbyRepository();
             var players = PlayerTestData.Get4Players();
             var lobby = new Lobby(2, players);
 
-            repository.AddNewLobby(players);
-            repository.AddNewLobby(players);
-            repository.AddNewLobby(players);
+            repository.Save(lobby);
+            repository.Save(lobby);
+            repository.Save(lobby);
 
             // Act
             var result = repository.Get(2);
@@ -52,20 +46,18 @@ namespace LudoTest.RepoTests
         public void Update_ShouldUpdateLobby()
         {
             // Arrange
-            var repository = new LobbyRepository(_idGeneratorService);
+            var repository = new LobbyRepository();
             var players = PlayerTestData.Get4Players();
-            var lobby = repository.AddNewLobby(players);
+            var expectedLobby = new Lobby(2, players);
+            repository.Save(expectedLobby);
 
             var roll = new Roll(players[0].Id, 6);
             
-            lobby.Rolls.Add(roll);
-            
-            var expectedLobby = new Lobby(lobby.Id, players);
             expectedLobby.Rolls.Add(roll);
         
             // Act
-            repository.UpdateLobby(lobby);
-            var result = repository.Get(lobby.Id);
+            repository.Update(expectedLobby);
+            var result = repository.Get(expectedLobby.Id);
         
             // Assert
             result.Should().BeEquivalentTo(expectedLobby);

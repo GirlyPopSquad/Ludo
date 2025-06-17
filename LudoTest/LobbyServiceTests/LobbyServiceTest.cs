@@ -9,18 +9,28 @@ namespace LudoTest.LobbyServiceTests;
 
 public class LobbyServiceTest
 {
-    private readonly Mock<ILobbyRepository> _repository = new();
-    private readonly Mock<IPlayerGenerator> _playerGenerator = new();
+    private readonly Mock<ILobbyRepository> _repositoryMock;
+    private readonly Mock<IPlayerGenerator> _playerGenerator;
+    private readonly IIdGeneratorService<Lobby> _idGeneratorService;
+    public LobbyServiceTest()
+    {
+        _repositoryMock = new Mock<ILobbyRepository>();
+        _playerGenerator = new Mock<IPlayerGenerator>();
+        _idGeneratorService = new IdGeneratorService<Lobby>();
+    }
 
     [Fact]
-    public void CreateLobby()
+    public void CreateLobby_ShouldCreateAndReturnNewLobby_IfSuccess()
     {
         //Arrange
         var lobbyPlayers = PlayerTestData.Get4Players();
         
         var expectedLobby = new Lobby(1, lobbyPlayers);
-        
-        _repository.Setup(r => r.AddNewLobby(It.IsAny<List<Player>>())).Returns(expectedLobby);
+
+        _repositoryMock
+           .Setup(p => p.GetLobbies())
+           .Returns(new Dictionary<int, Lobby>());
+
         _playerGenerator
            .Setup(p => p.GeneratePlayers())
            .Returns(new List<Player>
@@ -31,7 +41,7 @@ public class LobbyServiceTest
                 new ((Color)4),
            });
 
-        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
+        var lobbyService = new LobbyService(_repositoryMock.Object, _playerGenerator.Object, _idGeneratorService);
         
         //Act
         var actualLobby = lobbyService.CreateLobby();
@@ -46,9 +56,9 @@ public class LobbyServiceTest
         //Arrange
         var expectedLobby = new Lobby(1, PlayerTestData.Get4Players());
         
-        _repository.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
+        _repositoryMock.Setup(lobbyRepo => lobbyRepo.Get(1)).Returns(expectedLobby);
         
-        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
+        var lobbyService = new LobbyService(_repositoryMock.Object, _playerGenerator.Object, _idGeneratorService);
         
         //Act
         var actualLobby = lobbyService.GetLobbyById(1);
@@ -63,13 +73,11 @@ public class LobbyServiceTest
         //Arrange
         var testLobby = new Lobby(1, PlayerTestData.Get4Players());
         
-        _repository.Setup(repo => repo.UpdateLobby(testLobby));
-        
-        var lobbyService = new LobbyService(_repository.Object, _playerGenerator.Object);
+        var lobbyService = new LobbyService(_repositoryMock.Object, _playerGenerator.Object, _idGeneratorService);
         //Act
         lobbyService.UpdateLobby(testLobby);
         
         //Assert
-        _repository.Verify(repo => repo.UpdateLobby(testLobby), Times.Once);
+        _repositoryMock.Verify(repo => repo.Update(testLobby), Times.Once);
     }
 }

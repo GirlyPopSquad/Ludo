@@ -23,9 +23,9 @@ namespace LudoSpec.StepDefinitions
         {
             _idGenerator = new IdGeneratorService<Lobby>();
             _playerGenerator = new DefaultFourPlayerGeneratorService();
-            _lobbyRepo = new LobbyRepository(_idGenerator);
+            _lobbyRepo = new LobbyRepository();
             _diceService = new DiceService();
-            _lobbyService = new LobbyService(_lobbyRepo, _playerGenerator);
+            _lobbyService = new LobbyService(_lobbyRepo, _playerGenerator, _idGenerator);
             _startingService = new StartingService(_diceService, _lobbyService);
         }
 

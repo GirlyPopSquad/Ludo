@@ -30,7 +30,7 @@ namespace LudoTest.ControllerTests
             var result = _controller.Create();
 
             //Assert
-            result.Result.Should().BeOfType<OkObjectResult>()
+            result.Result.Should().BeOfType<CreatedAtActionResult>()
                 .Which.Value.Should().BeOfType<Lobby>()
                 .And.BeEquivalentTo(expectedLobby);
         }

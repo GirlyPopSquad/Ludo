@@ -22,7 +22,7 @@ namespace LudoAPI.Controllers
             {
                 return BadRequest("Lobby could not be created");
             }
-            return Ok(lobby);
+            return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
 
         [HttpGet("{id}")]
@@ -31,7 +31,7 @@ namespace LudoAPI.Controllers
             var lobby = _lobbyService.GetLobbyById(id);
             if (lobby == null)
             {
-                return BadRequest("Lobby could not be found");
+                return NotFound("Lobby could not be found");
             }
             return Ok(lobby);
         }
