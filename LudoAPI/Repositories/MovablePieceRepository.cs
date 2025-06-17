@@ -11,12 +11,7 @@ public class MovablePieceRepository : IMovablePieceRepository
         _movablePieces[gameId] = movablePieces;
     }
 
-    public List<MovablePiece> GetMovablePieces(int gameId)
-    {
-        return _movablePieces[gameId];
-    }
-
-    public MovablePiece? GetPiece(int gameId, int pieceNumber)
+    public MovablePiece? GetMovablePiece(int gameId, int pieceNumber)
     {
         return _movablePieces[gameId].FirstOrDefault(piece=> piece.PieceNumber == pieceNumber);
     }

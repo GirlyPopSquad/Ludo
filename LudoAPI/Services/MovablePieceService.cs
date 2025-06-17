@@ -112,7 +112,7 @@ public class MovablePieceService : IMovablePieceService
                         }
                         else
                         {
-                            throw new Exception("You cant move backwards ont this tile");
+                            throw new Exception("You cant move backwards on this tile");
 
                         }
                     }
@@ -154,7 +154,7 @@ public class MovablePieceService : IMovablePieceService
 
     public Piece MovePiece(int gameId, int pieceNumber)
     {
-        var chosenPiece = _movablePieceRepository.GetPiece(gameId, pieceNumber);
+        var chosenPiece = _movablePieceRepository.GetMovablePiece(gameId, pieceNumber);
         if (chosenPiece == null)
         {
             throw new Exception("Piece is not movable at this point");

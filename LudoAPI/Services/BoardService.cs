@@ -14,11 +14,6 @@ public class BoardService : IBoardService
         _boardRepository = boardRepository;
     }
 
-    public Board GetBoard(int boardId)
-    {
-        return _boardRepository.Get(boardId);
-    }
-
     public Board GetBoardFromGameId(int gameId)
     {
         return _boardRepository.GetByGameId(gameId);

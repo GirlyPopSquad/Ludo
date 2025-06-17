@@ -1,7 +1,6 @@
-﻿namespace LudoAPI.Services
+﻿namespace LudoAPI.Services;
+
+public interface IDiceService
 {
-    public interface IDiceService
-    {
-        int RollDice();
-    }
+    int RollDice();
 }
