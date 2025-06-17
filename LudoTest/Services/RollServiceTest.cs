@@ -9,7 +9,6 @@ namespace LudoTest.Services;
 
 public class RollServiceTest
 {
-
     [Fact]
     public void DoNextRoll_FirstRoll_ReturnsExpectedRoll()
     {
@@ -21,16 +20,17 @@ public class RollServiceTest
         var testCurrentPlayer = PlayerTestData.RedPlayer;
 
         var gameId = 1;
-
         var diceRoll = 6;
+        var expectedRoll = new Roll(testCurrentPlayer.Id, diceRoll);
 
         mockRollRepository
             .Setup(repo => repo.GetRollsFromGame(gameId))
-            .Returns((List<Roll>?) null); // Simulate no rolls exist
+            .Returns((List<Roll>?)null); // Simulate no rolls exist
 
         mockGameService
             .Setup(service => service.GetCurrentPlayerId(gameId))
             .Returns(testCurrentPlayer.Id);
+
         mockGameService
             .Setup(service => service.GetIsTimeToRoll(gameId))
             .Returns(true);
@@ -40,8 +40,7 @@ public class RollServiceTest
             .Returns(diceRoll);
 
         var rollService = new RollService(mockRollRepository.Object, mockGameService.Object, mockDiceService.Object);
-        var expectedRoll = new Roll(testCurrentPlayer.Id, diceRoll);
-        
+
         // Act
         var result = rollService.DoNextRoll(gameId);
 
@@ -50,6 +49,5 @@ public class RollServiceTest
             .And.Subject.As<Roll>().Should().BeEquivalentTo(expectedRoll);
 
         mockRollRepository.Verify(repo => repo.SaveRollToGame(gameId, It.IsAny<Roll>()), Times.Once);
-
     }
 }
