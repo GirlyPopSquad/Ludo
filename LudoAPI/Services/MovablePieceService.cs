@@ -29,7 +29,7 @@ public class MovablePieceService : IMovablePieceService
         var latestRoll = _rollService.GetLastestRoll(gameId);
         var currentPlayerId = _gameService.GetCurrentPlayerId(gameId);
 
-        if (latestRoll.PlayerId != currentPlayerId)
+        if (latestRoll.PlayerId != currentPlayerId) 
             // the person who made the last roll, is not the person, which turn it is. Therefore currentplayer needs to roll
         {
             throw new Exception("A new Roll has to be made, before movable pieces should be found");
@@ -91,7 +91,7 @@ public class MovablePieceService : IMovablePieceService
                 {
                     var canPassTroughCoordinate =
                         _ruleService.CanPiecePassCoordinate(gameId, piece, nextCoordinate);
-                    
+
                     if (!canPassTroughCoordinate)
                     {
                         isPieceMovable = false;
@@ -113,11 +113,10 @@ public class MovablePieceService : IMovablePieceService
                         else
                         {
                             throw new Exception("You cant move backwards on this tile");
-
                         }
                     }
-                    
-                    
+
+
                     if (tempTile is EndTile)
                     {
                         goingForward = false;
@@ -161,9 +160,9 @@ public class MovablePieceService : IMovablePieceService
         }
 
         var piece = _pieceService.GetPiece(gameId, pieceNumber);
-        
+
         var finalCoordinate = chosenPiece.PotentialCoordinate;
-        
+
         var willThisPieceBeKickedHome = _ruleService.WillThisPieceBeKickedHome(gameId, chosenPiece);
         if (willThisPieceBeKickedHome)
         {
@@ -179,7 +178,7 @@ public class MovablePieceService : IMovablePieceService
 
         //Check for win
         var isPlayersLastRound = _ruleService.WillThisBePlayersLastRound(gameId, chosenPiece);
-        
+
         if (isPlayersLastRound)
         {
             _gameService.HandlePlayerFinished(gameId, piece.Color);
