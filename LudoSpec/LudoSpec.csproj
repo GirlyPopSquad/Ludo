@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <UpToDateCheckInput Remove="features\eksamen-christian.feature" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="8.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="Reqnroll.xUnit" Version="2.2.1" />

@@ -9,17 +9,18 @@ namespace LudoTest.Eksamen
     public class BusinessFacingTests
     {
         [Fact(Skip = "reason")]
-        public void User_UploadsDocumentToCase_ThenSeesSuccessMessage()
+        public void GivenLoggedInUser_WhenUploadingADocumentToCase_ThenSuccessMessageIsShown()
         {
-            // Given
-            var user = new UserSession();
+            // Arrange
+            var user = new LoggedInUser();
             var casePage = new CaseDetailsPage(user);
+            casePage.OpenCase("Den der sag der du ved");
 
-            // When
-            casePage.UploadDocument("sag-123", "dokument.pdf");
+            // Act
+            casePage.UploadDocument("rapport.pdf");
 
-            // Then
-            Assert.Equal("Dokumentet er uploadet.", casePage.StatusMessage);
+            // Assert
+            Assert.Equal("Dokumentet er uploadet", casePage.StatusMessage);
         }
     }
 }

@@ -48,6 +48,7 @@ public class LobbyServiceTest
         
         //Assert
         actualLobby.Should().BeEquivalentTo(expectedLobby);
+        _repositoryMock.Verify(r => r.Save(It.Is<Lobby>(l => l.Id == 1)), Times.Once);
     }
 
     [Fact]
